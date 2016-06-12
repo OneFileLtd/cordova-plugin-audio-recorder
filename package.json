@@ -1,0 +1,31 @@
+{
+  "name": "cordova-plugin-audio-recorder",
+  "version": "0.0.1",
+  "description": "Cordova Audio Recorder Plugin",
+  "cordova": {
+    "id": "cordova-plugin-audio-recorder",
+    "platforms": [
+      "ios"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://bitbucket.org/deviceboxmedia/cordova-plugin-audio-recorder.git"
+  },
+  "keywords": [
+    "ecosystem:cordova",
+    "cordova-ios",
+    "cordova",
+    "audio",
+    "recorder"
+  ],
+  "scripts": {
+    "test": "npm run jshint",
+    "jshint": "node node_modules/jshint/bin/jshint www && node node_modules/jshint/bin/jshint src && node node_modules/jshint/bin/jshint tests"
+  },
+  "author": "M Howarth",
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "jshint": "^2.6.0"
+  }
+}

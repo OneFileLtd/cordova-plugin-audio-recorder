@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
+        id="cordova-plugin-audio-recorder"
+        version="0.0.1">
+    <name>AudioRecorder</name>
+
+    <description>Cordova Plugin Audio Recorder</description>
+    <license>Onefile Limited</license>
+    <keywords>nomad,onefile,audio,recorder</keywords>
+    <repo>https://bitbucket.org/deviceboxmedia/cordova-plugin-audio-recorder.git</repo>
+    <issue></issue>
+
+    <js-module src="www/AudioRecorder.js" name="AudioRecorder">
+        <clobbers target="AudioRecorder" />
+    </js-module>
+
+    <!-- ios -->
+    <platform name="ios">
+        <config-file target="config.xml" parent="/*">
+            <feature name="CDVAudioRecorder">
+                <param name="ios-package" value="CDVAudioRecorder" />
+            </feature>
+        </config-file>
+        <header-file src="src/ios/CDVAudioRecorder.h" />
+        <source-file src="src/ios/CDVAudioRecorder.m" />
+        <resource-file src="src/ios/CDVAudioRecorder.xib" />
+        <resource-file src="src/ios/CDVAudioRecorder.bundle" />
+
+        <framework src="AVFoundation.framework" />
+        <framework src="UIKIT.framework" />
+        <framework src="QuartzCore.framework" />
+        <framework src="CoreGraphics.framework" />
+        <framework src="MobileCoreServices.framework" />
+    </platform>
+
+</plugin>
