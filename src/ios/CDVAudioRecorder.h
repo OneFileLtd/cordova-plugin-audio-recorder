@@ -77,6 +77,7 @@ typedef enum {
     CDVAudioRecorder *_audioRecorderCommand;
     BOOL _isTimed;
     CDVPluginResult *_pluginResult;
+    UIStatusBarStyle _previousStatusBarStyle;
 }
 
 @property(nonatomic, assign) int userFilterID;
@@ -107,6 +108,7 @@ typedef enum {
 @property (nonatomic, strong) CDVAudioRecorder *audioRecorderCommand;
 @property BOOL isTimed;
 @property (nonatomic, strong) CDVPluginResult *pluginResult;
+@property UIStatusBarStyle previousStatusBarStyle;
 
 - (IBAction)recorderButtonPressed:(id)sender;
 - (IBAction)backButtonPressed:(id)sender;

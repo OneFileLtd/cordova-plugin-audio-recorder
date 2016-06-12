@@ -221,6 +221,7 @@
 @synthesize audioRecorderCommand = _audioRecorderCommand;
 @synthesize isTimed = _isTimed;
 @synthesize pluginResult = _pluginResult;
+@synthesize previousStatusBarStyle = _previousStatusBarStyle;
 
 #pragma mark -
 - (NSString*)resolveImageResource:(NSString*)resource
@@ -249,6 +250,7 @@
         self.callbackId = theCallbackId;
         self.errorCode = AUDIO_NO_MEDIA_FILES;
         self.isTimed = self.duration != nil;
+        self.previousStatusBarStyle = [UIApplication sharedApplication].statusBarStyle;
         return self;
     }
     return nil;
@@ -284,6 +286,11 @@
             [self.recorderButton setImage:[UIImage imageNamed:[self resolveImageResource:@"CDVAudioRecorder.bundle/record"]] forState:UIControlStateSelected];
             [self.recorderButton setImage:[UIImage imageNamed:[self resolveImageResource:@"CDVAudioRecorder.bundle/record"]] forState:UIControlStateDisabled];
             [self.recorderButton setImage:[UIImage imageNamed:[self resolveImageResource:@"CDVAudioRecorder.bundle/record"]] forState:UIControlStateHighlighted];
+
+            [self.saveCancelButton setImage:[UIImage imageNamed:[self resolveImageResource:@"CDVAudioRecorder.bundle/save"]] forState:UIControlStateNormal];
+            [self.saveCancelButton setImage:[UIImage imageNamed:[self resolveImageResource:@"CDVAudioRecorder.bundle/save"]] forState:UIControlStateSelected];
+            [self.saveCancelButton setImage:[UIImage imageNamed:[self resolveImageResource:@"CDVAudioRecorder.bundle/save"]] forState:UIControlStateDisabled];
+            [self.saveCancelButton setImage:[UIImage imageNamed:[self resolveImageResource:@"CDVAudioRecorder.bundle/save"]] forState:UIControlStateHighlighted];
             break;
     }
 }
@@ -446,6 +453,12 @@
     self.value = 0;
     self.segment = 0;
     self.currentState = STATE_NOT_SET;
+
+    UIBarButtonItem *btnDone = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(backButtonPressed:)];
+    self.navigationController.topViewController.navigationItem.leftBarButtonItem = btnDone;
+    btnDone.enabled=TRUE;
+    btnDone.style=UIBarButtonSystemItemDone;
+
     [self changeButtonState];
 }
 
@@ -471,10 +484,24 @@
 }
 
 - (IBAction)backButtonPressed:(id)sender {
+    NSLog(@"CLOSING VIEW");
     self.currentState = STATE_SAVE;
     [self performButtonAction];
-    [self.navigationController popViewControllerAnimated:TRUE];
-    NSLog(@"CLOSING VIEW");
+    // called when done button pressed or when error condition to do cleanup and remove view
+    [[self.audioRecorderCommand.viewController.presentedViewController presentingViewController] dismissViewControllerAnimated:YES completion:nil];
+    if (!self.pluginResult) {
+        self.pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageToErrorObject:(int)self.errorCode];
+    }
+
+    [self.audioRecorderCommand setInUse:NO];
+    UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, nil);
+    // return result
+    [self.audioRecorderCommand.commandDelegate sendPluginResult:self.pluginResult callbackId:self.callbackId];
+
+    if (IsAtLeastiOSVersion(@"7.0")) {
+        [[UIApplication sharedApplication] setStatusBarStyle:self.previousStatusBarStyle];
+    }
+
 }
 
 -(IBAction)saveButtonPressed:(id)sender
