@@ -36,7 +36,7 @@ import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.LOG;
 import org.apache.cordova.PermissionHelper;
 import org.apache.cordova.PluginManager;
-import org.apache.cordova.mediacapture.PendingRequests.Request;
+import uk.co.onefile.nomadionic.PendingRequests.Request;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
