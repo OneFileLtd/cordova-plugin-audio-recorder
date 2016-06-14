@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="fa5aae78-a822-4d54-9516-a7234c120ad1" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/android/CDVAudioRecorder.java" afterPath="$PROJECT_DIR$/src/android/CDVAudioRecorder.java" />
     </list>
     <ignored path="cordova-plugin-audio-recorder.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -625,7 +624,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1465892854009</updated>
-      <workItem from="1465892855536" duration="3646000" />
+      <workItem from="1465892855536" duration="3678000" />
     </task>
     <task id="LOCAL-00001" summary="Made space for Navigation bar.&#10;Turned on save button.">
       <created>1465893015359</created>
@@ -655,11 +654,18 @@
       <option name="project" value="LOCAL" />
       <updated>1465896825190</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="removed commented out/un-used code.">
+      <created>1465897581522</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1465897581523</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="3646000" />
+    <option name="totallyTimeSpent" value="3678000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="2" y="23" width="1920" height="1097" extended-state="6" />
@@ -700,7 +706,8 @@
     <MESSAGE value="Added Android" />
     <MESSAGE value="changed captureAudio to audioRecorder" />
     <MESSAGE value="fixed wrongly named this.captureAudio to audioRecorder." />
-    <option name="LAST_COMMIT_MESSAGE" value="fixed wrongly named this.captureAudio to audioRecorder." />
+    <MESSAGE value="removed commented out/un-used code." />
+    <option name="LAST_COMMIT_MESSAGE" value="removed commented out/un-used code." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
