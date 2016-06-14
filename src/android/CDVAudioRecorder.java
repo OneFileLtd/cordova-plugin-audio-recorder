@@ -356,8 +356,7 @@ public class CDVAudioRecorder extends CordovaPlugin {
 	private void executeRequest(Request req) {
 		switch (req.action) {
 			case CAPTURE_AUDIO:
-				this.captureAudio(req);
-				break;
+				this.audioRecorder(req);
 				break;
 		}
 	}
