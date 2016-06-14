@@ -148,6 +148,31 @@ public class CDVAudioRecorder extends CordovaPlugin {
 	}
 
 	/**
+	 * Get the Image specific attributes
+	 *
+	 * @param filePath path to the file
+	 * @param obj represents the Media File Data
+	 * @param video if true get video attributes as well
+	 * @return a JSONObject that represents the Media File Data
+	 * @throws JSONException
+	 */
+	private JSONObject getAudioVideoData(String filePath, JSONObject obj, boolean video) throws JSONException {
+		MediaPlayer player = new MediaPlayer();
+		try {
+			player.setDataSource(filePath);
+			player.prepare();
+			obj.put("duration", player.getDuration() / 1000);
+			if (video) {
+				obj.put("height", player.getVideoHeight());
+				obj.put("width", player.getVideoWidth());
+			}
+		} catch (IOException e) {
+			Log.d(LOG_TAG, "Error: loading video file");
+		}
+		return obj;
+	}
+
+	/**
 	 * Sets up an intent to capture audio.  Result handled by onActivityResult()
 	 */
 	private void audioRecorder(Request req) {
