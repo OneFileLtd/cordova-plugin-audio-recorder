@@ -57,19 +57,11 @@ import android.util.Log;
 
 public class CDVAudioRecorder extends CordovaPlugin {
 
-	private static final String VIDEO_3GPP = "video/3gpp";
-	private static final String VIDEO_MP4 = "video/mp4";
 	private static final String AUDIO_3GPP = "audio/3gpp";
-	private static final String IMAGE_JPEG = "image/jpeg";
-
 	private static final int CAPTURE_AUDIO = 0;     // Constant for capture audio
-	private static final int CAPTURE_IMAGE = 1;     // Constant for capture image
-	private static final int CAPTURE_VIDEO = 2;     // Constant for capture video
 	private static final String LOG_TAG = "Capture";
 
 	private static final int CAPTURE_INTERNAL_ERR = 0;
-	//    private static final int CAPTURE_APPLICATION_BUSY = 1;
-//    private static final int CAPTURE_INVALID_ARGUMENT = 2;
 	private static final int CAPTURE_NO_MEDIA_FILES = 3;
 	private static final int CAPTURE_PERMISSION_DENIED = 4;
 
@@ -149,56 +141,8 @@ public class CDVAudioRecorder extends CordovaPlugin {
 		}
 		Log.d(LOG_TAG, "Mime type = " + mimeType);
 
-		if (mimeType.equals(IMAGE_JPEG) || filePath.endsWith(".jpg")) {
-			obj = getImageData(fileUrl, obj);
-		}
-		else if (mimeType.endsWith(AUDIO_3GPP)) {
+		if (mimeType.endsWith(AUDIO_3GPP)) {
 			obj = getAudioVideoData(filePath, obj, false);
-		}
-		else if (mimeType.equals(VIDEO_3GPP) || mimeType.equals(VIDEO_MP4)) {
-			obj = getAudioVideoData(filePath, obj, true);
-		}
-		return obj;
-	}
-
-	/**
-	 * Get the Image specific attributes
-	 *
-	 * @param filePath path to the file
-	 * @param obj represents the Media File Data
-	 * @return a JSONObject that represents the Media File Data
-	 * @throws JSONException
-	 */
-	private JSONObject getImageData(Uri fileUrl, JSONObject obj) throws JSONException {
-		BitmapFactory.Options options = new BitmapFactory.Options();
-		options.inJustDecodeBounds = true;
-		BitmapFactory.decodeFile(fileUrl.getPath(), options);
-		obj.put("height", options.outHeight);
-		obj.put("width", options.outWidth);
-		return obj;
-	}
-
-	/**
-	 * Get the Image specific attributes
-	 *
-	 * @param filePath path to the file
-	 * @param obj represents the Media File Data
-	 * @param video if true get video attributes as well
-	 * @return a JSONObject that represents the Media File Data
-	 * @throws JSONException
-	 */
-	private JSONObject getAudioVideoData(String filePath, JSONObject obj, boolean video) throws JSONException {
-		MediaPlayer player = new MediaPlayer();
-		try {
-			player.setDataSource(filePath);
-			player.prepare();
-			obj.put("duration", player.getDuration() / 1000);
-			if (video) {
-				obj.put("height", player.getVideoHeight());
-				obj.put("width", player.getVideoWidth());
-			}
-		} catch (IOException e) {
-			Log.d(LOG_TAG, "Error: loading video file");
 		}
 		return obj;
 	}
@@ -279,7 +223,6 @@ public class CDVAudioRecorder extends CordovaPlugin {
 		}
 	}
 
-
 	public void onAudioActivityResult(Request req, Intent intent) {
 		// Get the uri of the audio clip
 		Uri data = intent.getData();
@@ -291,89 +234,7 @@ public class CDVAudioRecorder extends CordovaPlugin {
 			pendingRequests.resolveWithSuccess(req);
 		} else {
 			// still need to capture more audio clips
-			captureAudio(req);
-		}
-	}
-
-	public void onImageActivityResult(Request req) {
-		// For some reason if I try to do:
-		// Uri data = intent.getData();
-		// It crashes in the emulator and on my phone with a null pointer exception
-		// To work around it I had to grab the code from CameraLauncher.java
-		try {
-			// Create entry in media store for image
-			// (Don't use insertImage() because it uses default compression setting of 50 - no way to change it)
-			ContentValues values = new ContentValues();
-			values.put(android.provider.MediaStore.Images.Media.MIME_TYPE, IMAGE_JPEG);
-			Uri uri = null;
-			try {
-				uri = this.cordova.getActivity().getContentResolver().insert(android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
-			} catch (UnsupportedOperationException e) {
-				LOG.d(LOG_TAG, "Can't write to external media storage.");
-				try {
-					uri = this.cordova.getActivity().getContentResolver().insert(android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI, values);
-				} catch (UnsupportedOperationException ex) {
-					LOG.d(LOG_TAG, "Can't write to internal media storage.");
-					pendingRequests.resolveWithFailure(req, createErrorObject(CAPTURE_INTERNAL_ERR, "Error capturing image - no media storage found."));
-					return;
-				}
-			}
-			FileInputStream fis = new FileInputStream(getTempDirectoryPath() + "/Capture.jpg");
-			OutputStream os = this.cordova.getActivity().getContentResolver().openOutputStream(uri);
-			byte[] buffer = new byte[4096];
-			int len;
-			while ((len = fis.read(buffer)) != -1) {
-				os.write(buffer, 0, len);
-			}
-			os.flush();
-			os.close();
-			fis.close();
-
-			// Add image to results
-			req.results.put(createMediaFile(uri));
-
-			checkForDuplicateImage();
-
-			if (req.results.length() >= req.limit) {
-				// Send Uri back to JavaScript for viewing image
-				pendingRequests.resolveWithSuccess(req);
-			} else {
-				// still need to capture more images
-				captureImage(req);
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-			pendingRequests.resolveWithFailure(req, createErrorObject(CAPTURE_INTERNAL_ERR, "Error capturing image."));
-		}
-	}
-
-	public void onVideoActivityResult(Request req, Intent intent) {
-		Uri data = null;
-
-		if (intent != null){
-			// Get the uri of the video clip
-			data = intent.getData();
-		}
-
-		if( data == null){
-			File movie = new File(getTempDirectoryPath(), "Capture.avi");
-			data = Uri.fromFile(movie);
-		}
-
-		// create a file object from the uri
-		if(data == null) {
-			pendingRequests.resolveWithFailure(req, createErrorObject(CAPTURE_NO_MEDIA_FILES, "Error: data is null"));
-		}
-		else {
-			req.results.put(createMediaFile(data));
-
-			if (req.results.length() >= req.limit) {
-				// Send Uri back to JavaScript for viewing video
-				pendingRequests.resolveWithSuccess(req);
-			} else {
-				// still need to capture more video clips
-				captureVideo(req);
-			}
+			audioRecorder(req);
 		}
 	}
 
