@@ -34,4 +34,22 @@
         <framework src="MobileCoreServices.framework" />
     </platform>
 
+    <!-- android -->
+    <platform name="android">
+        <config-file target="res/xml/config.xml" parent="/*">
+            <feature name="CDVAudioRecorder" >
+                <param name="android-package" value="uk.co.onefile.nomadionic.audiocapture.CDVAudioRecorder"/>
+            </feature>
+        </config-file>
+
+        <config-file target="AndroidManifest.xml" parent="/*">
+            <uses-permission android:name="android.permission.RECORD_AUDIO" />
+            <uses-permission android:name="android.permission.RECORD_VIDEO"/>
+            <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+        </config-file>
+
+        <source-file src="src/android/CDVAudioRecorder.java" target-dir="src/uk/co/onefile/nomadionic/audiocapture" />
+        <source-file src="src/android/FileHelper.java" target-dir="src/uk/co/onefile/nomadionic/audiocapture" />
+        <source-file src="src/android/PendingRequests.java" target-dir="src/uk/co/onefile/nomadionic/audiocapture" />
+    </platform>
 </plugin>
