@@ -304,6 +304,7 @@
             [self pauseRecording];
             self.currentState = STATE_PAUSED;
             self.txtRecordingName.enabled = YES;
+            self.saveCancelButton.enabled = YES;
             break;
         case STATE_PAUSED:
             [self resumeRecording];
