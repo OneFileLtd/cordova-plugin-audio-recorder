@@ -116,8 +116,8 @@ public class CDVAudioRecorder extends CordovaPlugin {
 
 		JSONObject options = args.optJSONObject(0);
 
-		if (action.equals("captureAudio")) {
-			this.captureAudio(pendingRequests.createRequest(CAPTURE_AUDIO, options, callbackContext));
+		if (action.equals("audioRecorder")) {
+			this.audioRecorder(pendingRequests.createRequest(CAPTURE_AUDIO, options, callbackContext));
 		}
 		else {
 			return false;
