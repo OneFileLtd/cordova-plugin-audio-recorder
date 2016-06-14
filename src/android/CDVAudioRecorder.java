@@ -206,7 +206,7 @@ public class CDVAudioRecorder extends CordovaPlugin {
 	/**
 	 * Sets up an intent to capture audio.  Result handled by onActivityResult()
 	 */
-	private void captureAudio(Request req) {
+	private void audioRecorder(Request req) {
 		Intent intent = new Intent(android.provider.MediaStore.Audio.Media.RECORD_SOUND_ACTION);
 
 		this.cordova.startActivityForResult((CordovaPlugin) this, intent, req.requestCode);
