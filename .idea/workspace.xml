@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="fa5aae78-a822-4d54-9516-a7234c120ad1" name="Default" comment="Put back in the ripples.">
+    <list default="true" id="fa5aae78-a822-4d54-9516-a7234c120ad1" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="cordova-plugin-audio-recorder.iws" />
@@ -30,7 +30,7 @@
             <state relative-caret-position="360">
               <caret line="61" column="41" selection-start-line="61" selection-start-column="41" selection-end-line="61" selection-end-column="41" />
               <folding>
-                <element signature="imports" expanded="true" />
+                <element signature="e#0#2235#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -696,7 +696,7 @@
       <workItem from="1465974704588" duration="6943000" />
       <workItem from="1465989560657" duration="64000" />
       <workItem from="1465996866103" duration="116000" />
-      <workItem from="1465998222370" duration="460000" />
+      <workItem from="1465998222370" duration="675000" />
     </task>
     <task id="LOCAL-00001" summary="Made space for Navigation bar.&#10;Turned on save button.">
       <created>1465893015359</created>
@@ -845,11 +845,18 @@
       <option name="project" value="LOCAL" />
       <updated>1465998922817</updated>
     </task>
-    <option name="localTasksCounter" value="22" />
+    <task id="LOCAL-00022" summary="Put back in the ripples.">
+      <created>1465998944218</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1465998944218</updated>
+    </task>
+    <option name="localTasksCounter" value="23" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="18759000" />
+    <option name="totallyTimeSpent" value="18974000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-1916" y="23" width="1920" height="1097" extended-state="0" />
@@ -971,7 +978,7 @@
         <state relative-caret-position="360">
           <caret line="61" column="41" selection-start-line="61" selection-start-column="41" selection-end-line="61" selection-end-column="41" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="e#0#2235#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1052,7 +1059,7 @@
         <state relative-caret-position="360">
           <caret line="61" column="41" selection-start-line="61" selection-start-column="41" selection-end-line="61" selection-end-column="41" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="e#0#2235#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1133,7 +1140,7 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="e#0#2235#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1226,7 +1233,7 @@
         <state relative-caret-position="360">
           <caret line="61" column="41" selection-start-line="61" selection-start-column="41" selection-end-line="61" selection-end-column="41" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="e#0#2235#0" expanded="false" />
           </folding>
         </state>
       </provider>
