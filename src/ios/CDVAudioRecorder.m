@@ -480,7 +480,7 @@
 {
     [super viewDidAppear:animated];
     NSLog(@"viewDidAppear");
-//    [self performSelector:@selector(ripples) withObject:nil afterDelay:0.1];
+    [self performSelector:@selector(ripples) withObject:nil afterDelay:0.1];
 
 
 }
