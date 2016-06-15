@@ -51,7 +51,7 @@
         <source-file src="src/android/CDVAudioRecorder.java" target-dir="src/uk/co/onefile/nomadionic/audiocapture" />
 
         <!--  drawable src/android/resources -->
-        <resource-file src="src/android/res/layout/ic_action_next_item.png" target="res/drawable-hdpi/ic_action_next_item.png" />
+        <resource-file src="src/android/res/layout/activity_main.xml" target="res/layout/activity_main.xml" />
 
         <resource-file src="src/android/res/drawable-hdpi/ic_launcher.png" target="res/drawable-hdpi/ic_launcher.png" />
         <resource-file src="src/android/res/drawable-mdpi/ic_launcher.png" target="res/drawable-mdpi/ic_launcher.png" />
