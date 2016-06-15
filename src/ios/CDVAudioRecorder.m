@@ -215,6 +215,10 @@
 
 @synthesize circleTimer = _circleTimer;
 
+@synthesize fadeColor = _fadeColor;
+@synthesize lastCircleLayer = _lastCircleLayer;
+@synthesize lastRingLayer = _lastRingLayer;
+
 @synthesize errorCode = _errorCode;
 @synthesize callbackId = _callbackId;
 @synthesize duration = _duration;
@@ -374,16 +378,22 @@
     UIBezierPath *path = [UIBezierPath bezierPathWithArcCenter:CGPointMake(centreX, centreY) radius:radius startAngle:0 endAngle:DEGREES_TO_RADIANS(360) clockwise:YES];
     [circleLayer setPath:[path CGPath]];
     [circleLayer setFillColor:[UIColor blackColor].CGColor];
-    [circleLayer setStrokeColor:[UIColor orangeColor].CGColor];
-    [circleLayer setLineWidth:2.0f];
+    if(self.fadeColor > 0.0)
+        self.fadeColor -= 0.05;
+    float value = self.fadeColor;
+    [circleLayer setStrokeColor:[UIColor colorWithRed:value green:value blue:value alpha:1.0].CGColor];
+    [circleLayer setLineWidth:20.0f];
+    if(self.lastCircleLayer)
+        [self.lastCircleLayer removeFromSuperlayer];
     [[self.circlesView layer] addSublayer:circleLayer];
+    self.lastCircleLayer = circleLayer;
 }
 
 -(void)ripples
 {
     if(!self.circles)
     {
-        CGFloat radius = 80.0;
+        CGFloat radius = 60.0;
         NSNumber *radiusObject = [[NSNumber alloc] initWithFloat:radius];
         self.circles = [[NSMutableArray alloc] initWithCapacity:10];
         [self.circles addObject:radiusObject];
@@ -392,9 +402,12 @@
         {
             NSNumber *current = [self.circles objectAtIndex:index];
             CGFloat value = [current floatValue];
-            value += 2.0;
+            value += 3.0;
             if(value > 130.0)
-                value = 80.0;
+            {
+                value = 60.0;
+                self.fadeColor = 1.0;
+            }
             [self.circles setObject:[NSNumber numberWithFloat:value] atIndexedSubscript:index];
             [self drawCircle:value];
         }
