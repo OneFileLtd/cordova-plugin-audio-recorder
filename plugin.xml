@@ -49,7 +49,5 @@
         </config-file>
 
         <source-file src="src/android/CDVAudioRecorder.java" target-dir="src/uk/co/onefile/nomadionic/audiocapture" />
-        <source-file src="src/android/FileHelper.java" target-dir="src/uk/co/onefile/nomadionic/audiocapture" />
-        <source-file src="src/android/PendingRequests.java" target-dir="src/uk/co/onefile/nomadionic/audiocapture" />
     </platform>
 </plugin>
