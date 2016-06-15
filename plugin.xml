@@ -35,36 +35,36 @@
     </platform>
 
     <!-- android -->
-    <platform name="android">
-        <config-file target="res/xml/config.xml" parent="/*">
-            <feature name="CDVAudioRecorder" >
-                <param name="android-package" value="uk.co.onefile.nomadionic.audiocapture.CDVAudioRecorder"/>
-            </feature>
-        </config-file>
+    <!--<platform name="android">-->
+        <!--<config-file target="res/xml/config.xml" parent="/*">-->
+            <!--<feature name="CDVAudioRecorder" >-->
+                <!--<param name="android-package" value="uk.co.onefile.nomadionic.audiocapture.CDVAudioRecorder"/>-->
+            <!--</feature>-->
+        <!--</config-file>-->
 
-        <config-file target="AndroidManifest.xml" parent="/*">
-            <uses-permission android:name="android.permission.RECORD_AUDIO" />
-            <uses-permission android:name="android.permission.RECORD_VIDEO"/>
-            <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-        </config-file>
+        <!--<config-file target="AndroidManifest.xml" parent="/*">-->
+            <!--<uses-permission android:name="android.permission.RECORD_AUDIO" />-->
+            <!--<uses-permission android:name="android.permission.RECORD_VIDEO"/>-->
+            <!--<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />-->
+        <!--</config-file>-->
 
-        <source-file src="src/android/CDVAudioRecorder.java" target-dir="src/uk/co/onefile/nomadionic/audiocapture" />
+        <!--<source-file src="src/android/CDVAudioRecorder.java" target-dir="src/uk/co/onefile/nomadionic/audiocapture" />-->
 
-        <!--  drawable src/android/resources -->
-        <resource-file src="src/android/res/layout/activity_main.xml" target="res/layout/activity_main.xml" />
+        <!--&lt;!&ndash;  drawable src/android/resources &ndash;&gt;-->
+        <!--<resource-file src="src/android/res/layout/activity_main.xml" target="res/layout/activity_main.xml" />-->
 
-        <resource-file src="src/android/res/mipmap-hdpi/ic_launcher.png" target="res/mipmap-hdpi/ic_launcher.png" />
-        <resource-file src="src/android/res/mipmap-mdpi/ic_launcher.png" target="res/mipmap-mdpi/ic_launcher.png" />
-        <resource-file src="src/android/res/mipmap-xhdpi/ic_launcher.png" target="res/mipmap-xhdpi/ic_launcher.png" />
-        <resource-file src="src/android/res/mipmap-xxhdpi/ic_launcher.png" target="res/mipmap-xxhdpi/ic_launcher.png" />
-        <resource-file src="src/android/res/mipmap-xxxhdpi/ic_launcher.png" target="res/mipmap-xxxhdpi/ic_launcher.png" />
+        <!--<resource-file src="src/android/res/mipmap-hdpi/ic_launcher.png" target="res/mipmap-hdpi/ic_launcher.png" />-->
+        <!--<resource-file src="src/android/res/mipmap-mdpi/ic_launcher.png" target="res/mipmap-mdpi/ic_launcher.png" />-->
+        <!--<resource-file src="src/android/res/mipmap-xhdpi/ic_launcher.png" target="res/mipmap-xhdpi/ic_launcher.png" />-->
+        <!--<resource-file src="src/android/res/mipmap-xxhdpi/ic_launcher.png" target="res/mipmap-xxhdpi/ic_launcher.png" />-->
+        <!--<resource-file src="src/android/res/mipmap-xxxhdpi/ic_launcher.png" target="res/mipmap-xxxhdpi/ic_launcher.png" />-->
 
-        <resource-file src="src/android/res/values/colors.xml" target="res/values/colors.xml" />
-        <resource-file src="src/android/res/values/dimens.xml" target="res/values/dimens.xml" />
-        <resource-file src="src/android/res/values/strings.xml" target="res/values/strings.xml" />
-        <resource-file src="src/android/res/values/styles.xml" target="res/values/styles.xml" />
+        <!--<resource-file src="src/android/res/values/colors.xml" target="res/values/colors.xml" />-->
+        <!--<resource-file src="src/android/res/values/dimens.xml" target="res/values/dimens.xml" />-->
+        <!--<resource-file src="src/android/res/values/strings.xml" target="res/values/strings.xml" />-->
+        <!--<resource-file src="src/android/res/values/styles.xml" target="res/values/styles.xml" />-->
 
-        <resource-file src="src/android/res/values-w820dp/dimens.xml" target="res/values-w820dp/dimens.xml" />
+        <!--<resource-file src="src/android/res/values-w820dp/dimens.xml" target="res/values-w820dp/dimens.xml" />-->
 
-    </platform>
+    <!--</platform>-->
 </plugin>
