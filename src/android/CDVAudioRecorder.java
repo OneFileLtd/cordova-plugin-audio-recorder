@@ -45,13 +45,15 @@ public class CDVAudioRecorder extends CordovaPlugin {
 	@Override
 	protected void pluginInitialize() {
 		super.pluginInitialize();
-		Log.i("test","pluginInitialize");
+		Log.i("CDVAudioRecorder","pluginInitialize()");
 	}
 
 	@Override
 	public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
 		JSONObject options = args.optJSONObject(0);
-
+		Log.i("CDVAudioRecorder", "execute() called - checking action equals audioRecorder");
+		Log.i("CDVAudioRecorder", action);
+		Log.i("CDVAudioRecorder", args)
 		if (action.equals("audioRecorder")) {
 			cordova.getActivity().runOnUiThread(new Runnable() {
 				@Override
@@ -59,11 +61,12 @@ public class CDVAudioRecorder extends CordovaPlugin {
 					Context context = cordova.getActivity().getApplicationContext();
 					Intent intent = new Intent(context, MyNewActivityGap.class);
 					cordova.getActivity().startActivity(intent);
-					Log.i("test","execute");
+					Log.i("CDVAudioRecorder","executing run()");
 				}
 			});
-
+			Log.i("CDVAudioRecorder", "returning true");
 			return true;
 		}
+		Log.i("CDVAudioRecorder", "action not equal to audioRecorder - finishing");
 	}
 }
