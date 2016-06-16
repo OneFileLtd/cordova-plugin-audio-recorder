@@ -28,9 +28,11 @@
       <file leaf-file-name="CDVAudioRecorder.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/android/CDVAudioRecorder.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="450">
-              <caret line="47" column="27" selection-start-line="47" selection-start-column="27" selection-end-line="47" selection-end-column="27" />
-              <folding />
+            <state relative-caret-position="220">
+              <caret line="57" column="63" selection-start-line="57" selection-start-column="63" selection-end-line="57" selection-end-column="63" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -795,7 +797,7 @@
       <workItem from="1465996866103" duration="116000" />
       <workItem from="1465998222370" duration="675000" />
       <workItem from="1466062168179" duration="2376000" />
-      <workItem from="1466072192709" duration="4269000" />
+      <workItem from="1466072192709" duration="4738000" />
     </task>
     <task id="LOCAL-00001" summary="Made space for Navigation bar.&#10;Turned on save button.">
       <created>1465893015359</created>
@@ -1021,11 +1023,18 @@
       <option name="project" value="LOCAL" />
       <updated>1466076370658</updated>
     </task>
-    <option name="localTasksCounter" value="33" />
+    <task id="LOCAL-00033" summary="Android - Added additional libraries">
+      <created>1466076655869</created>
+      <option name="number" value="00033" />
+      <option name="presentableId" value="LOCAL-00033" />
+      <option name="project" value="LOCAL" />
+      <updated>1466076655869</updated>
+    </task>
+    <option name="localTasksCounter" value="34" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="25619000" />
+    <option name="totallyTimeSpent" value="26088000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="7" y="23" width="1920" height="1097" extended-state="6" />
@@ -1143,7 +1152,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="360">
           <caret line="61" column="41" selection-start-line="61" selection-start-column="41" selection-end-line="61" selection-end-column="41" />
-          <folding />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1222,7 +1233,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="360">
           <caret line="61" column="41" selection-start-line="61" selection-start-column="41" selection-end-line="61" selection-end-column="41" />
-          <folding />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1301,7 +1314,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1451,9 +1466,11 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/android/CDVAudioRecorder.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="450">
-          <caret line="47" column="27" selection-start-line="47" selection-start-column="27" selection-end-line="47" selection-end-column="27" />
-          <folding />
+        <state relative-caret-position="220">
+          <caret line="57" column="63" selection-start-line="57" selection-start-column="63" selection-end-line="57" selection-end-column="63" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

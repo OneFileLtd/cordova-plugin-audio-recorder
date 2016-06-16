@@ -49,6 +49,15 @@ import org.json.JSONObject;
 
 import android.Manifest;
 import android.app.Activity;
+import android.support.v7.app.AppCompatActivity;
+
+public class MyNewActivityGap extends AppCompatActivity {
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		Log.i("MyNewActivityGap","MyNewActivityGap - OnCreate()");
+	}
+}
 
 public class CDVAudioRecorder extends CordovaPlugin {
 
