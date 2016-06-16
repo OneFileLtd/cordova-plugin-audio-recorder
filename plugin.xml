@@ -57,6 +57,7 @@
         <source-file src="src/android/AudioRecorder.java" target-dir="src/uk/co/onefile/nomadionic/audiocapture" />
 
         <resource-file src="src/android/res/layout/activity_main.xml" target="res/layout/activity_main.xml" />
+        <resource-file src="src/android/res/values/dimens.xml" target="res/values/dimens.xml" />
 
     </platform>
 </plugin>
