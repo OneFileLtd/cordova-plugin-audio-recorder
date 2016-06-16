@@ -56,7 +56,7 @@
         <source-file src="src/android/CDVAudioRecorder.java" target-dir="src/uk/co/onefile/nomadionic/audiocapture" />
         <source-file src="src/android/AudioRecorder.java" target-dir="src/uk/co/onefile/nomadionic/audiocapture" />
 
-        <resource-file src="src/android/res/drawable-layout/activity_main.xml" target="res/drawable-layout/activity_main.xml" />
+        <resource-file src="src/android/res/layout/activity_main.xml" target="res/layout/activity_main.xml" />
 
     </platform>
 </plugin>
