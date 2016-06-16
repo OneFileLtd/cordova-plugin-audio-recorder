@@ -66,15 +66,15 @@ public class CDVAudioRecorder extends CordovaPlugin {
 		Log.i("CDVAudioRecorder", "execute() called - checking action equals audioRecorder");
 		Log.i("CDVAudioRecorder", action);
 		if (action.equals("audioRecorder")) {
-//			cordova.getActivity().runOnUiThread(new Runnable() {
-//				@Override
-//				public void run() {
-//					Context context = cordova.getActivity().getApplicationContext();
-//					Intent intent = new Intent(context, AudioRecorder.class);
-//					cordova.getActivity().startActivity(intent);
-//					Log.i("CDVAudioRecorder","executing run()");
-//				}
-//			});
+			cordova.getActivity().runOnUiThread(new Runnable() {
+				@Override
+				public void run() {
+					Context context = cordova.getActivity().getApplicationContext();
+					Intent intent = new Intent(context, AudioRecorder.class);
+					cordova.getActivity().startActivity(intent);
+					Log.i("CDVAudioRecorder","executing run()");
+				}
+			});
 			Log.i("CDVAudioRecorder", "returning true");
 			return true;
 		}
