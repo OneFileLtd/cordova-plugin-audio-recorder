@@ -52,7 +52,7 @@ public class CDVAudioRecorder extends CordovaPlugin {
 	public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
 		JSONObject options = args.optJSONObject(0);
 
-		if (action.equals("myaction")) {
+		if (action.equals("audioRecorder")) {
 			cordova.getActivity().runOnUiThread(new Runnable() {
 				@Override
 				public void run() {

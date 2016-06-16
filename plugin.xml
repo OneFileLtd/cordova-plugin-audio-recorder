@@ -36,6 +36,11 @@
 
     <!-- android -->
     <platform name="android">
+        <js-module src="www/AudioRecorder.js" name="AudioRecorder"> 
+            <clobbers target="cordova.AudioRecorder.audioRecorder" /> 
+            <clobbers target="window.audioRecorder" /> 
+        </js-module>
+
         <config-file target="res/xml/config.xml" parent="/*">
             <feature name="CDVAudioRecorder" >
                 <param name="android-package" value="uk.co.onefile.nomadionic.audiocapture.CDVAudioRecorder"/>
