@@ -53,7 +53,7 @@ public class CDVAudioRecorder extends CordovaPlugin {
 		JSONObject options = args.optJSONObject(0);
 		Log.i("CDVAudioRecorder", "execute() called - checking action equals audioRecorder");
 		Log.i("CDVAudioRecorder", action);
-		Log.i("CDVAudioRecorder", args)
+		Log.i("CDVAudioRecorder", args);
 		if (action.equals("audioRecorder")) {
 			cordova.getActivity().runOnUiThread(new Runnable() {
 				@Override
