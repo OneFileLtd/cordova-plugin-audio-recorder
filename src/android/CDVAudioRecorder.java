@@ -49,7 +49,6 @@ import org.json.JSONObject;
 
 import android.Manifest;
 import android.app.Activity;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 public class CDVAudioRecorder extends CordovaPlugin {
