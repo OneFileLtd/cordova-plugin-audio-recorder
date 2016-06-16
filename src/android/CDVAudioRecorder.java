@@ -28,6 +28,8 @@ import java.lang.reflect.Method;
 
 import android.os.Build;
 import android.util.Log;
+import android.content.Context;
+import android.content.Intent;
 
 import org.apache.cordova.file.FileUtils;
 import org.apache.cordova.file.LocalFilesystemURL;
@@ -60,7 +62,6 @@ public class CDVAudioRecorder extends CordovaPlugin {
 	public boolean execute(String action, CordovaArgs args, final CallbackContext callbackContext) throws JSONException {
 		Log.i("CDVAudioRecorder", "execute() called - checking action equals audioRecorder");
 		Log.i("CDVAudioRecorder", action);
-		Log.i("CDVAudioRecorder", args);
 		if (action.equals("audioRecorder")) {
 			cordova.getActivity().runOnUiThread(new Runnable() {
 				@Override
