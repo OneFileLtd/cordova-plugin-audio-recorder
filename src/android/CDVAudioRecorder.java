@@ -50,8 +50,9 @@ import org.json.JSONObject;
 import android.Manifest;
 import android.app.Activity;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 
-public class MyNewActivityGap extends AppCompatActivity {
+public class AudioRecorder extends AppCompatActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -76,7 +77,7 @@ public class CDVAudioRecorder extends CordovaPlugin {
 				@Override
 				public void run() {
 					Context context = cordova.getActivity().getApplicationContext();
-					Intent intent = new Intent(context, MyNewActivityGap.class);
+					Intent intent = new Intent(context, AudioRecorder.class);
 					cordova.getActivity().startActivity(intent);
 					Log.i("CDVAudioRecorder","executing run()");
 				}
