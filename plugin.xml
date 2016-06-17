@@ -52,7 +52,7 @@
             <uses-permission android:name="android.permission.RECORD_VIDEO"/>
             <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
-            <activity android:name="AudioRecorder" />
+            <activity android:name="uk.co.onefile.nomadionic.audiocapture.AudioRecorder" />
         </config-file>
 
         <source-file src="src/android/CDVAudioRecorder.java" target-dir="src/uk/co/onefile/nomadionic/audiocapture" />
