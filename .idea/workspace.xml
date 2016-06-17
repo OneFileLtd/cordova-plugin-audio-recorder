@@ -40,9 +40,11 @@
       <file leaf-file-name="AudioRecorder.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/android/AudioRecorder.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="405">
-              <caret line="27" column="0" selection-start-line="27" selection-start-column="0" selection-end-line="27" selection-end-column="0" />
-              <folding />
+            <state relative-caret-position="0">
+              <caret line="0" column="45" selection-start-line="0" selection-start-column="8" selection-end-line="0" selection-end-column="45" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -90,8 +92,8 @@
       <file leaf-file-name="plugin.xml" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/plugin.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="541">
-              <caret line="54" column="52" selection-start-line="54" selection-start-column="52" selection-end-line="54" selection-end-column="52" />
+            <state relative-caret-position="571">
+              <caret line="55" column="79" selection-start-line="55" selection-start-column="79" selection-end-line="55" selection-end-column="79" />
               <folding />
             </state>
           </provider>
@@ -773,7 +775,7 @@
       <workItem from="1466089112140" duration="82000" />
       <workItem from="1466089390911" duration="157000" />
       <workItem from="1466147693936" duration="588000" />
-      <workItem from="1466158220750" duration="1540000" />
+      <workItem from="1466158220750" duration="2496000" />
     </task>
     <task id="LOCAL-00001" summary="Made space for Navigation bar.&#10;Turned on save button.">
       <created>1465893015359</created>
@@ -1097,15 +1099,29 @@
       <option name="project" value="LOCAL" />
       <updated>1466159034051</updated>
     </task>
-    <option name="localTasksCounter" value="47" />
+    <task id="LOCAL-00047" summary="Android - added missing Intent (activity) to&#10;androidmanifest.xml through plugin.xml.">
+      <created>1466160123500</created>
+      <option name="number" value="00047" />
+      <option name="presentableId" value="LOCAL-00047" />
+      <option name="project" value="LOCAL" />
+      <updated>1466160123500</updated>
+    </task>
+    <task id="LOCAL-00048" summary="Android">
+      <created>1466166801598</created>
+      <option name="number" value="00048" />
+      <option name="presentableId" value="LOCAL-00048" />
+      <option name="project" value="LOCAL" />
+      <updated>1466166801598</updated>
+    </task>
+    <option name="localTasksCounter" value="49" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="36678000" />
+    <option name="totallyTimeSpent" value="37634000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="4" y="23" width="1920" height="1097" extended-state="6" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -1113,7 +1129,7 @@
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1814475" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1814475" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="hashGenerator" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32925585" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -1159,7 +1175,6 @@
     <MESSAGE value="Added fading circles.&#10;Removed memory leaks." />
     <MESSAGE value="Removed Android from plugin for now." />
     <MESSAGE value="Put back in the ripples." />
-    <MESSAGE value="Android" />
     <MESSAGE value="Android - Removed other resource files for now." />
     <MESSAGE value="Android - added missing semicolon." />
     <MESSAGE value="Android - added android log library." />
@@ -1168,7 +1183,9 @@
     <MESSAGE value="Android - added secondary class for the activity which will be used for the main audio recorder." />
     <MESSAGE value="Android -" />
     <MESSAGE value="Android - added mising imports." />
-    <option name="LAST_COMMIT_MESSAGE" value="Android - added mising imports." />
+    <MESSAGE value="Android - added missing Intent (activity) to&#10;androidmanifest.xml through plugin.xml." />
+    <MESSAGE value="Android" />
+    <option name="LAST_COMMIT_MESSAGE" value="Android" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -1526,16 +1543,18 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/android/AudioRecorder.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="405">
-          <caret line="27" column="0" selection-start-line="27" selection-start-column="0" selection-end-line="27" selection-end-column="0" />
-          <folding />
+        <state relative-caret-position="0">
+          <caret line="0" column="45" selection-start-line="0" selection-start-column="8" selection-end-line="0" selection-end-column="45" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/plugin.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="541">
-          <caret line="54" column="52" selection-start-line="54" selection-start-column="52" selection-end-line="54" selection-end-column="52" />
+        <state relative-caret-position="571">
+          <caret line="55" column="79" selection-start-line="55" selection-start-column="79" selection-end-line="55" selection-end-column="79" />
           <folding />
         </state>
       </provider>
