@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="fa5aae78-a822-4d54-9516-a7234c120ad1" name="Default" comment="Android - Re-added activity_main.xml, to include required layouts.">
+    <list default="true" id="fa5aae78-a822-4d54-9516-a7234c120ad1" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/android/res/values/colors.xml" afterPath="$PROJECT_DIR$/src/android/res/values/colors.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/plugin.xml" afterPath="$PROJECT_DIR$/plugin.xml" />
     </list>
     <ignored path="cordova-plugin-audio-recorder.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -35,11 +35,31 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="plugin.xml" pinned="false" current-in-tab="false">
+      <file leaf-file-name="plugin.xml" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/plugin.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="505">
-              <caret line="55" column="79" selection-start-line="55" selection-start-column="79" selection-end-line="55" selection-end-column="79" />
+            <state relative-caret-position="629">
+              <caret line="65" column="89" selection-start-line="65" selection-start-column="89" selection-end-line="65" selection-end-column="89" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="styles.xml" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/android/res/values/styles.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="30">
+              <caret line="2" column="0" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="strings.xml" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/android/res/values/strings.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="75">
+              <caret line="5" column="0" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -57,7 +77,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="colors.xml" pinned="false" current-in-tab="true">
+      <file leaf-file-name="colors.xml" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/android/res/values/colors.xml">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="195">
@@ -97,10 +117,10 @@
         <option value="$PROJECT_DIR$/src/ios/CDVAudioRecorder.m" />
         <option value="$PROJECT_DIR$/src/android/res/values/strings.xml" />
         <option value="$PROJECT_DIR$/src/android/CDVAudioRecorder.java" />
-        <option value="$PROJECT_DIR$/plugin.xml" />
         <option value="$PROJECT_DIR$/src/android/AudioRecorder.java" />
         <option value="$PROJECT_DIR$/src/android/res/layout/activity_main.xml" />
         <option value="$PROJECT_DIR$/src/android/res/values/colors.xml" />
+        <option value="$PROJECT_DIR$/plugin.xml" />
       </list>
     </option>
   </component>
@@ -714,21 +734,7 @@
       <workItem from="1466147693936" duration="588000" />
       <workItem from="1466158220750" duration="3914000" />
       <workItem from="1466174049804" duration="475000" />
-      <workItem from="1466408530102" duration="1345000" />
-    </task>
-    <task id="LOCAL-00005" summary="removed commented out/un-used code.">
-      <created>1465897581522</created>
-      <option name="number" value="00005" />
-      <option name="presentableId" value="LOCAL-00005" />
-      <option name="project" value="LOCAL" />
-      <updated>1465897581523</updated>
-    </task>
-    <task id="LOCAL-00006" summary="removed commented out/un-used code.">
-      <created>1465897588548</created>
-      <option name="number" value="00006" />
-      <option name="presentableId" value="LOCAL-00006" />
-      <option name="project" value="LOCAL" />
-      <updated>1465897588548</updated>
+      <workItem from="1466408530102" duration="1777000" />
     </task>
     <task id="LOCAL-00007" summary="rename captureAudio to audioRecorder.">
       <created>1465897958249</created>
@@ -1059,11 +1065,25 @@
       <option name="project" value="LOCAL" />
       <updated>1466409160003</updated>
     </task>
-    <option name="localTasksCounter" value="54" />
+    <task id="LOCAL-00054" summary="Android - Re-added colors.xml">
+      <created>1466411039643</created>
+      <option name="number" value="00054" />
+      <option name="presentableId" value="LOCAL-00054" />
+      <option name="project" value="LOCAL" />
+      <updated>1466411039643</updated>
+    </task>
+    <task id="LOCAL-00055" summary="Android - Re-added some other res files">
+      <created>1466411320829</created>
+      <option name="number" value="00055" />
+      <option name="presentableId" value="LOCAL-00055" />
+      <option name="project" value="LOCAL" />
+      <updated>1466411320829</updated>
+    </task>
+    <option name="localTasksCounter" value="56" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="40872000" />
+    <option name="totallyTimeSpent" value="41304000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-1920" y="23" width="1920" height="1097" extended-state="0" />
@@ -1110,8 +1130,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Made space for Navigation bar.&#10;Turned on save button." />
-    <MESSAGE value="Added Android" />
     <MESSAGE value="changed captureAudio to audioRecorder" />
     <MESSAGE value="fixed wrongly named this.captureAudio to audioRecorder." />
     <MESSAGE value="removed commented out/un-used code." />
@@ -1135,7 +1153,9 @@
     <MESSAGE value="Android - Added other code back in.&#10;Calls the OnCreate successfully on the previous commit." />
     <MESSAGE value="Android -" />
     <MESSAGE value="Android - Re-added activity_main.xml, to include required layouts." />
-    <option name="LAST_COMMIT_MESSAGE" value="Android - Re-added activity_main.xml, to include required layouts." />
+    <MESSAGE value="Android - Re-added colors.xml" />
+    <MESSAGE value="Android - Re-added some other res files" />
+    <option name="LAST_COMMIT_MESSAGE" value="Android - Re-added some other res files" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -1431,14 +1451,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/android/res/values/styles.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="2" column="0" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/ios/CDVAudioRecorder.xib">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -1460,14 +1472,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/android/res/values/strings.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="5" column="0" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/android/res/values/dimens.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -1485,14 +1489,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="1" column="17" selection-start-line="1" selection-start-column="4" selection-end-line="1" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/plugin.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="505">
-          <caret line="55" column="79" selection-start-line="55" selection-start-column="79" selection-end-line="55" selection-end-column="79" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1526,6 +1522,30 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="195">
           <caret line="13" column="0" selection-start-line="13" selection-start-column="0" selection-end-line="13" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/android/res/values/styles.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="2" column="0" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/android/res/values/strings.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="5" column="0" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/plugin.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="629">
+          <caret line="65" column="89" selection-start-line="65" selection-start-column="89" selection-end-line="65" selection-end-column="89" />
           <folding />
         </state>
       </provider>
