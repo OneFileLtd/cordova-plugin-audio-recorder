@@ -44,7 +44,7 @@
 
         <config-file target="res/xml/config.xml" parent="/*">
             <feature name="CDVAudioRecorder" >
-                <param name="android-package" value="uk.co.onefile.nomadionic.audiocapture"/>
+                <param name="android-package" value="uk.co.onefile.nomadionic.audiocapture.CDVAudioRecorder"/>
             </feature>
         </config-file>
 

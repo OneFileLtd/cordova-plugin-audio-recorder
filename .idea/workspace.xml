@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="fa5aae78-a822-4d54-9516-a7234c120ad1" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/plugin.xml" afterPath="$PROJECT_DIR$/plugin.xml" />
     </list>
     <ignored path="cordova-plugin-audio-recorder.iws" />
@@ -39,7 +38,7 @@
         <entry file="file://$PROJECT_DIR$/plugin.xml">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="314">
-              <caret line="46" column="90" selection-start-line="46" selection-start-column="90" selection-end-line="46" selection-end-column="90" />
+              <caret line="46" column="91" selection-start-line="46" selection-start-column="91" selection-end-line="46" selection-end-column="107" />
               <folding />
             </state>
           </provider>
@@ -89,7 +88,7 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="-1914" />
+    <option name="x" value="-1" />
     <option name="y" value="23" />
     <option name="width" value="1920" />
     <option name="height" value="1097" />
@@ -756,14 +755,7 @@
       <workItem from="1466158220750" duration="3914000" />
       <workItem from="1466174049804" duration="475000" />
       <workItem from="1466408530102" duration="4010000" />
-      <workItem from="1466415386405" duration="8530000" />
-    </task>
-    <task id="LOCAL-00017" summary="android.">
-      <created>1465982446557</created>
-      <option name="number" value="00017" />
-      <option name="presentableId" value="LOCAL-00017" />
-      <option name="project" value="LOCAL" />
-      <updated>1465982446557</updated>
+      <workItem from="1466415386405" duration="9078000" />
     </task>
     <task id="LOCAL-00018" summary="Added fading circles.&#10;Removed memory leaks.">
       <created>1465986260359</created>
@@ -1101,14 +1093,21 @@
       <option name="project" value="LOCAL" />
       <updated>1466422062896</updated>
     </task>
-    <option name="localTasksCounter" value="66" />
+    <task id="LOCAL-00066" summary="Android - Change mainActivity to correct activity.">
+      <created>1466428486604</created>
+      <option name="number" value="00066" />
+      <option name="presentableId" value="LOCAL-00066" />
+      <option name="project" value="LOCAL" />
+      <updated>1466428486604</updated>
+    </task>
+    <option name="localTasksCounter" value="67" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="52067000" />
+    <option name="totallyTimeSpent" value="52615000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-1914" y="23" width="1920" height="1097" extended-state="0" />
+    <frame x="-1" y="23" width="1920" height="1097" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -1564,7 +1563,7 @@
     <entry file="file://$PROJECT_DIR$/plugin.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="314">
-          <caret line="46" column="90" selection-start-line="46" selection-start-column="90" selection-end-line="46" selection-end-column="90" />
+          <caret line="46" column="91" selection-start-line="46" selection-start-column="91" selection-end-line="46" selection-end-column="107" />
           <folding />
         </state>
       </provider>
