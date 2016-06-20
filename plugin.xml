@@ -62,6 +62,8 @@
 
         <resource-file src="src/android/res/layout/activity_main.xml" target="res/layout/activity_main.xml" />
         <resource-file src="src/android/res/values/dimens.xml" target="res/values/dimens.xml" />
+        <resource-file src="src/android/res/values/colors.xml" target="res/values/colors.xml" />
+        <resource-file src="src/android/res/values/string.xml" target="res/values/string.xml" />
 
     </platform>
 </plugin>
