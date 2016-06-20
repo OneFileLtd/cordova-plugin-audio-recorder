@@ -2,4 +2,6 @@
 	<string name="app_name">Test</string>
 	<string name="action_settings">Settings</string>
 	<string name="title_activity_main2">Main2Activity</string>
+	<string name="activity_name">CDVAudioRecorder</string>
+	<string name="launcher_name">ic_launcher</string>
 </resources>
