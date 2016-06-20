@@ -3,7 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="fa5aae78-a822-4d54-9516-a7234c120ad1" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/plugin.xml" afterPath="$PROJECT_DIR$/plugin.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/android/AudioRecorder.java" afterPath="$PROJECT_DIR$/src/android/AudioRecorder.java" />
     </list>
     <ignored path="cordova-plugin-audio-recorder.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -25,11 +25,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="AudioRecorder.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="AudioRecorder.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/android/AudioRecorder.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="11280">
-              <caret line="764" column="39" selection-start-line="764" selection-start-column="39" selection-end-line="764" selection-end-column="39" />
+            <state relative-caret-position="15">
+              <caret line="1" column="0" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -37,11 +37,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="plugin.xml" pinned="false" current-in-tab="true">
+      <file leaf-file-name="plugin.xml" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/plugin.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="599">
-              <caret line="68" column="63" selection-start-line="68" selection-start-column="63" selection-end-line="68" selection-end-column="63" />
+            <state relative-caret-position="584">
+              <caret line="67" column="0" selection-start-line="67" selection-start-column="0" selection-end-line="68" selection-end-column="67" />
               <folding />
             </state>
           </provider>
@@ -79,8 +79,8 @@
         <option value="$PROJECT_DIR$/src/android/res/values/colors.xml" />
         <option value="$PROJECT_DIR$/src/android/res/layout/activity_main.xml" />
         <option value="$PROJECT_DIR$/src/android/res/values/strings.xml" />
-        <option value="$PROJECT_DIR$/src/android/AudioRecorder.java" />
         <option value="$PROJECT_DIR$/plugin.xml" />
+        <option value="$PROJECT_DIR$/src/android/AudioRecorder.java" />
       </list>
     </option>
   </component>
@@ -163,6 +163,32 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ios" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="cordova-plugin-audio-recorder" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="cordova-plugin-audio-recorder" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ios" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="CDVAudioRecorder.bundle" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -727,21 +753,7 @@
       <workItem from="1466158220750" duration="3914000" />
       <workItem from="1466174049804" duration="475000" />
       <workItem from="1466408530102" duration="4010000" />
-      <workItem from="1466415386405" duration="5400000" />
-    </task>
-    <task id="LOCAL-00015" summary="android.">
-      <created>1465981299156</created>
-      <option name="number" value="00015" />
-      <option name="presentableId" value="LOCAL-00015" />
-      <option name="project" value="LOCAL" />
-      <updated>1465981299156</updated>
-    </task>
-    <task id="LOCAL-00016" summary="android.">
-      <created>1465981615774</created>
-      <option name="number" value="00016" />
-      <option name="presentableId" value="LOCAL-00016" />
-      <option name="project" value="LOCAL" />
-      <updated>1465981615775</updated>
+      <workItem from="1466415386405" duration="6657000" />
     </task>
     <task id="LOCAL-00017" summary="android.">
       <created>1465982446557</created>
@@ -1072,14 +1084,28 @@
       <option name="project" value="LOCAL" />
       <updated>1466421279951</updated>
     </task>
-    <option name="localTasksCounter" value="64" />
+    <task id="LOCAL-00064" summary="Android - Change mainActivity to correct activity.">
+      <created>1466421751149</created>
+      <option name="number" value="00064" />
+      <option name="presentableId" value="LOCAL-00064" />
+      <option name="project" value="LOCAL" />
+      <updated>1466421751149</updated>
+    </task>
+    <task id="LOCAL-00065" summary="Android - Change mainActivity to correct activity.">
+      <created>1466422062896</created>
+      <option name="number" value="00065" />
+      <option name="presentableId" value="LOCAL-00065" />
+      <option name="project" value="LOCAL" />
+      <updated>1466422062896</updated>
+    </task>
+    <option name="localTasksCounter" value="66" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="48937000" />
+    <option name="totallyTimeSpent" value="50194000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="23" width="1920" height="1097" extended-state="6" />
+    <frame x="0" y="23" width="1920" height="1097" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -1524,21 +1550,21 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/android/AudioRecorder.java">
+    <entry file="file://$PROJECT_DIR$/plugin.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="11280">
-          <caret line="764" column="39" selection-start-line="764" selection-start-column="39" selection-end-line="764" selection-end-column="39" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+        <state relative-caret-position="584">
+          <caret line="67" column="0" selection-start-line="67" selection-start-column="0" selection-end-line="68" selection-end-column="67" />
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/plugin.xml">
+    <entry file="file://$PROJECT_DIR$/src/android/AudioRecorder.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="599">
-          <caret line="68" column="63" selection-start-line="68" selection-start-column="63" selection-end-line="68" selection-end-column="63" />
-          <folding />
+        <state relative-caret-position="15">
+          <caret line="1" column="0" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

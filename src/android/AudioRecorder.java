@@ -1,7 +1,5 @@
 package uk.co.onefile.nomadionic.audiocapture;
 
-import uk.co.onefile.nomadionic.audiocapture.R;
-
 import android.graphics.Color;
 import android.media.AudioFormat;
 import android.media.AudioRecord;
