@@ -30,6 +30,7 @@
         <framework src="AVFoundation.framework" />
         <framework src="UIKIT.framework" />
         <framework src="QuartzCore.framework" />
+
         <framework src="CoreGraphics.framework" />
         <framework src="MobileCoreServices.framework" />
     </platform>
