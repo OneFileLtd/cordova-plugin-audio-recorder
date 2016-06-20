@@ -741,7 +741,7 @@ public class AudioRecorder extends Activity {
 	}
 
 	static class AudioRecordingTask extends AsyncTask<Void, Void, Void> {
-		MainActivity activity = null;
+		AudioRecorder activity = null;
 		int progress = 0;
 
 		private String outputPath;
@@ -914,7 +914,7 @@ public class AudioRecorder extends Activity {
 			activity = null;
 		}
 
-		void attach(MainActivity activity)
+		void attach(AudioRecorder activity)
 		{
 			this.activity = activity;
 		}
