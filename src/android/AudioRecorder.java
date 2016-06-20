@@ -762,7 +762,7 @@ public class AudioRecorder extends Activity {
 
 		}
 
-		public void setUp(MainActivity activity, String outputPath, long maxSize, long sizeSoFar)
+		public void setUp(AudioRecorder activity, String outputPath, long maxSize, long sizeSoFar)
 		{
 			attach(activity);
 

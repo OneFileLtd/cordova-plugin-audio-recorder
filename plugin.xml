@@ -66,7 +66,7 @@
         <resource-file src="src/android/res/values/colors.xml" target="res/values/colors.xml" />
         <resource-file src="src/android/res/values/strings.xml" target="res/values/strings.xml" />
 
-        <framework src="com.android.support:appcompat-v7:21+" />
+        <framework src="android.support.v7.app.AppCompatActivity" />
 
     </platform>
 </plugin>
