@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="fa5aae78-a822-4d54-9516-a7234c120ad1" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/android/AudioRecorder.java" afterPath="$PROJECT_DIR$/src/android/AudioRecorder.java" />
     </list>
     <ignored path="cordova-plugin-audio-recorder.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -739,14 +738,7 @@
       <workItem from="1466408530102" duration="4010000" />
       <workItem from="1466415386405" duration="9492000" />
       <workItem from="1466434271117" duration="1869000" />
-      <workItem from="1466493149960" duration="900000" />
-    </task>
-    <task id="LOCAL-00019" summary="Removed Android from plugin for now.">
-      <created>1465989613261</created>
-      <option name="number" value="00019" />
-      <option name="presentableId" value="LOCAL-00019" />
-      <option name="project" value="LOCAL" />
-      <updated>1465989613261</updated>
+      <workItem from="1466493149960" duration="916000" />
     </task>
     <task id="LOCAL-00020" summary="Put back in the ripples.">
       <created>1465998265210</created>
@@ -1084,11 +1076,18 @@
       <option name="project" value="LOCAL" />
       <updated>1466434913220</updated>
     </task>
-    <option name="localTasksCounter" value="68" />
+    <task id="LOCAL-00068" summary="Android - Removed all UI for now.">
+      <created>1466494481316</created>
+      <option name="number" value="00068" />
+      <option name="presentableId" value="LOCAL-00068" />
+      <option name="project" value="LOCAL" />
+      <updated>1466494481317</updated>
+    </task>
+    <option name="localTasksCounter" value="69" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="55798000" />
+    <option name="totallyTimeSpent" value="55814000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1920" height="1097" extended-state="6" />
@@ -1224,6 +1223,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="61" column="41" selection-start-line="61" selection-start-column="41" selection-end-line="61" selection-end-column="41" />
+          <folding>
+            <element signature="e#0#2881#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1300,6 +1302,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="61" column="41" selection-start-line="61" selection-start-column="41" selection-end-line="61" selection-end-column="41" />
+          <folding>
+            <element signature="e#0#2881#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1376,6 +1381,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#2881#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1527,6 +1535,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="435">
           <caret line="46" column="28" selection-start-line="46" selection-start-column="28" selection-end-line="46" selection-end-column="28" />
+          <folding>
+            <element signature="e#0#2881#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
