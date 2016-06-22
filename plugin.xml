@@ -80,4 +80,32 @@
         <framework src="com.android.support:appcompat-v7:23.3.0" />
 
     </platform>
+	
+	<platform name="windows">
+		<config-file target="package.appxmanifest" parent="/Package/Capabilities">
+            <DeviceCapability Name="microphone" />
+            <DeviceCapability Name="webcam" />
+        </config-file>
+		
+        <js-module src="src/windows/CDVAudioRecorderProxy.js" name="CDVAudioRecorderProxy">
+            <merges target="" />
+        </js-module>
+		
+		<js-module src="src/windows/AudioUtil.js" name="AudioUtil">
+            <merges target="AudioRecorder" />
+        </js-module>
+		
+		<resource-file src="src/windows/AudioRecorder.html" target="pages/AudioRecorder.html" />
+		<resource-file src="src/windows/default.css" target="pages/default.css" />
+		<resource-file src="src/windows/ionicons.eot" target="fonts/ionicons.eot" />
+		<resource-file src="src/windows/ionicons.svg" target="fonts/ionicons.svg" />
+		<resource-file src="src/windows/ionicons.ttf" target="fonts/ionicons.ttf" />
+		<resource-file src="src/windows/ionicons.woff" target="fonts/ionicons.woff" />
+		<resource-file src="src/windows/OpenSans-Bold.ttf" target="fonts/OpenSans-Bold.ttf" />
+		<resource-file src="src/windows/OpenSans-BoldItalic.ttf" target="fonts/OpenSans-BoldItalic.ttf" />
+		<resource-file src="src/windows/OpenSans-Italic.ttf" target="fonts/OpenSans-Italic.ttf" />
+		<resource-file src="src/windows/OpenSans-Light.ttf" target="fonts/OpenSans-Light.ttf" />
+		<resource-file src="src/windows/OpenSans-LightItalic.ttf" target="fonts/OpenSans-LightItalic.ttf" />
+		<resource-file src="src/windows/OpenSans-Regular.ttf" target="fonts/OpenSans-Regular.ttf" />
+	</platform>
 </plugin>
