@@ -8,7 +8,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -33,8 +32,12 @@ import android.graphics.Paint;
 import android.graphics.Bitmap;
 import android.widget.ImageView;
 import android.graphics.Paint.Style;
+import android.app.Activity;
 
-public class AudioRecorder extends AppCompatActivity {
+// TODO: This needs putting back in for the plugin, I think the resources and project path don't equate to the same path.
+import uk.co.onefile.nomadionic.R;
+
+public class AudioRecorder extends Activity {
 
 	private static final Integer STATE_NOT_SET = 0;
 	private static final Integer STATE_RECORDING = 1;
@@ -76,12 +79,15 @@ public class AudioRecorder extends AppCompatActivity {
 	private boolean errorOccured = false;
 	private long mStartTime = 0L;
 	private long mTotalTime = 0L;
-	private String timeText = "Total recording time: 0:00";
+	private String timeText = "00:00:00";
 	private String sizeText = "Total recording size: 0.00 MB";
 	private Handler mHandler = new Handler();
 	private static final DecimalFormat df2 = new DecimalFormat("#,###,###,##0.00");
 	private long uploadLimit = 0;
 
+	private final String tempPart1StorageFilePath = storageDirectory + "temp_audio_";
+	private final String tempStorageFilePath = storageDirectory + "temp_audio_0.pcm";
+	private final String finalStorageFilePath = storageDirectory + "OneFileAudio.wav";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -170,10 +176,10 @@ public class AudioRecorder extends AppCompatActivity {
 			long millis = System.currentTimeMillis() - mStartTime;
 			int seconds = (int) (millis / 1000);
 			int minutes = seconds / 60;
+			int hours = seconds / 3600;
 			seconds = seconds % 60;
 
 			mTotalTime = millis;
-
 			double size = 0;
 
 			if (audioRecordingTask != null)
@@ -188,7 +194,7 @@ public class AudioRecorder extends AppCompatActivity {
 				size = 0;
 			}
 
-			timeText = "Total recording time: " + String.format("%d:%02d", minutes, seconds);
+			timeText = String.format("%02d:%02d:%02d", hours, minutes, seconds);
 			sizeText = "Total recording size: " + size + " MB";
 
 			recordingTime.setText(timeText);
@@ -211,22 +217,29 @@ public class AudioRecorder extends AppCompatActivity {
 
 	private void drawCircles()
 	{
-		Bitmap bitMap = Bitmap.createBitmap(300, 300, Bitmap.Config.ARGB_8888);  //creates bmp
-		bitMap = bitMap.copy(bitMap.getConfig(), true);     //lets bmp to be mutable
-		Canvas canvas = new Canvas(bitMap);                 //draw a canvas in defined bmp
+		// Grey pulsing circle
+		Bitmap bitMap1 = Bitmap.createBitmap(300, 300, Bitmap.Config.ARGB_8888);  //creates bmp
+		bitMap1 = bitMap1.copy(bitMap1.getConfig(), true);     //lets bmp to be mutable
+		Canvas canvas1 = new Canvas(bitMap1);                 //draw a canvas in defined bmp
+		ImageView imageView1 = (ImageView) findViewById(R.id.circle);
+		imageView1.setImageBitmap(bitMap1);
 
-		Paint paint = new Paint();                          //define paint and paint color
-		paint.setColor(Color.RED);
-		paint.setStyle(Style.FILL_AND_STROKE);
-		paint.setStrokeWidth(5.0f);
-		paint.setAntiAlias(true);                           //smooth edges
+		// Pulsing circle
+		Paint paint1 = new Paint();
+		paint1.setColor(Color.parseColor("#AAAAAA"));
+		paint1.setStyle(Style.FILL_AND_STROKE);
+		paint1.setStrokeWidth(5.0f);
+		paint1.setAntiAlias(true);
+		canvas1.drawCircle(150, 150, 145, paint1);
+		// Progress indicator circle.
+		Paint paint2 = new Paint();
+		paint2.setColor(Color.parseColor("#FF0000"));
+		paint2.setStyle(Style.FILL_AND_STROKE);
+		paint2.setStrokeWidth(5.0f);
+		paint2.setAntiAlias(true);
+		canvas1.drawCircle(150, 150, 100, paint2);
 
-		ImageView imageView = (ImageView) findViewById(R.id.circle);
-		imageView.setImageBitmap(bitMap);
-
-		canvas.drawCircle(150, 150, 145, paint);
-		//invalidate to update bitmap in imageview
-		imageView.invalidate();
+		imageView1.invalidate();
 	}
 
 	private void setUpButtons()
@@ -683,14 +696,16 @@ public class AudioRecorder extends AppCompatActivity {
 			{
 				for (int x = 0; x <= _pauseCount - 1; x++)
 				{
-					File f1 = new File(storageDirectory + "temp_audio_0.pcm");
-					File f2 = new File(storageDirectory + "temp_audio_" + (x + 1) + ".pcm");
+					File f1 = new File(tempStorageFilePath);
+					File f2 = new File(tempPart1StorageFilePath  + (x + 1) + ".pcm");
 					mergePCM(f1, f2);
+					Log.i(TAG, tempPart1StorageFilePath  + (x + 1) + ".pcm");
 				}
 			}
-			File f1 = new File(storageDirectory + "temp_audio_0.pcm");
+			File f1 = new File(tempStorageFilePath);
+			Log.i(TAG, tempStorageFilePath);
 			// Convert the PCM data into a readable WAVE format:
-			properWAV(f1);
+			convertPCMtoWAV(f1);
 			return null;
 		}
 
@@ -700,7 +715,7 @@ public class AudioRecorder extends AppCompatActivity {
 			super.onCancelled();
 		}
 
-		private void properWAV(File fileToConvert)
+		private void convertPCMtoWAV(File fileToConvert)
 		{
 			Log.i(TAG, "Starting conversion");
 			try
@@ -714,13 +729,14 @@ public class AudioRecorder extends AppCompatActivity {
 				int myBlockAlign = (int) (myChannels * myBitsPerSample / 8);
 
 				// 8 to 16 bit
-
-				long myDataSize = fileToConvert.length();// clipData.length;
+				long myDataSize = fileToConvert.length();
 				long myChunk2Size = myDataSize * myChannels * myBitsPerSample / 8;
 				long myChunkSize = 36 + myChunk2Size;
 
 				OutputStream os;
-				os = new FileOutputStream(new File(storageDirectory + "OneFileAudio.wav"));
+				os = new FileOutputStream(new File(finalStorageFilePath));
+				Log.i(TAG,finalStorageFilePath);
+
 				BufferedOutputStream bos = new BufferedOutputStream(os);
 				DataOutputStream outFile = new DataOutputStream(bos);
 
@@ -814,28 +830,4 @@ public class AudioRecorder extends AppCompatActivity {
 			super.onPostExecute(result);
 		}
 	} // private class SaveAudio extends AsyncTask<Object, Integer, Void> {}
-
-	public class MyView extends View
-	{
-		Paint paint;
-
-		public MyView(Context context)
-		{
-			super(context);
-
-			paint = new Paint();
-			paint.setColor(Color.GRAY);
-		}
-
-		@Override
-		protected void onDraw(Canvas canvas)
-		{
-			int x = getWidth();
-			int y = getHeight();
-			int radius;
-			radius = 100;
-			canvas.drawColor(Color.parseColor("#CD5C5C"));
-			canvas.drawCircle(x / 2, y / 2, radius, paint);
-		}
-	}
 }
