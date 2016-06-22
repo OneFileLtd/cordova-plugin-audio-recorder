@@ -63,11 +63,11 @@
         <source-file src="src/android/CDVAudioRecorder.java" target-dir="src/uk/co/onefile/nomadionic/audiocapture" />
         <source-file src="src/android/AudioRecorder.java" target-dir="src/uk/co/onefile/nomadionic/audiocapture" />
 
-        <resource-file src="src/android/res/drawable/continue_button" target="res/drawable/continue_button" />
-        <resource-file src="src/android/res/drawable/pause_button" target="res/drawable/pause_button" />
-        <resource-file src="src/android/res/drawable/play_button" target="res/drawable/play_button" />
-        <resource-file src="src/android/res/drawable/record_button" target="res/drawable/record_button" />
-        <resource-file src="src/android/res/drawable/save_button" target="res/drawable/save_button" />
+        <resource-file src="src/android/res/drawable/continue_button.png" target="res/drawable/continue_button.png" />
+        <resource-file src="src/android/res/drawable/pause_button.png" target="res/drawable/pause_button.png" />
+        <resource-file src="src/android/res/drawable/play_button.png" target="res/drawable/play_button.png" />
+        <resource-file src="src/android/res/drawable/record_button.png" target="res/drawable/record_button.png" />
+        <resource-file src="src/android/res/drawable/save_button.png" target="res/drawable/save_button.png" />
 
 
         <resource-file src="src/android/res/layout/activity_main.xml" target="res/layout/activity_main.xml" />
