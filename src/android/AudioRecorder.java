@@ -13,7 +13,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,97 +27,132 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.DecimalFormat;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-
-import android.os.Build;
-import android.util.Log;
 import android.content.Context;
-import android.content.Intent;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.Bitmap;
+import android.widget.ImageView;
+import android.graphics.Paint.Style;
 
-import org.apache.cordova.file.FileUtils;
-import org.apache.cordova.file.LocalFilesystemURL;
+public class AudioRecorder extends AppCompatActivity {
 
-import org.apache.cordova.CallbackContext;
-import org.apache.cordova.Config;
-import org.apache.cordova.CordovaArgs;
-import org.apache.cordova.CordovaHttpAuthHandler;
-import org.apache.cordova.CordovaPlugin;
-import org.apache.cordova.CordovaWebView;
-import org.apache.cordova.LOG;
-import org.apache.cordova.PluginManager;
-import org.apache.cordova.PluginResult;
+	private static final Integer STATE_NOT_SET = 0;
+	private static final Integer STATE_RECORDING = 1;
+	private static final Integer STATE_PAUSED = 2;
+	private static final Integer STATE_STOPPED = 3;
+	private static final Integer STATE_SAVE = 4;
+	private static final Integer STATE_SAVING = 5;
+	private static final Integer STATE_EXIT = 6;
+	private static final Integer STATE_EXITING = 7;
+	private static final Integer STATE_FINISHED_RECORDING = 8;
 
-import org.apache.cordova.*;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import android.Manifest;
+	private static final Integer STATE_AUDIO_TASK_NOT_SET = 0;
+	private static final Integer STATE_AUDIO_TASK_STOPPED = 1;
+	private static final Integer STATE_AUDIO_TASK_PAUSED = 2;
+	private static final Integer STATE_AUDIO_TASK_RECORDING = 3;
+	private static final Integer STATE_AUDIO_TASK_ERROR = 4;
 
-import android.os.Bundle;
-import android.view.View;
-import android.app.Activity;
-
-public class AudioRecorder extends Activity {
-
-	private String TAG = "AudioRecorder";
+	private Integer currentState = STATE_NOT_SET;
+	private Integer currentState_AudioTask = STATE_AUDIO_TASK_NOT_SET;
 
 	public static final Integer RECORDING_FREQUENCY = 11025;
+	public String storageDirectory = Environment.getExternalStorageDirectory().getPath() + "/.audiorecorder/";
 
+	private String TAG = "Audio Recorder";
 	private Integer maxUpload = 0;
 	private String audioOutputPath = "";
 	private Integer pauseCount = -1;
 	private String fileSizeErrorMsg = "";
-
 	private long sizeSoFar = 50000;
 	private long maxSize = 30000000;
-
 	private LinearLayout savingLayout;
-//    private AppStorage localStorage;
-
 	private TextView recordingTime;
 	private TextView recordingSize;
 	private TextView maxRecordingSize;
-
 	private AudioRecordingTask audioRecordingTask;
-
 	private boolean audioRecordingNotStarted = true;
 	private boolean audioHasBeenRecorded = false;
 	private boolean audioIsBeingRecorded = false;
 	private boolean errorOccured = false;
-
 	private long mStartTime = 0L;
 	private long mTotalTime = 0L;
-
 	private String timeText = "Total recording time: 0:00";
 	private String sizeText = "Total recording size: 0.00 MB";
-
 	private Handler mHandler = new Handler();
-
 	private static final DecimalFormat df2 = new DecimalFormat("#,###,###,##0.00");
-
 	private long uploadLimit = 0;
-	private String storageDirectory;
+
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
+		Log.i(TAG, "onCreate()");
 
-		super.onCreate(savedInstanceState);
-		setTitleColor(Color.parseColor("#FFFFFF"));
+		setContentView(R.layout.activity_main);
 		setTitle("Audio Recorder");
-		Log.i(TAG, "AudioRecorder - OnCreate");
+
 		if (savedInstanceState != null)
 		{
 			restoreSession(savedInstanceState);
 		}
+	}
 
+	@Override
+	protected void onPause()
+	{
+		super.onPause();
+		Log.i(TAG, "onPause()");
+
+		if (audioRecordingTask != null)
+		{
+			audioRecordingTask.pause();
+			Log.i(TAG, "Pausing recording");
+		}
+
+		while (!audioRecordingNotStarted)
+		{
+		}
+	}
+
+	@Override
+	protected void onResume()
+	{
+		super.onResume();
+		Log.i(TAG, "onResume()");
+
+		setContentView(R.layout.activity_main);
+		recordingTime = (TextView) findViewById(R.id.recordingTime);
+		recordingSize = (TextView) findViewById(R.id.recordingSize);
+		maxRecordingSize = (TextView) findViewById(R.id.maxSize);
+
+		savingLayout = (LinearLayout) findViewById(R.id.savingLayout);
+
+		recordingTime.setText(timeText);
+		recordingSize.setText(sizeText);
+		maxRecordingSize.setText("Max recording size: "+uploadLimit+" MB");
+
+		checkExternalStorage();
+		setUpButtons();
+	}
+
+	@Override
+	public void onSaveInstanceState(Bundle savedInstanceState)
+	{
+		Log.i(TAG, "onSaveInstanceState() Called");
+
+		savedInstanceState.putInt("pauseCount", pauseCount);
+		savedInstanceState.putLong("sizeSoFar", sizeSoFar);
+		savedInstanceState.putBoolean("audioRecordingNotStarted", audioRecordingNotStarted);
+		savedInstanceState.putBoolean("audioHasBeenRecorded", audioHasBeenRecorded);
+		savedInstanceState.putString("timeText", timeText);
+		savedInstanceState.putString("sizeText", sizeText);
+		super.onSaveInstanceState(savedInstanceState);
+	}
+
+	@Override
+	public void onBackPressed()
+	{
+		Log.i(TAG, "onBackPressed");
 	}
 
 	// Function that converst bytes to Megabytes
@@ -132,6 +166,7 @@ public class AudioRecorder extends Activity {
 
 		public void run()
 		{
+			Log.i(TAG, "Runnable mUpdateTimeTask()");
 			long millis = System.currentTimeMillis() - mStartTime;
 			int seconds = (int) (millis / 1000);
 			int minutes = seconds / 60;
@@ -156,8 +191,8 @@ public class AudioRecorder extends Activity {
 			timeText = "Total recording time: " + String.format("%d:%02d", minutes, seconds);
 			sizeText = "Total recording size: " + size + " MB";
 
-//			recordingTime.setText(timeText);
-//			recordingSize.setText(sizeText);
+			recordingTime.setText(timeText);
+			recordingSize.setText(sizeText);
 
 			mHandler.postDelayed(this, 500);
 		}
@@ -165,6 +200,7 @@ public class AudioRecorder extends Activity {
 
 	private void restoreSession(Bundle savedInstanceState)
 	{
+		Log.i(TAG, "restoreSession()");
 		pauseCount = savedInstanceState.getInt("pauseCount");
 		sizeSoFar = savedInstanceState.getLong("sizeSoFar");
 		audioRecordingNotStarted = savedInstanceState.getBoolean("audioRecordingNotStarted");
@@ -173,198 +209,149 @@ public class AudioRecorder extends Activity {
 		sizeText = savedInstanceState.getString("sizeText");
 	}
 
-	private void setMaxUpload()
+	private void drawCircles()
 	{
-	}
+		Bitmap bitMap = Bitmap.createBitmap(300, 300, Bitmap.Config.ARGB_8888);  //creates bmp
+		bitMap = bitMap.copy(bitMap.getConfig(), true);     //lets bmp to be mutable
+		Canvas canvas = new Canvas(bitMap);                 //draw a canvas in defined bmp
 
-	private void setFileSizeMessage()
-	{
+		Paint paint = new Paint();                          //define paint and paint color
+		paint.setColor(Color.RED);
+		paint.setStyle(Style.FILL_AND_STROKE);
+		paint.setStrokeWidth(5.0f);
+		paint.setAntiAlias(true);                           //smooth edges
+
+		ImageView imageView = (ImageView) findViewById(R.id.circle);
+		imageView.setImageBitmap(bitMap);
+
+		canvas.drawCircle(150, 150, 145, paint);
+		//invalidate to update bitmap in imageview
+		imageView.invalidate();
 	}
 
 	private void setUpButtons()
 	{
-//		final Button startButton = (Button) findViewById(R.id.AudioStartRecording);
-//		final Button AudioBtnFinishAndSave = (Button) findViewById(R.id.AudioBtnFinishAndSave);
-//		final Button confirmButton = (Button) findViewById(R.id.AudioCancelRecording);
-//		final ProgressBar RecordingProgressBar = (ProgressBar) findViewById(R.id.recordingBar);
-//		AudioBtnFinishAndSave.setEnabled(false);
-//		AudioBtnFinishAndSave.setAlpha(.5f);
-//
-//		Log.i(TAG, "AudioRecorder - setUpButtons");
-//
-//		if (audioHasBeenRecorded)
-//		{
-//			startButton.setText("Resume Recording");
-//			AudioBtnFinishAndSave.setEnabled(true);
-//			AudioBtnFinishAndSave.setAlpha(1f);
-//			RecordingProgressBar.setVisibility(View.GONE);
-//		}
-//		else if (audioIsBeingRecorded)
-//		{
-//			startButton.setText("Pause Recording");
-//			RecordingProgressBar.setVisibility(View.VISIBLE);
-//		}
-//
-//		startButton.setOnClickListener(new View.OnClickListener() {
-//			public void onClick(View view)
-//			{
-//				if (audioRecordingNotStarted)
-//				{
-//					startRecording();
-//					startButton.setText("Pause Recording");
-//					RecordingProgressBar.setVisibility(View.VISIBLE);
-//					if (mStartTime == 0L)
-//					{
-//						mStartTime = System.currentTimeMillis();
-//
-//					}
-//					mStartTime = System.currentTimeMillis() - mTotalTime;
-//					mHandler.removeCallbacks(mUpdateTimeTask);
-//					mHandler.postDelayed(mUpdateTimeTask, 100);
-//				}
-//				else
-//				{
-//					if (audioRecordingTask != null)
-//					{
-//						audioRecordingTask.pause();
-//						Log.i(TAG, "Pausing recording");
-//					}
-//					startButton.setText("Resume Recording");
-//					RecordingProgressBar.setVisibility(View.GONE);
-//					mHandler.removeCallbacks(mUpdateTimeTask);
-//				}
-//			}
-//		});
-//
-//		AudioBtnFinishAndSave.setOnClickListener(new View.OnClickListener() {
-//			public void onClick(View view)
-//			{
-//				savingLayout.setVisibility(View.VISIBLE);
-//				startButton.setVisibility(View.GONE);
-//				confirmButton.setVisibility(View.GONE);
-//
-//				SaveAudio saveAudio = new SaveAudio(pauseCount);
-//				saveAudio.execute((Integer) null);
-//
-//				setResult(RESULT_OK);
-//				finish();
-//			}
-//		});
-//
-//		confirmButton.setOnClickListener(new View.OnClickListener() {
-//			public void onClick(View view)
-//			{
-//				cancelRecording();
-//			}
-//		});
-	}
+		Log.i(TAG, "setUpButtons()");
 
-	private void onAudioRecorderLowMemory()
-	{
-		runOnUiThread(new Runnable() {
-			public void run()
+		drawCircles();
+		final Button startButton = (Button) findViewById(R.id.AudioStartRecording);
+		final Button AudioBtnFinishAndSave = (Button) findViewById(R.id.AudioBtnFinishAndSave);
+
+		if(currentState == STATE_NOT_SET || currentState == STATE_STOPPED) // if (audioRecordingNotStarted)
+		{
+			startButton.setBackgroundResource(R.drawable.record_button);
+			AudioBtnFinishAndSave.setEnabled(false);
+			AudioBtnFinishAndSave.setAlpha(.5f);
+		}
+
+		startButton.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View view)
 			{
-//				final ProgressBar RecordingProgressBar = (ProgressBar) findViewById(R.id.recordingBar);
-//				final Button startButton = (Button) findViewById(R.id.AudioStartRecording);
-//				final Button confirmButton = (Button) findViewById(R.id.AudioCancelRecording);
-//				Button AudioBtnFinishAndSave = (Button) findViewById(R.id.AudioBtnFinishAndSave);
-//				AudioBtnFinishAndSave.setVisibility(View.VISIBLE);
-//				try
-//				{
-//					//displayAlertBox(fileSizeErrorMsg, null, null, "OK", false, null);
-//				}
-//				catch(IllegalStateException e)
-//				{
-//					Toast.makeText(getApplicationContext(), fileSizeErrorMsg, Toast.LENGTH_SHORT).show();
-//				}
-//
-//				RecordingProgressBar.setVisibility(View.GONE);
-//
-//				startButton.setEnabled(false);
-//
-//				startButton.setVisibility(View.GONE);
-//				confirmButton.setVisibility(View.GONE);
+				Log.i(TAG, "startButton.setOnClickListener()");
+				if(currentState == STATE_NOT_SET || currentState == STATE_STOPPED)
+				{
+					startRecording();
+
+					startButton.setBackgroundResource(R.drawable.pause_button);
+					currentState = STATE_RECORDING;
+				}
+
+				else if(currentState == STATE_RECORDING)
+				{
+					pauseRecording();
+
+					startButton.setBackgroundResource(R.drawable.continue_button);
+					AudioBtnFinishAndSave.setEnabled(true);
+					AudioBtnFinishAndSave.setAlpha(1f);
+					currentState = STATE_PAUSED;
+				}
+
+				else if(currentState == STATE_PAUSED)
+				{
+					startRecording();
+
+					startButton.setBackgroundResource(R.drawable.pause_button);
+					currentState = STATE_RECORDING;
+				}
+
+			}
+		});
+
+		AudioBtnFinishAndSave.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View view)
+			{
+
+				Log.i(TAG, "AudioBtnFinishAndSave.setOnClickListener()");
+				savingLayout.setVisibility(View.VISIBLE);
+				startButton.setVisibility(View.GONE);
+
+				SaveAudio saveAudio = new SaveAudio(pauseCount);
+				saveAudio.execute((Integer) null);
+
+				setResult(RESULT_OK);
+				finish();
 			}
 		});
 	}
 
-	@Override
-	protected void onPause()
-	{
-		Log.i(TAG, "onPause()");
-		if (audioRecordingTask != null)
-		{
-			audioRecordingTask.pause();
-			Log.i(TAG, "Pausing recording");
-		}
-
-		while (!audioRecordingNotStarted)
-		{
-			// wait
-		}
-		super.onPause();
-	}
-
-	@Override
-	protected void onResume()
-	{
-		Log.i(TAG, "onResume()");
-		super.onResume();
-		this.setMaxUpload();
-
-//		setContentView(R.layout.evidence_activity_new_audio_recorder);
-//		recordingTime = (TextView) findViewById(R.id.recordingTime);
-//		recordingSize = (TextView) findViewById(R.id.recordingSize);
-//		maxRecordingSize = (TextView) findViewById(R.id.maxSize);
-//		savingLayout = (LinearLayout) findViewById(R.id.savingLayout);
-//
-//		recordingTime.setText(timeText);
-//		recordingSize.setText(sizeText);
-//		maxRecordingSize.setText("Max recording size: "+uploadLimit+" MB");
-//
-//		checkExternalStorage();
-	}
 
 	private long getMaxFileSize()
 	{
-		return 30000;
+		Log.i(TAG, "getMaxFileSize");
+		return 30000000;
 	}
+
 	private void checkEvidenceFolderExists()
 	{
+		Log.i(TAG, "checkEvidenceFolderExists");
+
 		File dir = new File(storageDirectory);
+
 		if (!dir.exists())
 		{
 			Log.i(TAG, "Creating Nomad Folder");
 			dir.mkdirs();
 		}
-
-		setFileSizeMessage();
 		maxSize = getMaxFileSize();
-		setUpButtons();
 	}
 
 	private void checkExternalStorage()
 	{
-		String state = Environment.getExternalStorageState();
+		Log.i(TAG, "checkExternalStorage");
 
+		String state = Environment.getExternalStorageState();
 		if (Environment.MEDIA_MOUNTED.equals(state))
 		{
-			// We can read and write the media
-
 			checkEvidenceFolderExists();
 		}
 		else if (Environment.MEDIA_MOUNTED_READ_ONLY.equals(state))
 		{
-			// We can only read the media
-
-			//displayAlertBox("Cannot write to external media - plase ensure it is currently connected", "Retry", "Cancel", null, false, -1);
 		}
 		else
 		{
-			// Something else is wrong. It may be one of many other states, but
-			// all we need to know is we can neither read nor write
-			//displayAlertBox("Cannot write to external media - plase ensure it is currently connected", "Retry", "Cancel", null, false, -1);
 		}
+	}
+
+	private void onAudioRecorderLowMemory()
+	{
+		Log.i(TAG, "onAudioRecorderLowMemory()");
+		runOnUiThread(new Runnable() {
+			public void run()
+			{
+				Log.i(TAG, "onAudioRecorderLowMemory() - runOnUiThread");
+				final Button startButton = (Button) findViewById(R.id.AudioStartRecording);
+				Button AudioBtnFinishAndSave = (Button) findViewById(R.id.AudioBtnFinishAndSave);
+				AudioBtnFinishAndSave.setVisibility(View.VISIBLE);
+				try
+				{
+				}
+				catch(IllegalStateException e)
+				{
+					Toast.makeText(getApplicationContext(), fileSizeErrorMsg, Toast.LENGTH_SHORT).show();
+				}
+				startButton.setEnabled(false);
+			}
+		});
 	}
 
 	private void onAudioRecorderPaused()
@@ -374,48 +361,8 @@ public class AudioRecorder extends Activity {
 		audioRecordingNotStarted = true;
 		audioHasBeenRecorded = true;
 		audioIsBeingRecorded = false;
-
 		mHandler.removeCallbacks(mUpdateTimeTask);
-
-		runOnUiThread(new Runnable() {
-			public void run()
-			{
-//				final ProgressBar RecordingProgressBar = (ProgressBar) findViewById(R.id.recordingBar);
-//				Button AudioBtnFinishAndSave = (Button) findViewById(R.id.AudioBtnFinishAndSave);
-//				AudioBtnFinishAndSave.setEnabled(true);
-//				AudioBtnFinishAndSave.setAlpha(1f);
-//				RecordingProgressBar.setVisibility(View.GONE);
-			}
-		});
-	}
-
-	private void cancelRecording()
-	{
-		if(!errorOccured)
-		{
-			//displayAlertBox("Are you sure you want to cancel this recording?", "Yes", "No", null, false, 1);
-		}
-	}
-
-	public void onPositiveSelection(Integer taskID)
-	{
-		if(taskID == 1)
-		{
-			setResult(RESULT_CANCELED);
-			finish();
-		}
-		else if (taskID == -1)
-		{
-			checkExternalStorage();
-		}
-	}
-
-	public void onNegativeSelection(Integer taskID)
-	{
-		if (taskID!=1)
-		{
-			finish();
-		}
+		currentState_AudioTask = STATE_AUDIO_TASK_PAUSED;
 	}
 
 	private void onAudioRecorderError()
@@ -428,30 +375,17 @@ public class AudioRecorder extends Activity {
 		errorOccured = true;
 
 		mHandler.removeCallbacks(mUpdateTimeTask);
+		currentState_AudioTask = STATE_AUDIO_TASK_ERROR;
 
 		runOnUiThread(new Runnable() {
 			public void run()
 			{
-//				final ProgressBar RecordingProgressBar = (ProgressBar) findViewById(R.id.recordingBar);
-//				Button AudioBtnCancel = (Button) findViewById(R.id.AudioCancelRecording);
-//				AudioBtnCancel.setVisibility(View.VISIBLE);
-//
-//				AudioBtnCancel.setOnClickListener(new View.OnClickListener() {
-//
-//					public void onClick(View v)
-//					{
-//						audioRecordingTask = null;
-//						cancelRecording();
-//					}
-//				});
-//
-//				Button startButton = (Button) findViewById(R.id.AudioStartRecording);
-//				startButton.setVisibility(View.GONE);
-//
-//				Toast.makeText(getApplicationContext(),"An error occured trying to record audio",
-//						Toast.LENGTH_LONG).show();
-//
-//				RecordingProgressBar.setVisibility(View.GONE);
+				Button startButton = (Button) findViewById(R.id.AudioStartRecording);
+				startButton.setBackgroundResource(R.drawable.pause_button);
+				startButton.setEnabled(false);
+
+				Toast.makeText(getApplicationContext(),"An error occured trying to record audio",
+						Toast.LENGTH_LONG).show();
 			}
 		});
 	}
@@ -461,6 +395,7 @@ public class AudioRecorder extends Activity {
 		Log.i(TAG, "notifyAudioRecordingHasBegun()");
 		audioRecordingNotStarted = false;
 		audioIsBeingRecorded = true;
+		currentState_AudioTask = STATE_AUDIO_TASK_RECORDING;
 	}
 
 	public void updateTotalSize(long sizeOfThisRecording)
@@ -471,15 +406,15 @@ public class AudioRecorder extends Activity {
 
 	private void createEvidenceFolder()
 	{
+		Log.i(TAG, "createEvidenceFolder()");
+
 		String state = android.os.Environment.getExternalStorageState();
 
 		if (!state.equals(android.os.Environment.MEDIA_MOUNTED))
 		{
-			//displayAlertBox("SD Card is not mounted.  It is " + state + ".", null, null, "OK", false, null);
 		}
 
 		File dir = new File(storageDirectory);
-
 		if (!dir.exists())
 		{
 			Log.i(TAG, "Creating Nomad Folder");
@@ -489,36 +424,47 @@ public class AudioRecorder extends Activity {
 
 	private void startRecording()
 	{
-//		Button AudioBtnFinishAndSave = (Button) findViewById(R.id.AudioBtnFinishAndSave);
-//		if (audioRecordingNotStarted)
-//		{
-//			AudioBtnFinishAndSave.setEnabled(false);
-//			AudioBtnFinishAndSave.setAlpha(.5f);
-//		}
-//		else
-//		{
-//			AudioBtnFinishAndSave.setEnabled(true);
-//			AudioBtnFinishAndSave.setAlpha(0f);
-//		}
-//		savingLayout.setVisibility(View.GONE);
-//		pauseCount++;
+		Log.i(TAG, "startRecording()");
+		if (mStartTime == 0L)
+			mStartTime = System.currentTimeMillis();
+		mStartTime = System.currentTimeMillis() - mTotalTime;
+		mHandler.removeCallbacks(mUpdateTimeTask);
+		mHandler.postDelayed(mUpdateTimeTask, 100);
+		savingLayout.setVisibility(View.GONE);
+
+		pauseCount++;
 
 		createEvidenceFolder();
 		getFilePath();
+
 		Log.i(TAG, "Recording to file: " + audioOutputPath);
+
 		audioRecordingTask = new AudioRecordingTask();
 		audioRecordingTask.setUp(this, audioOutputPath, maxSize, sizeSoFar);
 		audioRecordingTask.execute();
 	}
 
+	private void pauseRecording()
+	{
+		Log.i(TAG, "pauseRecording()");
+
+		mHandler.removeCallbacks(mUpdateTimeTask);
+
+		if (audioRecordingTask != null)
+			audioRecordingTask.pause();
+	}
+
 	private void getFilePath()
 	{
+		Log.i(TAG, "getFilePath()");
+
 		File file = new File(storageDirectory + "temp_audio_" + pauseCount + ".pcm");
 
 		if (!file.exists())
 		{
 			try
 			{
+				Log.i(TAG, "getFilePath() - file.createNewFile");
 				file.createNewFile();
 			}
 			catch (IOException e2)
@@ -526,34 +472,198 @@ public class AudioRecorder extends Activity {
 				e2.printStackTrace();
 			}
 		}
-
 		audioOutputPath = file.getAbsolutePath();
 	}
 
-	@Override
-	public void onSaveInstanceState(Bundle savedInstanceState)
-	{
-		Log.i(TAG, "onSaveInstanceState() Called");
+	// ------------------------------------------------------------------
+	// ----- AudioRecordingTask - AsyncTask - Record Audio --------------
+	// ------------------------------------------------------------------
+	static class AudioRecordingTask extends AsyncTask<Void, Void, Void> {
+		private String TAG = "AudioRecorder - AudioRecordingTask - AsyncTask";
+		AudioRecorder activity = null;
+		int progress = 0;
+		private String outputPath;
+		private boolean stopped = false;
+		private boolean error = false;
+		private boolean paused = false;
+		private long maxSize;
+		private long sizeSoFar;
+		private long sizeOfThisRecording;
 
-		savedInstanceState.putInt("pauseCount", pauseCount);
-		savedInstanceState.putLong("sizeSoFar", sizeSoFar);
-		savedInstanceState.putBoolean("audioRecordingNotStarted", audioRecordingNotStarted);
-		savedInstanceState.putBoolean("audioHasBeenRecorded", audioHasBeenRecorded);
-		savedInstanceState.putString("timeText", timeText);
-		savedInstanceState.putString("sizeText", sizeText);
+		DataOutputStream dataOutStream;
 
-		super.onSaveInstanceState(savedInstanceState);
-	}
+		AudioRecordingTask()
+		{
+		}
 
-	@Override
-	public void onBackPressed()
-	{
-		//displayAlertBox("Are you sure you want to cancel this recording?", "Yes", "No", null, false, 1);
-	}
+		public void setUp(AudioRecorder activity, String outputPath, long maxSize, long sizeSoFar)
+		{
+			attach(activity);
 
+			this.outputPath = outputPath;
+			this.maxSize = maxSize;
+			this.sizeSoFar = sizeSoFar;
+			activity.currentState_AudioTask = STATE_AUDIO_TASK_NOT_SET;
+			Log.i(TAG, "AudioRecordingTask - maxSize " + maxSize);
+			Log.i(TAG, "AudioRecordingTask - sizeSoFar " + sizeSoFar);
+		}
+
+		@Override
+		protected Void doInBackground(Void... unused)
+		{
+
+			activity.notifyAudioRecordingHasBegun();
+
+			int frequency = RECORDING_FREQUENCY;
+			int channelConfiguration = AudioFormat.CHANNEL_IN_MONO;
+			int audioEncoding = AudioFormat.ENCODING_PCM_16BIT;
+
+			final int bufferSize = AudioRecord.getMinBufferSize(frequency, channelConfiguration, audioEncoding);
+
+			// Create hardware audio recorder
+			AudioRecord audioRecord = null;
+			try
+			{
+				audioRecord = new AudioRecord(MediaRecorder.AudioSource.MIC, frequency, channelConfiguration,
+						audioEncoding, bufferSize);
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
+			}
+
+			File file = new File(outputPath);
+
+			if (file.exists())
+				file.delete();
+			try {
+				file = new File(outputPath);
+			}
+			catch (NullPointerException e)
+			{
+				e.printStackTrace();
+			}
+
+			OutputStream oStream = null;
+			try
+			{
+				oStream = new FileOutputStream(file);
+			}
+			catch (FileNotFoundException e2)
+			{
+				e2.printStackTrace();
+			}
+
+			dataOutStream = new DataOutputStream(oStream);
+
+			byte[] buffer = new byte[bufferSize];
+
+			if(audioRecord != null)
+			{
+				audioRecord.startRecording();
+				activity.currentState_AudioTask = STATE_AUDIO_TASK_RECORDING;
+			}
+			else
+			{
+				stopped = true;
+				error = true;
+				activity.currentState_AudioTask = STATE_AUDIO_TASK_ERROR;
+				Log.i(activity.TAG, "audio recording not started - STATE_AUDIO_TASK_ERROR");
+			}
+
+			while (!stopped)
+			{
+				int bufferReadResult = audioRecord.read(buffer, 0, bufferSize);
+
+				try
+				{
+					dataOutStream.write(buffer, 0, bufferReadResult);
+				}
+				catch (IOException e1)
+				{
+					e1.printStackTrace();
+				}
+
+				if ((dataOutStream.size() + sizeSoFar) > maxSize)
+				{
+					stopped = true;
+					activity.currentState_AudioTask = STATE_AUDIO_TASK_STOPPED;
+					Log.i(activity.TAG, "dataOutStream too big - STATE_AUDIO_TASK_STOPPED");
+				}
+			}
+
+			sizeOfThisRecording = dataOutStream.size();
+
+			try
+			{
+				dataOutStream.flush();
+				dataOutStream.close();
+			}
+			catch (IOException e1)
+			{
+				e1.printStackTrace();
+			}
+
+			if(audioRecord != null)
+			{
+				audioRecord.stop();
+				audioRecord.release();
+				audioRecord = null;
+				activity.currentState_AudioTask = STATE_AUDIO_TASK_STOPPED;
+			}
+
+			if (activity != null)
+			{
+				activity.updateTotalSize(sizeOfThisRecording);
+				if (stopped && !paused && !error)
+				{
+					if (activity != null)
+					{
+						activity.onAudioRecorderPaused();
+						//activity.onAudioRecorderLowMemory();
+					}
+				}
+				else if (paused)
+					activity.onAudioRecorderPaused();
+				else if (error)
+					activity.onAudioRecorderError();
+			}
+			return (null);
+		}
+
+		public int getSize()
+		{
+			if (dataOutStream != null)
+				return dataOutStream.size();
+			else
+				return 0;
+		}
+
+		public void pause()
+		{
+			stopped = true;
+			paused = true;
+			activity.currentState_AudioTask = STATE_AUDIO_TASK_PAUSED;
+		}
+
+		void detach()
+		{
+			activity = null;
+		}
+
+		void attach(AudioRecorder activity)
+		{
+			this.activity = activity;
+		}
+
+	} // static class AudioRecordingTask extends AsyncTask<Void, Void, Void> {}
+
+	// ------------------------------------------------------------------
+	// ----- SaveAudio - AsyncTask --------------------------------------
+	// ------------------------------------------------------------------
 	private class SaveAudio extends AsyncTask<Object, Integer, Void> {
-
 		private int _pauseCount;
+		private String TAG = "AudioRecorder - SaveAudio - AsyncTask";
 
 		public SaveAudio(int pauseCount)
 		{
@@ -578,7 +688,6 @@ public class AudioRecorder extends Activity {
 					mergePCM(f1, f2);
 				}
 			}
-
 			File f1 = new File(storageDirectory + "temp_audio_0.pcm");
 			// Convert the PCM data into a readable WAVE format:
 			properWAV(f1);
@@ -593,10 +702,7 @@ public class AudioRecorder extends Activity {
 
 		private void properWAV(File fileToConvert)
 		{
-			Log.i(TAG, "********************************");
 			Log.i(TAG, "Starting conversion");
-			Log.i(TAG, "********************************");
-
 			try
 			{
 				long mySubChunk1Size = 16;
@@ -608,6 +714,7 @@ public class AudioRecorder extends Activity {
 				int myBlockAlign = (int) (myChannels * myBitsPerSample / 8);
 
 				// 8 to 16 bit
+
 				long myDataSize = fileToConvert.length();// clipData.length;
 				long myChunk2Size = myDataSize * myChannels * myBitsPerSample / 8;
 				long myChunkSize = 36 + myChunk2Size;
@@ -632,13 +739,18 @@ public class AudioRecorder extends Activity {
 				outFile.write(intToByteArray((int) myDataSize), 0, 4);
 
 				InputStream in = new FileInputStream(fileToConvert);
+
 				byte[] buf = new byte[1024];
+
 				int len;
+
 				while ((len = in.read(buf)) > 0)
 				{
 					outFile.write(buf, 0, len);
 				}
+
 				in.close();
+
 				outFile.flush();
 				outFile.close();
 			}
@@ -653,16 +765,21 @@ public class AudioRecorder extends Activity {
 			try
 			{
 				InputStream in;
+
 				in = new FileInputStream(f2);
+
 				OutputStream out = new FileOutputStream(f1, true);
+
 				byte[] buf = new byte[1024];
 				int len;
 				while ((len = in.read(buf)) > 0)
 				{
 					out.write(buf, 0, len);
 				}
+
 				in.close();
 				out.close();
+
 				f2.delete();
 			}
 			catch (FileNotFoundException e)
@@ -693,171 +810,32 @@ public class AudioRecorder extends Activity {
 		@Override
 		protected void onPostExecute(Void result)
 		{
-			Log.i(TAG, "********************************");
 			Log.i(TAG, "Finished conversion");
-			Log.i(TAG, "********************************");
 			super.onPostExecute(result);
 		}
+	} // private class SaveAudio extends AsyncTask<Object, Integer, Void> {}
 
-	}
+	public class MyView extends View
+	{
+		Paint paint;
 
-	static class AudioRecordingTask extends AsyncTask<Void, Void, Void> {
-		AudioRecorder activity = null;
-		int progress = 0;
-		private String outputPath;
-		private boolean stopped = false;
-		private boolean error = false;
-		private boolean paused = false;
-		private long maxSize;
-		private long sizeSoFar;
-		private long sizeOfThisRecording;
-		DataOutputStream dos;
-
-		AudioRecordingTask()
+		public MyView(Context context)
 		{
+			super(context);
 
-		}
-
-		public void setUp(AudioRecorder activity, String outputPath, long maxSize, long sizeSoFar)
-		{
-			attach(activity);
-			this.outputPath = outputPath;
-			this.maxSize = maxSize;
-			this.sizeSoFar = sizeSoFar;
+			paint = new Paint();
+			paint.setColor(Color.GRAY);
 		}
 
 		@Override
-		protected Void doInBackground(Void... unused)
+		protected void onDraw(Canvas canvas)
 		{
-			activity.notifyAudioRecordingHasBegun();
-			int frequency = RECORDING_FREQUENCY;
-			int channelConfiguration = AudioFormat.CHANNEL_IN_MONO;
-			int audioEncoding = AudioFormat.ENCODING_PCM_16BIT;
-			final int bufferSize = AudioRecord.getMinBufferSize(frequency, channelConfiguration, audioEncoding);
-			AudioRecord audioRecord = null;
-
-			try
-			{
-				audioRecord = new AudioRecord(MediaRecorder.AudioSource.MIC, frequency, channelConfiguration, audioEncoding, bufferSize);
-			}
-			catch(Exception e)
-			{
-			}
-
-			File file = new File(outputPath);
-			if (file.exists())
-				file.delete();
-			file = new File(outputPath);
-
-			OutputStream os = null;
-			try
-			{
-				os = new FileOutputStream(file);
-			}
-			catch (FileNotFoundException e2)
-			{
-				e2.printStackTrace();
-			}
-
-			dos = new DataOutputStream(os);
-
-			byte[] buffer = new byte[bufferSize];
-
-			if(audioRecord != null)
-			{
-				audioRecord.startRecording();
-			}
-			else
-			{
-				stopped = true;
-				error = true;
-			}
-
-			while (!stopped)
-			{
-				int bufferReadResult = audioRecord.read(buffer, 0, bufferSize);
-				try
-				{
-					dos.write(buffer, 0, bufferReadResult);
-				}
-				catch (IOException e1)
-				{
-					e1.printStackTrace();
-				}
-				if ((dos.size() + sizeSoFar) > maxSize)
-				{
-					stopped = true;
-				}
-			}
-
-			sizeOfThisRecording = dos.size();
-
-			try
-			{
-				dos.flush();
-				dos.close();
-			}
-			catch (IOException e1)
-			{
-				e1.printStackTrace();
-			}
-
-			if(audioRecord != null)
-			{
-				audioRecord.stop();
-				audioRecord.release();
-				audioRecord = null;
-			}
-			if (activity != null)
-			{
-				activity.updateTotalSize(sizeOfThisRecording);
-				if (stopped && !paused && !error)
-				{
-					if (activity != null)
-					{
-						activity.onAudioRecorderPaused();
-						activity.onAudioRecorderLowMemory();
-					}
-				}
-				else if (paused)
-				{
-					activity.onAudioRecorderPaused();
-				}
-				else if (error)
-				{
-					activity.onAudioRecorderError();
-				}
-			}
-			return (null);
+			int x = getWidth();
+			int y = getHeight();
+			int radius;
+			radius = 100;
+			canvas.drawColor(Color.parseColor("#CD5C5C"));
+			canvas.drawCircle(x / 2, y / 2, radius, paint);
 		}
-
-		public int getSize()
-		{
-			if (dos != null)
-			{
-				return dos.size();
-			}
-			else
-			{
-				return 0;
-			}
-		}
-
-		public void pause()
-		{
-			stopped = true;
-			paused = true;
-		}
-
-		void detach()
-		{
-			activity = null;
-		}
-
-		void attach(AudioRecorder activity)
-		{
-			this.activity = activity;
-		}
-
 	}
 }

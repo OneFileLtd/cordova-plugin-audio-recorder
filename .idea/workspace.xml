@@ -1,9 +1,212 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="fa5aae78-a822-4d54-9516-a7234c120ad1" name="Default" comment="Android - Put setContentView back in.">
+    <list default="true" id="fa5aae78-a822-4d54-9516-a7234c120ad1" name="Default" comment="">
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/accept.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/accept_button.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/accept_button_control.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/accept_button_pressed.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/action_delete.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/action_settings.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/action_unlock.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/actionplan.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/add_attachment.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/add_attachment_control.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/add_attachment_pressed.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/add_button.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/add_button_control.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/add_button_pressed.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/announcements.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/arrow_next.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/assessment.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/assessment_method2_32x32.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/av_play_over_video.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/av_upload.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/back_button.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/back_button_control.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/back_button_pressed.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/backrepeat.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/bg_pathbar_btn.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/bg_pathbar_btn_standard_focused.9.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/bg_pathbar_btn_standard_normal.9.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/bg_pathbar_btn_standard_pressed.9.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/bg_pathbar_light.9.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/checkbox_selected.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/checkbox_unselected.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/close.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/cloud_upload.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/com_facebook_loginbutton_blue.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/com_facebook_loginbutton_blue_focused.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/com_facebook_loginbutton_blue_normal.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/com_facebook_loginbutton_blue_pressed.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/content_discard.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/content_edit.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/content_new.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/content_picture.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/content_save.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/content_undo.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/cool_calendar2.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/cool_progress.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/counter_background.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/counter_background_pressed.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/counter_background_pressed_white.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/counter_background_ready.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/counter_background_ready_white.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/counter_background_white.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/dark_circle.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/dashboard_listselector.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/defaultuser.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/delete_32x32.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/delete_button.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/delete_button_control.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/delete_button_pressed.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/drop_shadow.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/edit_button.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/edit_button_control.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/edit_button_pressed.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/evidence.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/evidence_32x32.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/evidence_add_32x32.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/finish_48x48.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/formtable.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/forum.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/green_tick.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/green_tick_small.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/greenprogress.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/grey_accept.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/grey_tick.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/grey_tick_small.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/greyed_out_button.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/grid_view_icon.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/help.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/highlighted_fading.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/home.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/ic_action_overflow.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/ic_launcher_android_package.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/ic_launcher_archive.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/ic_launcher_audio.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/ic_launcher_file.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/ic_launcher_folder.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/ic_launcher_image.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/ic_launcher_sdcard.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/ic_launcher_text_csv.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/ic_launcher_text_html.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/ic_launcher_text_plain.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/ic_launcher_text_xml.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/ic_launcher_video.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/ic_navbar_accept.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/ic_navbar_home.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/ic_pulltorefresh_arrow.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/ignite_checkbox.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/ignite_input_normal_bg.9.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/ignite_input_selected_bg.9.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/ignite_radiobutton.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/ignite_textfield_background.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/info.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/light_circle.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/list_selector.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/list_selector_pressed.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/list_view_icon.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/locked.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/login_button_bg.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/login_button_control.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/login_button_pressed.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/login_text_field.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/logout.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/message.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/mic_nice_small_small.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/mic_nice_small_small_ticked.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/microphone.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/mug_shot_silhouette.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/navigation_cancel.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/navigation_next_item.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/navigation_previous_item.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/negative_button.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/negative_button_bg.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/negative_button_pressed.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/new_attachment_white.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/next_button.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/next_button_control.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/next_button_pressed.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/next_item.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/no_signature.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/nomad_from_assessment_plan_icon.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/nomad_template_icon.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/nomad_text_colour.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/nomadicon.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/nomadicon_old.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/nomadsplashscreen.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/other.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/photo.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/plain_button.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/plain_button_control.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/plain_button_pressed.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/portfolio_32x32.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/positive_button.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/positive_button_bg.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/positive_button_pressed.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/pull_to_refresh_header_background.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/radio_button_selected.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/radio_button_unselected.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/record.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/record_grey.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/review.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/rounded_edges.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/search.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/search_dark.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/search_dark_control.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/search_dark_pressed.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/section_background.9.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/segment_radio_left.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/segment_radio_left_inverted.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/segment_radio_middle.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/segment_radio_middle_inverted.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/segment_radio_right.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/segment_radio_right_inverted.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/segmented_greyed_out_left.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/segmented_greyed_out_middle.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/segmented_greyed_out_right.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/segmented_off_left.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/segmented_off_left_inverted.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/segmented_off_middle.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/segmented_off_middle_inverted.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/segmented_off_right.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/segmented_off_right_inverted.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/segmented_on_left.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/segmented_on_left_inverted.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/segmented_on_middle.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/segmented_on_middle_inverted.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/segmented_on_right.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/segmented_on_right_inverted.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/segmented_pressed_left.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/segmented_pressed_left_inverted.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/segmented_pressed_middle.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/segmented_pressed_middle_inverted.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/segmented_pressed_right.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/segmented_pressed_right_inverted.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/shadow.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/signed_green_tick.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/step4_small.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/task.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/textfield.9.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/thewhitestuff.9.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/thewhitestuff2.9.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/tick.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/tickbox.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/upload_ready.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/user.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/video.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/white_camera_image.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/white_mic_icon.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/white_storage_icon.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/android/res/drawable/white_video_icon.png" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/android/AudioRecorder.java" afterPath="$PROJECT_DIR$/src/android/AudioRecorder.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/android/res/layout/activity_main.xml" afterPath="$PROJECT_DIR$/src/android/res/layout/activity_main.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/android/res/values-w820dp/dimens.xml" afterPath="$PROJECT_DIR$/src/android/res/values-w820dp/dimens.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/android/res/values/dimens.xml" afterPath="$PROJECT_DIR$/src/android/res/values/dimens.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/android/res/values/strings.xml" afterPath="$PROJECT_DIR$/src/android/res/values/strings.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/android/res/values/styles.xml" afterPath="$PROJECT_DIR$/src/android/res/values/styles.xml" />
     </list>
     <ignored path="cordova-plugin-audio-recorder.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -28,11 +231,19 @@
       <file leaf-file-name="AudioRecorder.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/android/AudioRecorder.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1649">
-              <caret line="110" column="0" selection-start-line="110" selection-start-column="0" selection-end-line="110" selection-end-column="0" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
+            <state relative-caret-position="315">
+              <caret line="21" column="31" selection-start-line="21" selection-start-column="31" selection-end-line="21" selection-end-column="31" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="activity_main.xml" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/android/res/layout/activity_main.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="660">
+              <caret line="44" column="43" selection-start-line="44" selection-start-column="43" selection-end-line="44" selection-end-column="43" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -67,9 +278,9 @@
         <option value="$PROJECT_DIR$/src/ios/CDVAudioRecorder.m" />
         <option value="$PROJECT_DIR$/src/android/CDVAudioRecorder.java" />
         <option value="$PROJECT_DIR$/src/android/res/values/colors.xml" />
-        <option value="$PROJECT_DIR$/src/android/res/layout/activity_main.xml" />
         <option value="$PROJECT_DIR$/src/android/res/values/strings.xml" />
         <option value="$PROJECT_DIR$/plugin.xml" />
+        <option value="$PROJECT_DIR$/src/android/res/layout/activity_main.xml" />
         <option value="$PROJECT_DIR$/src/android/AudioRecorder.java" />
       </list>
     </option>
@@ -81,9 +292,10 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds">
+    <option name="x" value="-1920" />
     <option name="y" value="23" />
     <option name="width" value="1920" />
-    <option name="height" value="697" />
+    <option name="height" value="1097" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
@@ -111,6 +323,8 @@
     </navigator>
     <panes>
       <pane id="Scope" />
+      <pane id="Scratches" />
+      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -223,88 +437,8 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="cordova-plugin-audio-recorder" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="cordova-plugin-audio-recorder" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="android" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="res" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="values" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="cordova-plugin-audio-recorder" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="cordova-plugin-audio-recorder" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="android" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="res" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="mipmap-hdpi" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="cordova-plugin-audio-recorder" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="cordova-plugin-audio-recorder" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="android" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="res" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="layout" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
         </subPane>
       </pane>
-      <pane id="Scratches" />
-      <pane id="PackagesPane" />
       <pane id="AndroidView" />
     </panes>
   </component>
@@ -315,7 +449,7 @@
     <property name="settings.editor.selected.configurable" value="preferences.keymap" />
     <property name="settings.editor.splitter.proportion" value="0.2" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../nomad-app-android2" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="js-jscs-nodeInterpreter" value="/usr/local/bin/node" />
     <property name="js-jscs-package" value="/usr/local/lib/node_modules/jscs" />
@@ -749,14 +883,8 @@
       <workItem from="1466408530102" duration="4010000" />
       <workItem from="1466415386405" duration="9492000" />
       <workItem from="1466434271117" duration="1869000" />
-      <workItem from="1466493149960" duration="2429000" />
-    </task>
-    <task id="LOCAL-00022" summary="Put back in the ripples.">
-      <created>1465998944218</created>
-      <option name="number" value="00022" />
-      <option name="presentableId" value="LOCAL-00022" />
-      <option name="project" value="LOCAL" />
-      <updated>1465998944218</updated>
+      <workItem from="1466493149960" duration="4340000" />
+      <workItem from="1466579881187" duration="778000" />
     </task>
     <task id="LOCAL-00023" summary="Put back in the ripples.">
       <created>1466063285544</created>
@@ -1094,41 +1222,48 @@
       <option name="project" value="LOCAL" />
       <updated>1466495272647</updated>
     </task>
-    <option name="localTasksCounter" value="71" />
+    <task id="LOCAL-00071" summary="Android - Put setContentView back in.">
+      <created>1466496063217</created>
+      <option name="number" value="00071" />
+      <option name="presentableId" value="LOCAL-00071" />
+      <option name="project" value="LOCAL" />
+      <updated>1466496063217</updated>
+    </task>
+    <option name="localTasksCounter" value="72" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="57327000" />
+    <option name="totallyTimeSpent" value="60016000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="23" width="1920" height="697" extended-state="0" />
+    <frame x="-1920" y="23" width="1920" height="1097" extended-state="0" />
     <editor active="false" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.328152" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.208981" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.27987742" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32890704" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.21246007" sideWeight="0.5" order="5" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.21246007" sideWeight="0.5" order="5" side_tool="false" content_ui="combo" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.16134185" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="hashGenerator" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="true" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="7" side_tool="false" content_ui="combo" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.328152" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Captures" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
@@ -1234,9 +1369,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="61" column="41" selection-start-line="61" selection-start-column="41" selection-end-line="61" selection-end-column="41" />
-          <folding>
-            <element signature="e#0#2881#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1313,9 +1445,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="61" column="41" selection-start-line="61" selection-start-column="41" selection-end-line="61" selection-end-column="41" />
-          <folding>
-            <element signature="e#0#2881#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1392,9 +1521,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#2881#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1512,21 +1638,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/android/res/drawable/counter_background.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/android/res/layout/activity_main.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1755">
-          <caret line="138" column="43" selection-start-line="138" selection-start-column="43" selection-end-line="138" selection-end-column="43" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/src/android/res/drawable/counter_background.xml" />
     <entry file="file://$PROJECT_DIR$/src/android/res/values/strings.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="75">
@@ -1535,20 +1647,27 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/android/res/drawable/counter_background_pressed.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/src/android/res/drawable/counter_background_pressed.xml" />
     <entry file="file://$PROJECT_DIR$/src/android/CDVAudioRecorder.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="435">
           <caret line="46" column="28" selection-start-line="46" selection-start-column="28" selection-end-line="46" selection-end-column="28" />
-          <folding>
-            <element signature="e#0#2881#0" expanded="false" />
-          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/android/AudioRecorder.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="315">
+          <caret line="21" column="31" selection-start-line="21" selection-start-column="31" selection-end-line="21" selection-end-column="31" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/android/res/layout/activity_main.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="660">
+          <caret line="44" column="43" selection-start-line="44" selection-start-column="43" selection-end-line="44" selection-end-column="43" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1557,16 +1676,6 @@
         <state relative-caret-position="285">
           <caret line="19" column="16" selection-start-line="19" selection-start-column="16" selection-end-line="19" selection-end-column="16" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/android/AudioRecorder.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1649">
-          <caret line="110" column="0" selection-start-line="110" selection-start-column="0" selection-end-line="110" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
