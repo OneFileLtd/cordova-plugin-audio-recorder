@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -26,12 +27,46 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.DecimalFormat;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+
+import android.os.Build;
+import android.util.Log;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Bitmap;
 import android.widget.ImageView;
 import android.graphics.Paint.Style;
+
+import android.content.Intent;
+
+import org.apache.cordova.file.FileUtils;
+import org.apache.cordova.file.LocalFilesystemURL;
+
+import org.apache.cordova.CallbackContext;
+import org.apache.cordova.Config;
+import org.apache.cordova.CordovaArgs;
+import org.apache.cordova.CordovaHttpAuthHandler;
+import org.apache.cordova.CordovaPlugin;
+import org.apache.cordova.CordovaWebView;
+import org.apache.cordova.LOG;
+import org.apache.cordova.PluginManager;
+import org.apache.cordova.PluginResult;
+
+import org.apache.cordova.*;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import android.Manifest;
+
+import android.os.Bundle;
+import android.view.View;
 import android.app.Activity;
 
 // TODO: This needs putting back in for the plugin, I think the resources and project path don't equate to the same path.
@@ -93,7 +128,6 @@ public class AudioRecorder extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Log.i(TAG, "onCreate()");
-
 		setContentView(R.layout.activity_main);
 		setTitle("Audio Recorder");
 
@@ -136,6 +170,13 @@ public class AudioRecorder extends Activity {
 		recordingTime.setText(timeText);
 		recordingSize.setText(sizeText);
 		maxRecordingSize.setText("Max recording size: "+uploadLimit+" MB");
+
+		String data = new String();
+		Intent intent = getIntent();
+		Bundle extras = intent.getExtras();
+		if(extras != null)
+			data = extras.getString("entryDataString"); // retrieve the data using keyName
+		Log.i(TAG, data);
 
 		checkExternalStorage();
 		setUpButtons();
@@ -217,36 +258,29 @@ public class AudioRecorder extends Activity {
 
 	private void drawCircles()
 	{
-		// Grey pulsing circle
-		Bitmap bitMap1 = Bitmap.createBitmap(300, 300, Bitmap.Config.ARGB_8888);  //creates bmp
-		bitMap1 = bitMap1.copy(bitMap1.getConfig(), true);     //lets bmp to be mutable
-		Canvas canvas1 = new Canvas(bitMap1);                 //draw a canvas in defined bmp
-		ImageView imageView1 = (ImageView) findViewById(R.id.circle);
-		imageView1.setImageBitmap(bitMap1);
+		Bitmap bitMap = Bitmap.createBitmap(300, 300, Bitmap.Config.ARGB_8888);  //creates bmp
+		bitMap = bitMap.copy(bitMap.getConfig(), true);     //lets bmp to be mutable
+		Canvas canvas = new Canvas(bitMap);                 //draw a canvas in defined bmp
 
-		// Pulsing circle
-		Paint paint1 = new Paint();
-		paint1.setColor(Color.parseColor("#AAAAAA"));
-		paint1.setStyle(Style.FILL_AND_STROKE);
-		paint1.setStrokeWidth(5.0f);
-		paint1.setAntiAlias(true);
-		canvas1.drawCircle(150, 150, 145, paint1);
-		// Progress indicator circle.
-		Paint paint2 = new Paint();
-		paint2.setColor(Color.parseColor("#FF0000"));
-		paint2.setStyle(Style.FILL_AND_STROKE);
-		paint2.setStrokeWidth(5.0f);
-		paint2.setAntiAlias(true);
-		canvas1.drawCircle(150, 150, 100, paint2);
+		Paint paint = new Paint();                          //define paint and paint color
+		paint.setColor(Color.RED);
+		paint.setStyle(Style.FILL_AND_STROKE);
+		paint.setStrokeWidth(5.0f);
+		paint.setAntiAlias(true);                           //smooth edges
 
-		imageView1.invalidate();
+		ImageView imageView = (ImageView) findViewById(R.id.circle);
+		imageView.setImageBitmap(bitMap);
+
+		canvas.drawCircle(150, 150, 145, paint);
+		//invalidate to update bitmap in imageview
+		imageView.invalidate();
 	}
 
 	private void setUpButtons()
 	{
 		Log.i(TAG, "setUpButtons()");
 
-		drawCircles();
+		//drawCircles();
 		final Button startButton = (Button) findViewById(R.id.AudioStartRecording);
 		final Button AudioBtnFinishAndSave = (Button) findViewById(R.id.AudioBtnFinishAndSave);
 
@@ -301,7 +335,9 @@ public class AudioRecorder extends Activity {
 				SaveAudio saveAudio = new SaveAudio(pauseCount);
 				saveAudio.execute((Integer) null);
 
-				setResult(RESULT_OK);
+				Intent output = new Intent();
+				output.putExtra("returnFilePath", finalStorageFilePath);
+				setResult(RESULT_OK, output);
 				finish();
 			}
 		});
