@@ -77,8 +77,6 @@
         <resource-file src="src/android/res/values/colors.xml" target="res/values/colors.xml" />
         <resource-file src="src/android/res/values/strings.xml" target="res/values/strings.xml" />
 
-        <framework src="com.android.support:appcompat-v7:23.3.0" />
-
     </platform>
 	
 	<platform name="windows">
