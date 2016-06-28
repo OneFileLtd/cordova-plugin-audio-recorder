@@ -58,32 +58,82 @@ import android.content.Intent;
 
 public class CDVAudioRecorder extends CordovaPlugin {
 
+	private final String TAG = "CDVAudioRecorder";
+	private final int AUDIO_RECORDER_REQUEST_CODE = 1001;
+	private CallbackContext callbackContextWithResult;
+
 	@Override
 	protected void pluginInitialize() {
 		super.pluginInitialize();
-		Log.i("CDVAudioRecorder","pluginInitialize()");
+		Log.i(TAG, "pluginInitialize()");
 	}
 
 	@Override
 	public boolean execute(String action, final JSONArray data, final CallbackContext callbackContext) throws JSONException {
-		Log.i("CDVAudioRecorder", "execute() called - checking action equals audioRecorder");
-		Log.i("CDVAudioRecorder", action);
+		Log.i(TAG, "execute() called - checking action equals audioRecorder");
+		Log.i(TAG, action);
 		if (action.equals("audioRecorder")) {
-
+			callbackContextWithResult = callbackContext;
+			cordova.setActivityResultCallback(this);
 			cordova.getActivity().runOnUiThread(new Runnable() {
 				@Override
 				public void run() {
 					Context context = cordova.getActivity().getApplicationContext();
+					// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+					// Pass information to the activity.
 					Intent intent = new Intent(context, AudioRecorder.class);
 					intent.putExtra("entryDataString", data.optJSONObject(0).toString());
-					cordova.getActivity().startActivity(intent);
-					Log.i("CDVAudioRecorder","executing run()");
+					// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+					cordova.getActivity().startActivityForResult(intent, AUDIO_RECORDER_REQUEST_CODE);
 				}
 			});
-
 			return true;
 		}
-		Log.i("CDVAudioRecorder", "action not equal to audioRecorder - finishing");
+		Log.i(TAG, "action not equal to audioRecorder - finishing");
 		return false;
+	}
+
+	public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+		// Only deal with any requests from our callback.
+		if(requestCode == AUDIO_RECORDER_REQUEST_CODE) {
+			if(resultCode == cordova.getActivity().RESULT_OK) {
+				Log.i(TAG, "plugin - onActivityResult - RESULT_OK");
+				// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+				// Returned information from the activity called above
+				String data = new String();
+				Bundle extras = intent.getExtras();
+				if (extras != null) {
+					try {
+						JSONArray jsonArray = new JSONArray();
+						JSONObject jsonData = new JSONObject();
+						jsonData.put("fullPath", extras.getString("filePath"));
+						jsonData.put("name", extras.getString("fileName"));
+						jsonData.put("ext", extras.getString("fileExt"));
+						jsonData.put("size", extras.getString("fileSize"));
+						jsonData.put("type", extras.getString("fileType"));
+						jsonArray.put(jsonData);
+						Log.i(TAG, jsonData.toString());
+						callbackContextWithResult.success(jsonArray);
+					}
+					catch (JSONException e)
+					{
+						e.printStackTrace();
+					}
+				}
+				// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+			}
+		}
+	}
+
+	@Override
+	public void onRestoreStateForActivityResult(Bundle state, CallbackContext callbackContext)
+	{
+		Log.i(TAG, "onRestoreStateForActivityResult");
+	}
+
+	@Override
+	public Object onMessage(String id, Object data) {
+		Log.i(TAG, "onMessage");
+		return null;
 	}
 }

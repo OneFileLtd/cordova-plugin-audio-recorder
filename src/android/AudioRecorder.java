@@ -121,7 +121,8 @@ public class AudioRecorder extends Activity {
 
 	private final String tempPart1StorageFilePath = storageDirectory + "temp_audio_";
 	private final String tempStorageFilePath = storageDirectory + "temp_audio_0.pcm";
-	private final String finalStorageFilePath = storageDirectory + "OneFileAudio.wav";
+	private final String finalStorageFileName = "OneFileAudio.wav";
+	private final String finalStorageFilePath = storageDirectory + finalStorageFileName;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -158,25 +159,23 @@ public class AudioRecorder extends Activity {
 	{
 		super.onResume();
 		Log.i(TAG, "onResume()");
-
 		setContentView(R.layout.activity_main);
 		recordingTime = (TextView) findViewById(R.id.recordingTime);
 		recordingSize = (TextView) findViewById(R.id.recordingSize);
 		maxRecordingSize = (TextView) findViewById(R.id.maxSize);
-
 		savingLayout = (LinearLayout) findViewById(R.id.savingLayout);
-
 		recordingTime.setText(timeText);
 		recordingSize.setText(sizeText);
 		maxRecordingSize.setText("Max recording size: "+uploadLimit+" MB");
-
+		// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		// PULL INFORMATION FROM THE CALLING PLUGIN ENTRY POINT
 		String data = new String();
 		Intent intent = getIntent();
 		Bundle extras = intent.getExtras();
 		if(extras != null)
 			data = extras.getString("entryDataString"); // retrieve the data using keyName
 		Log.i(TAG, data);
-
+		// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 		checkExternalStorage();
 		setUpButtons();
 	}
@@ -185,7 +184,6 @@ public class AudioRecorder extends Activity {
 	public void onSaveInstanceState(Bundle savedInstanceState)
 	{
 		Log.i(TAG, "onSaveInstanceState() Called");
-
 		savedInstanceState.putInt("pauseCount", pauseCount);
 		savedInstanceState.putLong("sizeSoFar", sizeSoFar);
 		savedInstanceState.putBoolean("audioRecordingNotStarted", audioRecordingNotStarted);
@@ -323,20 +321,31 @@ public class AudioRecorder extends Activity {
 			}
 		});
 
+		// -------------------------------------------------
+		// ----- SAVE AUDIO AND EXIT ACTIVITY --------------
+		// -------------------------------------------------
 		AudioBtnFinishAndSave.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view)
 			{
-
 				Log.i(TAG, "AudioBtnFinishAndSave.setOnClickListener()");
 				savingLayout.setVisibility(View.VISIBLE);
 				startButton.setVisibility(View.GONE);
-
 				SaveAudio saveAudio = new SaveAudio(pauseCount);
 				saveAudio.execute((Integer) null);
 
-				Intent output = new Intent();
-				output.putExtra("returnFilePath", finalStorageFilePath);
-				setResult(RESULT_OK, output);
+				File filenew = new File(finalStorageFilePath);
+				int fileSize = Integer.parseInt(String.valueOf(filenew.length()));
+
+				// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+				// PASS BACK ANY INFORMATION BACK TO THE PLUGIN ENTRY POINT.
+				Intent intent = new Intent();
+				intent.putExtra("filePath", finalStorageFilePath);
+				intent.putExtra("fileName", finalStorageFileName);
+				intent.putExtra("fileExt", "wav");
+				intent.putExtra("fileType", "audio/wav");
+				intent.putExtra("fileSize", Integer.toString(fileSize));
+				setResult(Activity.RESULT_OK, intent);
+				// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 				finish();
 			}
 		});

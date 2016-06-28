@@ -80,7 +80,8 @@
     NSMutableDictionary* fileDict = [NSMutableDictionary dictionaryWithCapacity:5];
 
     CDVFile *fs = [self.commandDelegate getCommandInstance:@"File"];
-
+    if(!fullPath)
+        return nil;
     // Get canonical version of localPath
     NSURL *fileURL = [NSURL URLWithString:[NSString stringWithFormat:@"file://%@", fullPath]];
     NSURL *resolvedFileURL = [fileURL URLByResolvingSymlinksInPath];
@@ -154,6 +155,7 @@
 @property BOOL isSavingRecording;
 @property NSInteger recSeconds;
 @property NSInteger recMinutes;
+@property NSInteger recHours;
 @property int startX;
 @property int startY;
 @property int countX;
@@ -166,6 +168,7 @@
 - (void)saveRecording;
 - (void)pauseRecording;
 - (void)resumeRecording;
+- (void)finishPlugin;
 @end
 
 /************************************************************************************************************
@@ -193,6 +196,7 @@
 @synthesize isSavingRecording = _isSavingRecording;
 @synthesize recSeconds = _recSeconds;
 @synthesize recMinutes = _recMinutes;
+@synthesize recHours = _recHours;
 @synthesize timer = _timer;
 @synthesize MaxRecSize = _MaxRecSize;
 @synthesize bezPath = _bezPath;
@@ -312,12 +316,15 @@
             break;
         case STATE_PAUSED:
             [self resumeRecording];
+            [self performSelector:@selector(ripples) withObject:nil afterDelay:0.1];
             self.currentState = STATE_RECORDING;
             self.txtRecordingName.enabled = NO;
             break;
         case STATE_SAVE:
+            NSLog(@"Saving");
             [self stopRecording];
             [self saveRecording];
+            [self finishPlugin];
             self.saveCancelButton.enabled = NO;
             self.txtRecordingName.enabled = NO;
             self.isRecording = NO;
@@ -325,6 +332,7 @@
             self.isSavingRecording = NO;
             self.recSeconds = 0;
             self.recMinutes = 0;
+            self.recHours = 0;
             self.value = 0;
             self.currentState = STATE_SAVING;
             break;
@@ -342,6 +350,7 @@
         case STATE_STOPPED:
         default:
             [self startRecording];
+            [self performSelector:@selector(ripples) withObject:nil afterDelay:0.1];
             self.currentState = STATE_RECORDING;
             self.saveCancelButton.enabled = NO;
             self.txtRecordingName.enabled = NO;
@@ -412,7 +421,8 @@
             [self drawCircle:value];
         }
     }
-    [self performSelector:@selector(ripples) withObject:nil afterDelay:0.05];
+    if(self.currentState == STATE_RECORDING)
+        [self performSelector:@selector(ripples) withObject:nil afterDelay:0.05];
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
@@ -458,6 +468,7 @@
     self.isSavingRecording = NO;
     self.recSeconds = 0;
     self.recMinutes = 0;
+    self.recHours = 0;
     self.currentState = STATE_NOT_SET;
 
     //Get the centre setttings and display the maximum audio recording size
@@ -472,7 +483,7 @@
     self.navigationController.topViewController.navigationItem.leftBarButtonItem = btnDone;
     btnDone.enabled=TRUE;
     btnDone.style=UIBarButtonSystemItemDone;
-
+    self.saveCancelButton.enabled = NO;
     [self changeButtonState];
 }
 
@@ -480,9 +491,6 @@
 {
     [super viewDidAppear:animated];
     NSLog(@"viewDidAppear");
-    [self performSelector:@selector(ripples) withObject:nil afterDelay:0.1];
-
-
 }
 
 -(void)viewWillDisappear:(BOOL)animated
@@ -501,21 +509,6 @@
     NSLog(@"CLOSING VIEW");
     self.currentState = STATE_SAVE;
     [self performButtonAction];
-    // called when done button pressed or when error condition to do cleanup and remove view
-    [[self.audioRecorderCommand.viewController.presentedViewController presentingViewController] dismissViewControllerAnimated:YES completion:nil];
-    if (!self.pluginResult) {
-        self.pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageToErrorObject:(int)self.errorCode];
-    }
-
-    [self.audioRecorderCommand setInUse:NO];
-    UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, nil);
-    // return result
-    [self.audioRecorderCommand.commandDelegate sendPluginResult:self.pluginResult callbackId:self.callbackId];
-
-    if (IsAtLeastiOSVersion(@"7.0")) {
-        [[UIApplication sharedApplication] setStatusBarStyle:self.previousStatusBarStyle];
-    }
-
 }
 
 -(IBAction)saveButtonPressed:(id)sender
@@ -561,9 +554,14 @@
     if(self.recSeconds == 60){
         self.recSeconds=0;
         self.recMinutes++;
+        if(self.recMinutes >= 60)
+        {
+            self.recHours++;
+            self.recMinutes = 0;
+        }
     }
 
-    NSString *timertext = [NSString stringWithFormat:@"%0.2ld:%0.2ld", (long)self.recMinutes, (long)self.recSeconds];
+    NSString *timertext = [NSString stringWithFormat:@"%0.2ld:%0.2ld:%0.2ld", (long)self.recHours, (long)self.recMinutes, (long)self.recSeconds];
     self.timeElapsedLabel.text = timertext;
     float bytesUsed =  32000 *  ((self.recMinutes * 60) + self.recSeconds);
     float MBUsed = bytesUsed / (float)1024.0 / (float)1024.0;
@@ -928,6 +926,31 @@
 
         self.outputStream = [NSOutputStream outputStreamToFileAtPath:[RecordingPath path]
                                                               append:NO];
+    }
+}
+
+#pragma mark - Finish up and exit Plugin
+-(void)finishPlugin {
+    NSDictionary* fileDict = [self.audioRecorderCommand getMediaDictionaryFromPath:self.recorderFilePath ofType:@"audio/wav"];
+    if(fileDict)
+    {
+        NSArray* fileArray = [NSArray arrayWithObject:fileDict];
+
+        self.pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsArray:fileArray];
+    }
+    // called when done button pressed or when error condition to do cleanup and remove view
+    [[self.audioRecorderCommand.viewController.presentedViewController presentingViewController] dismissViewControllerAnimated:YES completion:nil];
+    if (!self.pluginResult) {
+        self.pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageToErrorObject:(int)self.errorCode];
+    }
+
+    [self.audioRecorderCommand setInUse:NO];
+    UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, nil);
+    // return result
+    [self.audioRecorderCommand.commandDelegate sendPluginResult:self.pluginResult callbackId:self.callbackId];
+
+    if (IsAtLeastiOSVersion(@"7.0")) {
+        [[UIApplication sharedApplication] setStatusBarStyle:self.previousStatusBarStyle];
     }
 }
 
