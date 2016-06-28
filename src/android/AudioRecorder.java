@@ -121,8 +121,8 @@ public class AudioRecorder extends Activity {
 
 	private final String tempPart1StorageFilePath = storageDirectory + "temp_audio_";
 	private final String tempStorageFilePath = storageDirectory + "temp_audio_0.pcm";
-	private final String finalStorageFileName = "OneFileAudio.wav";
-	private final String finalStorageFilePath = storageDirectory + finalStorageFileName;
+	private final String finalStorageFileName = "onefileaudio.wav";
+	private final String finalStorageFilePath = finalStorageFile + storageDirectory + finalStorageFileName;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -340,6 +340,7 @@ public class AudioRecorder extends Activity {
 				// PASS BACK ANY INFORMATION BACK TO THE PLUGIN ENTRY POINT.
 				Intent intent = new Intent();
 				intent.putExtra("filePath", finalStorageFilePath);
+				intent.putExtra("localURL", finalStorageFilePath);
 				intent.putExtra("fileName", finalStorageFileName);
 				intent.putExtra("fileExt", "wav");
 				intent.putExtra("fileType", "audio/wav");

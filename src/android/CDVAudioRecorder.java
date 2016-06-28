@@ -107,6 +107,7 @@ public class CDVAudioRecorder extends CordovaPlugin {
 						JSONArray jsonArray = new JSONArray();
 						JSONObject jsonData = new JSONObject();
 						jsonData.put("fullPath", extras.getString("filePath"));
+						jsonData.put("localURL", extras.getString("localURL"));
 						jsonData.put("name", extras.getString("fileName"));
 						jsonData.put("ext", extras.getString("fileExt"));
 						jsonData.put("size", extras.getString("fileSize"));
