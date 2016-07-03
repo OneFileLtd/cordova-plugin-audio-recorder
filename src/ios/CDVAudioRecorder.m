@@ -23,6 +23,8 @@
 #endif
 @end
 
+#ifndef DEV_PLUGING
+
 /************************************************************************************************************
  *      CDVAudioRecorder - Initialisation point of the plugin, creates a Navigation Controller and Pushes
  *      the main audio recorder view controller on to it.
@@ -113,6 +115,9 @@
 }
 @end
 
+#endif
+
+#pragma mark - ACTUAL VIEW CONTROLLER INSIDE PLUG IN - INTERFACE
 /************************************************************************************************************
  *      AudioRecorder - ViewController for the Audio Recorder
  ************************************************************************************************************/
@@ -141,6 +146,7 @@
 
     float _averagePower;
     float _peakPower;
+    BOOL _micPermission;
 }
 
 @property (nonatomic, retain) NSString *recorderFilePath;
@@ -162,6 +168,7 @@
 @property float averagePower;
 @property float peakPower;
 @property float MaxRecSize;
+@property BOOL micPermission;
 
 - (void)startRecording;
 - (void)stopRecording;
@@ -226,10 +233,96 @@
 @synthesize errorCode = _errorCode;
 @synthesize callbackId = _callbackId;
 @synthesize duration = _duration;
-@synthesize audioRecorderCommand = _audioRecorderCommand;
 @synthesize isTimed = _isTimed;
-@synthesize pluginResult = _pluginResult;
 @synthesize previousStatusBarStyle = _previousStatusBarStyle;
+@synthesize micPermission = _micPermission;
+
+#ifndef DEV_PLUGING
+@synthesize audioRecorderCommand = _audioRecorderCommand;
+@synthesize pluginResult = _pluginResult;
+#endif
+
+/* ~~~~~~~~~~ PLUGIN ~~~~~~~~~~~ */
+#pragma mark - View entry point for our new view.
+#ifndef DEV_PLUGING
+- (id)initWithCommand:(CDVAudioRecorder *)theCommand duration:(NSNumber *)theDuration callbackId:(NSString *)theCallbackId
+{
+    NSLog(@"CDVRecorderViewController - initWithCommand");
+    if ((self = [super init])) {
+        self.audioRecorderCommand = theCommand;
+        self.duration = theDuration;
+        self.callbackId = theCallbackId;
+        self.errorCode = AUDIO_NO_MEDIA_FILES;
+        self.isTimed = self.duration != nil;
+        self.previousStatusBarStyle = [UIApplication sharedApplication].statusBarStyle;
+        return self;
+    }
+    return nil;
+}
+#endif
+
+#pragma mark - Finish up and exit Plugin
+-(void)finishPlugin {
+#ifndef DEV_PLUGING
+    NSDictionary* fileDict = [self.audioRecorderCommand getMediaDictionaryFromPath:self.recorderFilePath ofType:@"audio/wav"];
+    if(fileDict)
+    {
+        NSArray* fileArray = [NSArray arrayWithObject:fileDict];
+        
+        self.pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsArray:fileArray];
+    }
+    // called when done button pressed or when error condition to do cleanup and remove view
+    [[self.audioRecorderCommand.viewController.presentedViewController presentingViewController] dismissViewControllerAnimated:YES completion:nil];
+    if (!self.pluginResult) {
+        self.pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageToErrorObject:(int)self.errorCode];
+    }
+    
+    [self.audioRecorderCommand setInUse:NO];
+    UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, nil);
+    // return result
+    [self.audioRecorderCommand.commandDelegate sendPluginResult:self.pluginResult callbackId:self.callbackId];
+    
+    if (IsAtLeastiOSVersion(@"7.0")) {
+        [[UIApplication sharedApplication] setStatusBarStyle:self.previousStatusBarStyle];
+    }
+#endif
+}
+
+/* ~~~~~~~~~~ VIEW ~~~~~~~~~~~ */
+#pragma mark - ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#pragma mark - Check permission to use Microphone
+-(void)checkPermission
+{
+    [[AVAudioSession sharedInstance] requestRecordPermission:^(BOOL granted) {
+        if (granted) {
+            NSLog(@"Permission granted");
+            self.micPermission = YES;
+        }
+        else {
+            NSLog(@"Permission denied");
+            self.micPermission = NO;
+        }
+    }];
+}
+
+#pragma mark - 
+-(void) adviseUserPermission
+{
+    UIAlertAction *resetAction = [UIAlertAction
+                                  actionWithTitle:NSLocalizedString(@"OKAY", @"OKAY action")
+                                  style:UIAlertActionStyleDestructive
+                                  handler:^(UIAlertAction *action)
+                                  {
+                                      NSLog(@"OKAY action");
+                                  }];
+    
+    UIAlertController *alertController = [UIAlertController
+                                          alertControllerWithTitle:@"Mic Permission Error"
+                                          message:@"This app does not have permission to use your mic, please go to the settings app and allow permission !!"
+                                          preferredStyle:UIAlertControllerStyleAlert];
+    [alertController addAction:resetAction];
+    [self presentViewController:alertController animated:YES completion:nil];
+}
 
 #pragma mark -
 - (NSString*)resolveImageResource:(NSString*)resource
@@ -244,24 +337,7 @@
             return [NSString stringWithFormat:@"%@.png", resource];
         }
     }
-
     return resource;
-}
-
-#pragma mark -
-- (id)initWithCommand:(CDVAudioRecorder *)theCommand duration:(NSNumber *)theDuration callbackId:(NSString *)theCallbackId
-{
-    NSLog(@"CDVRecorderViewController - initWithCommand");
-    if ((self = [super init])) {
-        self.audioRecorderCommand = theCommand;
-        self.duration = theDuration;
-        self.callbackId = theCallbackId;
-        self.errorCode = AUDIO_NO_MEDIA_FILES;
-        self.isTimed = self.duration != nil;
-        self.previousStatusBarStyle = [UIApplication sharedApplication].statusBarStyle;
-        return self;
-    }
-    return nil;
 }
 
 #pragma mark -
@@ -363,7 +439,7 @@
 -(void)drawPie
 {
     CGFloat radius = MIN(self.circle.frame.size.width,self.circle.frame.size.height)/2;
-    CGFloat inset  = 15;
+    CGFloat inset  = 20;
     CAShapeLayer *ring = [CAShapeLayer layer];
     ring.path = [UIBezierPath bezierPathWithRoundedRect:CGRectInset(self.circle.bounds, inset, inset)
                                            cornerRadius:radius-inset].CGPath;
@@ -402,7 +478,7 @@
 {
     if(!self.circles)
     {
-        CGFloat radius = 60.0;
+        CGFloat radius = 100.0;
         NSNumber *radiusObject = [[NSNumber alloc] initWithFloat:radius];
         self.circles = [[NSMutableArray alloc] initWithCapacity:10];
         [self.circles addObject:radiusObject];
@@ -412,9 +488,9 @@
             NSNumber *current = [self.circles objectAtIndex:index];
             CGFloat value = [current floatValue];
             value += 3.0;
-            if(value > 130.0)
+            if(value > 250.0)
             {
-                value = 60.0;
+                value = 100.0;
                 self.fadeColor = 1.0;
             }
             [self.circles setObject:[NSNumber numberWithFloat:value] atIndexedSubscript:index];
@@ -423,6 +499,18 @@
     }
     if(self.currentState == STATE_RECORDING)
         [self performSelector:@selector(ripples) withObject:nil afterDelay:0.05];
+}
+
+-(void)backgroundNotification:(NSNotification *)notification
+{
+    NSLog(@"backgroundNotification");
+    if(self.currentState == STATE_RECORDING)
+    {
+        [self.circles removeAllObjects];
+        self.circles = nil;
+        [self performButtonAction];
+        [self changeButtonState];
+    }
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
@@ -463,6 +551,10 @@
 {
     [super viewWillAppear:animated];
     NSLog(@"viewWillAppear");
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(backgroundNotification:)
+                                                 name:UIApplicationDidEnterBackgroundNotification object:nil];
+    
     self.isRecording = NO;
     self.isPaused = NO;
     self.isSavingRecording = NO;
@@ -474,7 +566,7 @@
     //Get the centre setttings and display the maximum audio recording size
     NSString *maxSizeText = [NSString stringWithFormat:@"%d MB", 30000];
     [self.maxFileSizeLabel setText:maxSizeText];
-    self.MaxRecSize = 30000;
+    self.MaxRecSize = 30.0;
     self.value = 0;
     self.segment = 0;
     self.currentState = STATE_NOT_SET;
@@ -485,6 +577,7 @@
     btnDone.style=UIBarButtonSystemItemDone;
     self.saveCancelButton.enabled = NO;
     [self changeButtonState];
+    [self checkPermission];
 }
 
 -(void)viewDidAppear:(BOOL)animated
@@ -497,12 +590,16 @@
 {
     [super viewWillDisappear:animated];
     NSLog(@"viewWillDisappear");
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidEnterBackgroundNotification object:nil];
 }
 
 #pragma mark - Buttons
 - (IBAction)recorderButtonPressed:(id)sender
 {
-    [self performButtonAction];
+    if(self.micPermission)
+        [self performButtonAction];
+    else
+        [self adviseUserPermission];
 }
 
 - (IBAction)backButtonPressed:(id)sender {
@@ -575,9 +672,9 @@
         [self stopRecording];
         [self.viewAmplitude setHidden:YES];
     }
-    self.value = 1.0 * (MBUsed / 30.0f);
+    self.value = 1.0 * (MBUsed / self.MaxRecSize);
     [self drawPie];
-    if(MBUsed >= self.MaxRecSize && self.recorder && self.recorder.recording)
+    if(self.value >= 1.0f && self.recorder && self.recorder.recording)
         [self stopRecording];
 }
 
@@ -926,31 +1023,6 @@
 
         self.outputStream = [NSOutputStream outputStreamToFileAtPath:[RecordingPath path]
                                                               append:NO];
-    }
-}
-
-#pragma mark - Finish up and exit Plugin
--(void)finishPlugin {
-    NSDictionary* fileDict = [self.audioRecorderCommand getMediaDictionaryFromPath:self.recorderFilePath ofType:@"audio/wav"];
-    if(fileDict)
-    {
-        NSArray* fileArray = [NSArray arrayWithObject:fileDict];
-
-        self.pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsArray:fileArray];
-    }
-    // called when done button pressed or when error condition to do cleanup and remove view
-    [[self.audioRecorderCommand.viewController.presentedViewController presentingViewController] dismissViewControllerAnimated:YES completion:nil];
-    if (!self.pluginResult) {
-        self.pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageToErrorObject:(int)self.errorCode];
-    }
-
-    [self.audioRecorderCommand setInUse:NO];
-    UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, nil);
-    // return result
-    [self.audioRecorderCommand.commandDelegate sendPluginResult:self.pluginResult callbackId:self.callbackId];
-
-    if (IsAtLeastiOSVersion(@"7.0")) {
-        [[UIApplication sharedApplication] setStatusBarStyle:self.previousStatusBarStyle];
     }
 }
 

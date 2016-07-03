@@ -1,8 +1,10 @@
 #import <UIKit/UIKit.h>
 #import <AVFoundation/AVFoundation.h>
 #import <QuartzCore/QuartzCore.h>
+#ifndef DEV_PLUGING
 #import <Cordova/CDVPlugin.h>
 #import "CDVFile.h"
+#endif
 
 enum CDVAUDIOError {
     AUDIO_INTERNAL_ERR = 0,
@@ -34,14 +36,21 @@ typedef enum {
  *      CDVAudioRecorder - Initialisation point of the plugin, creates a Navigation Controller and Pushes
  *      the main audio recorder view controller on to it.
  ************************************************************************************************************/
+#ifndef DEV_PLUGING
 @interface CDVAudioRecorder : CDVPlugin <UINavigationControllerDelegate>
 {
     BOOL _inUse;
 }
 @property BOOL inUse;
+
 - (void)audioRecorder:(CDVInvokedUrlCommand*)command;
 - (NSDictionary*)getMediaDictionaryFromPath:(NSString*)fullPath ofType:(NSString*)type;
 @end
+#endif
+
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /************************************************************************************************************
  *      AudioRecorder - ViewController for the Audio Recorder
@@ -77,9 +86,11 @@ typedef enum {
     CDVAUDIOError _errorCode;
     NSString *_callbackId;
     NSNumber *_duration;
+BOOL _isTimed;
+#ifndef DEV_PLUGING
     CDVAudioRecorder *_audioRecorderCommand;
-    BOOL _isTimed;
     CDVPluginResult *_pluginResult;
+#endif
     UIStatusBarStyle _previousStatusBarStyle;
 }
 
@@ -113,14 +124,19 @@ typedef enum {
 @property (nonatomic) CDVAUDIOError errorCode;
 @property (nonatomic, copy) NSString *callbackId;
 @property (nonatomic, copy) NSNumber *duration;
-@property (nonatomic, strong) CDVAudioRecorder *audioRecorderCommand;
 @property BOOL isTimed;
-@property (nonatomic, strong) CDVPluginResult *pluginResult;
 @property UIStatusBarStyle previousStatusBarStyle;
+
+#ifndef DEV_PLUGING
+@property (nonatomic, strong) CDVAudioRecorder *audioRecorderCommand;
+@property (nonatomic, strong) CDVPluginResult *pluginResult;
+#endif
 
 - (IBAction)recorderButtonPressed:(id)sender;
 - (IBAction)backButtonPressed:(id)sender;
 - (IBAction)saveButtonPressed:(id)sender;
 
+#ifndef DEV_PLUGING
 - (id)initWithCommand:(CDVPlugin *)theCommand duration:(NSNumber*)theDuration callbackId:(NSString*)theCallbackId;
+#endif
 @end
