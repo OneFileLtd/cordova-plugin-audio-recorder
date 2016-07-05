@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="fa5aae78-a822-4d54-9516-a7234c120ad1" name="Default" comment="">
+    <list default="true" id="fa5aae78-a822-4d54-9516-a7234c120ad1" name="Default" comment="removed">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/android/CDVAudioRecorder.java" afterPath="$PROJECT_DIR$/src/android/CDVAudioRecorder.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ios/CDVAudioRecorder.m" afterPath="$PROJECT_DIR$/src/ios/CDVAudioRecorder.m" />
@@ -26,21 +26,21 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="CDVAudioRecorder.m" pinned="false" current-in-tab="false">
+      <file leaf-file-name="CDVAudioRecorder.m" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/ios/CDVAudioRecorder.m">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="285">
-              <caret line="271" column="105" selection-start-line="271" selection-start-column="105" selection-end-line="271" selection-end-column="105" />
+            <state relative-caret-position="240">
+              <caret line="268" column="5" selection-start-line="268" selection-start-column="5" selection-end-line="268" selection-end-column="5" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="CDVAudioRecorder.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="CDVAudioRecorder.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/android/CDVAudioRecorder.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="268">
-              <caret line="116" column="66" selection-start-line="116" selection-start-column="66" selection-end-line="116" selection-end-column="66" />
+            <state relative-caret-position="404">
+              <caret line="112" column="75" selection-start-line="112" selection-start-column="75" selection-end-line="112" selection-end-column="75" />
               <folding />
             </state>
           </provider>
@@ -81,6 +81,7 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds">
+    <option name="x" value="-1835" />
     <option name="y" value="23" />
     <option name="width" value="1920" />
     <option name="height" value="1097" />
@@ -110,6 +111,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
+      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -216,9 +219,7 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
       <pane id="PackagesPane" />
-      <pane id="Scratches" />
       <pane id="AndroidView" />
     </panes>
   </component>
@@ -670,14 +671,8 @@
       <workItem from="1467017904848" duration="591000" />
       <workItem from="1467099895209" duration="742000" />
       <workItem from="1467127604455" duration="183000" />
-      <workItem from="1467715073896" duration="131000" />
-    </task>
-    <task id="LOCAL-00031" summary="Android - Change execute.">
-      <created>1466076279526</created>
-      <option name="number" value="00031" />
-      <option name="presentableId" value="LOCAL-00031" />
-      <option name="project" value="LOCAL" />
-      <updated>1466076279526</updated>
+      <workItem from="1467715073896" duration="197000" />
+      <workItem from="1467715884984" duration="85000" />
     </task>
     <task id="LOCAL-00032" summary="Android - Added additional libraries">
       <created>1466076370658</created>
@@ -1015,14 +1010,21 @@
       <option name="project" value="LOCAL" />
       <updated>1467127753530</updated>
     </task>
-    <option name="localTasksCounter" value="80" />
+    <task id="LOCAL-00080" summary="No fetches back one object not and array of objects.">
+      <created>1467715265599</created>
+      <option name="number" value="00080" />
+      <option name="presentableId" value="LOCAL-00080" />
+      <option name="project" value="LOCAL" />
+      <updated>1467715265599</updated>
+    </task>
+    <option name="localTasksCounter" value="81" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="65656000" />
+    <option name="totallyTimeSpent" value="65807000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="23" width="1920" height="1097" extended-state="6" />
+    <frame x="-1835" y="23" width="1920" height="1097" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -1066,7 +1068,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Android - Change execute." />
     <MESSAGE value="Android - Added additional libraries" />
     <MESSAGE value="Android - added secondary class for the activity which will be used for the main audio recorder." />
     <MESSAGE value="Android - added mising imports." />
@@ -1091,7 +1092,8 @@
     <MESSAGE value="Android - Removed unused framework from plugin.xml" />
     <MESSAGE value="Updated with code that passes data to and from plugin." />
     <MESSAGE value="Corrected localURL for filePath for Android.&#10;Removed launcher icons for Android.&#10;Added multi-layout xib for iOS" />
-    <option name="LAST_COMMIT_MESSAGE" value="Corrected localURL for filePath for Android.&#10;Removed launcher icons for Android.&#10;Added multi-layout xib for iOS" />
+    <MESSAGE value="No fetches back one object not and array of objects." />
+    <option name="LAST_COMMIT_MESSAGE" value="No fetches back one object not and array of objects." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -1389,7 +1391,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1890">
           <caret line="142" column="0" selection-start-line="142" selection-start-column="0" selection-end-line="142" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1405,9 +1406,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="11865">
           <caret line="879" column="0" selection-start-line="879" selection-start-column="0" selection-end-line="879" selection-end-column="0" />
-          <folding>
-            <element signature="e#19748#19749#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1415,7 +1413,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2070">
           <caret line="138" column="0" selection-start-line="138" selection-start-column="0" selection-end-line="138" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1423,22 +1420,21 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="15">
           <caret line="1" column="17" selection-start-line="1" selection-start-column="4" selection-end-line="1" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/android/CDVAudioRecorder.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="404">
+          <caret line="112" column="75" selection-start-line="112" selection-start-column="75" selection-end-line="112" selection-end-column="75" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/ios/CDVAudioRecorder.m">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="285">
-          <caret line="271" column="105" selection-start-line="271" selection-start-column="105" selection-end-line="271" selection-end-column="105" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/android/CDVAudioRecorder.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="268">
-          <caret line="116" column="66" selection-start-line="116" selection-start-column="66" selection-end-line="116" selection-end-column="66" />
+        <state relative-caret-position="240">
+          <caret line="268" column="5" selection-start-line="268" selection-start-column="5" selection-end-line="268" selection-end-column="5" />
           <folding />
         </state>
       </provider>

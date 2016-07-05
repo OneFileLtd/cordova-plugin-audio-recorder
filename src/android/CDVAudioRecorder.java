@@ -104,7 +104,6 @@ public class CDVAudioRecorder extends CordovaPlugin {
 				Bundle extras = intent.getExtras();
 				if (extras != null) {
 					try {
-						// JSONArray jsonArray = new JSONArray();
 						JSONObject jsonData = new JSONObject();
 						jsonData.put("fullPath", extras.getString("filePath"));
 						jsonData.put("localURL", extras.getString("localURL"));
@@ -112,7 +111,6 @@ public class CDVAudioRecorder extends CordovaPlugin {
 						jsonData.put("ext", extras.getString("fileExt"));
 						jsonData.put("size", extras.getString("fileSize"));
 						jsonData.put("type", extras.getString("fileType"));
-						jsonArray.put(jsonData);
 						Log.i(TAG, jsonData.toString());
 						callbackContextWithResult.success(jsonData);
 					}
