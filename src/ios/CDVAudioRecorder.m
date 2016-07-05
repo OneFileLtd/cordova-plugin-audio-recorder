@@ -267,9 +267,9 @@
     NSDictionary* fileDict = [self.audioRecorderCommand getMediaDictionaryFromPath:self.recorderFilePath ofType:@"audio/wav"];
     if(fileDict)
     {
-        NSArray* fileArray = [NSArray arrayWithObject:fileDict];
+        // NSArray* fileArray = [NSArray arrayWithObject:fileDict];
         
-        self.pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsArray:fileArray];
+        self.pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsArray:fileDict];
     }
     // called when done button pressed or when error condition to do cleanup and remove view
     [[self.audioRecorderCommand.viewController.presentedViewController presentingViewController] dismissViewControllerAnimated:YES completion:nil];
