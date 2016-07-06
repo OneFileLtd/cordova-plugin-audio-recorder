@@ -145,8 +145,8 @@
 			navBack(true, {
 				status: 2,
 				fileDetails: {
-					fullPath: capturedFile.path,
-					localURL: capturedFile.path,
+					fullPath: nativePathToCordova(capturedFile.path),
+					localURL: nativePathToCordova(capturedFile.path),
 					name: capturedFile.name,
 					size: basicProperties.size,
 					ext: capturedFile.fileType.replace('.', ''),
@@ -156,6 +156,19 @@
 		}).done(null, function error(err) {
 			navBack(false, err);
 		});
+	}
+
+	function cordovaPathToNative(path) {
+		// turn / into \\
+		var cleanPath = path.replace(/\//g, '\\');
+		// turn  \\ into \
+		cleanPath = cleanPath.replace(/\\+/g, '\\');
+		return cleanPath;
+	}
+
+	function nativePathToCordova(path) {
+		var cleanPath = path.replace(/\\/g, '/');
+		return cleanPath;
 	}
 
 	function resize(evt) {
