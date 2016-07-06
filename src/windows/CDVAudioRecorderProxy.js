@@ -145,8 +145,8 @@
 			navBack(true, {
 				status: 2,
 				fileDetails: {
-					fullPath: nativePathToCordova(capturedFile.path),
-					localURL: nativePathToCordova(capturedFile.path),
+					fullPath: nativePathToCordova("ms-appdata:///temp/" + capturedFile.name),
+					localURL: nativePathToCordova("ms-appdata:///temp/" + capturedFile.name),
 					name: capturedFile.name,
 					size: basicProperties.size,
 					ext: capturedFile.fileType.replace('.', ''),
