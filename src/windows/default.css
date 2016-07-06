@@ -13,20 +13,14 @@
     font-style: normal;
 }
 
-html * {
+.plugin-page * {
     font-family: 'Open Sans', sans-serif !important;
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
 }
 
-*, *:before, *:after {
-    -moz-box-sizing: inherit;
-    -webkit-box-sizing: inherit;
-    box-sizing: inherit;
-}
-
-.plugin-page{
+.plugin-page {
     position: absolute;
     top: 0px;
     bottom: 0px;
@@ -36,68 +30,62 @@ html * {
     background-color: #262d35;
 }
 
-body {
-    padding: 0;
-    margin: 0;
-    background-color: #262d35;
-}
-
-.icon {
-    display: inline-block;
-    font-family: "Ionicons" !important;
-    speak: none;
-    font-style: normal;
-    font-weight: normal;
-    font-variant: normal;
-    text-transform: none;
-    text-rendering: auto;
-    line-height: 1;
-    -webkit-font-smoothing: antialiased;
-    font-size: 32px;
-}
+    .plugin-page .icon {
+        display: inline-block;
+        font-family: "Ionicons" !important;
+        speak: none;
+        font-style: normal;
+        font-weight: normal;
+        font-variant: normal;
+        text-transform: none;
+        text-rendering: auto;
+        line-height: 1;
+        -webkit-font-smoothing: antialiased;
+        font-size: 32px;
+    }
 
 
-#audioPlayer {
-    position: absolute;
-    top: 44px;
-    bottom: 54px;
-    left: 0;
-    right: 0;
-}
+    .plugin-page #audioPlayer {
+        position: absolute;
+        top: 44px;
+        bottom: 54px;
+        left: 0;
+        right: 0;
+    }
 
-.aspect-landscape #audioPlayer {
-    bottom: 0;
-}
+    .plugin-page .aspect-landscape #audioPlayer {
+        bottom: 0;
+    }
 
-.bar-header {
-    padding: 5px;
-    height: 44px;
-    background-color: #3b444d;
-    color: white;
-    font-size: 17px;
-    font-weight: 500;
-}
+    .plugin-page .bar-header {
+        padding: 5px;
+        height: 44px;
+        background-color: #3b444d;
+        color: white;
+        font-size: 17px;
+        font-weight: 500;
+    }
 
 @media (min-width: 350px) {
-    .bar-header {
+    .plugin-page .bar-header {
         padding-left: 10px;
         padding-right: 10px;
     }
 }
 
 @media (min-height: 600px) {
-    .bar-header {
+    .plugin-page .bar-header {
         height: 54px;
         padding-top: 10px;
         padding-bottom: 10px;
     }
 
-    #audioPlayer {
+    .plugin-page #audioPlayer {
         top: 54px;
     }
 }
 
-.time {
+.plugin-page .time {
     z-index: 100;
     position: absolute;
     color: #e9a400;
@@ -105,15 +93,15 @@ body {
     letter-spacing: 0.1em;
     width: 100%;
     text-align: center;
-	line-height: 1em;
+    line-height: 1em;
 }
 
-.aspect-landscape .time {
+.plugin-page .aspect-landscape .time {
     top: 10px;
 }
 
 
-.play-ring {
+.plugin-page .play-ring {
     z-index: 80;
     display: block;
     width: 36vmin;
@@ -131,14 +119,14 @@ body {
     box-shadow: 0 0 4vmin rgba(0,0,0,0.6);
 }
 
-.recording .play-ring {
+.plugin-page .recording .play-ring {
     -moz-animation: rotate-progress 1.5s linear infinite;
     -o-animation: rotate-progress 1.5s linear infinite;
     -webkit-animation: rotate-progress 1.5s linear infinite;
     animation: rotate-progress 1.5s linear infinite;
 }
 
-#recordButton {
+.plugin-page #recordButton {
     z-index: 100;
     display: block;
     width: 32vmin;
@@ -160,12 +148,18 @@ body {
     border: 1px solid #5c6772;
 }
 
-#audioPlayer.recording #recordButton {
+.plugin-page #backButton {
+    border: none;
+    background-color: transparent;
+    height: 54px;
+}
+
+.plugin-page #audioPlayer.recording #recordButton {
     background-color: #3b444d;
     color: #e9a400;
 }
 
-#saveButton {
+.plugin-page #saveButton {
     display: none;
     position: absolute;
     bottom: 2em;
@@ -185,22 +179,22 @@ body {
     transform: translate(-50%, 0);
 }
 
-    #saveButton.available {
+    .plugin-page #saveButton.available {
         display: block;
     }
 
-.aspect-landscape #saveButton {
+.plugin-page .aspect-landscape #saveButton {
     bottom: 15px;
 }
 
 @media (max-height: 380px) {
-    .aspect-landscape #saveButton {
+    .plugin-page .aspect-landscape #saveButton {
         bottom: 10px;
         font-size: 1em;
     }
 }
 
-.pulse {
+.plugin-page .pulse {
     width: 100vmin;
     height: 100%;
     max-height: 100vmin;
@@ -216,7 +210,7 @@ body {
 }
 
 
-.pulse-container {
+.plugin-page .pulse-container {
     position: absolute;
     top: 0;
     left: 0;
@@ -234,7 +228,8 @@ body {
     justify-content: center;
 }
 
-#audioPlayer.unstarted .pulse-container, #audioPlayer.paused .pulse-container {
+.plugin-page #audioPlayer.unstarted .pulse-container,
+.plugin-page #audioPlayer.paused .pulse-container {
     -webkit-transition: 0.4s ease-in-out;
     -moz-transition: 0.4s ease-in-out;
     -ms-transition: 0.4s ease-in-out;
@@ -243,7 +238,7 @@ body {
     opacity: 0;
 }
 
-#audioPlayer.recording .pulse-container {
+.plugin-page #audioPlayer.recording .pulse-container {
     -webkit-transition: 0.3s ease-in-out;
     -moz-transition: 0.3s ease-in-out;
     -ms-transition: 0.3s ease-in-out;
@@ -252,40 +247,44 @@ body {
     opacity: 1;
 }
 
-.unstarted span, .paused span, .recording span {
+.plugin-page .unstarted span,
+.plugin-page .paused span,
+.plugin-page .recording span {
     display: none;
 }
 
-#audioPlayer.unstarted .unstarted, #audioPlayer.paused .paused, #audioPlayer.recording .recording {
+.plugin-page #audioPlayer.unstarted .unstarted,
+.plugin-page #audioPlayer.paused .paused,
+.plugin-page #audioPlayer.recording .recording {
     display: inline;
 }
 
-.aspect-landscape .pulse-container {
+.plugin-page .aspect-landscape .pulse-container {
     left: 22px;
     right: 22px;
 }
 
-.pulse-container .pulse-inner {
+.plugin-page .pulse-container .pulse-inner {
     position: relative;
     width: 100%;
     height: 100%;
 }
 
-    .pulse-container .pulse-inner > div:nth-child(2) {
+    .plugin-page .pulse-container .pulse-inner > div:nth-child(2) {
         -moz-animation-delay: 0.4s;
         -o-animation-delay: 0.4s;
         -webkit-animation-delay: 0.4s;
         animation-delay: 0.4s;
     }
 
-    .pulse-container .pulse-inner > div:nth-child(3) {
+    .plugin-page .pulse-container .pulse-inner > div:nth-child(3) {
         -moz-animation-delay: 1s;
         -o-animation-delay: 1s;
         -webkit-animation-delay: 1s;
         animation-delay: 1s;
     }
 
-    .pulse-container .pulse-inner > div {
+    .plugin-page .pulse-container .pulse-inner > div {
         width: 100%;
         height: 100%;
         border-radius: 50%;
