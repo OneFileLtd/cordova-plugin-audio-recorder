@@ -137,7 +137,7 @@
 				}
 			})
 			.then(function () {
-				return sFile.path;
+				return sFile;
 			});
 	}
 

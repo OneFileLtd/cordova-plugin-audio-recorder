@@ -1,40 +1,40 @@
 ﻿(function () {
-    "use strict";
-    var CDVAudioRecorderProxy = {
-        audioRecorder: function (win, fail, args, env) {
-            try {
+	"use strict";
+	var CDVAudioRecorderProxy = {
+		audioRecorder: function (win, fail, args, env) {
+			try {
 				successCB = win;
 				errorCB = fail;
 				callerOptions = args;
 				WinJS.Navigation.navigate('/pages/AudioRecorder.html');
-            } catch (e) {
-                fail(e);
-            }
-        }
-    };
+			} catch (e) {
+				fail(e);
+			}
+		}
+	};
 
-    WinJS.Namespace.define('Timer', {
+	WinJS.Namespace.define('Timer', {
 		currentTime: 0,
 		startTime: 0,
 		pausedTime: 0,
 		elapsedTime: 0,
 		formattedTime: '0.000s'
 	});
-	
+
 	WinJS.Navigation.addEventListener("navigating", function (e) {
 		var elem = document.createElement("div");
 		elem.id = 'audioRecorderPluginPage';
-        var body = document.getElementsByTagName("body")[0];
+		var body = document.getElementsByTagName("body")[0];
 		body.appendChild(elem);
 		WinJS.Utilities.addClass(elem, 'plugin-page');
-        WinJS.UI.Animation.exitPage(elem.children).then(function () {
-            WinJS.Utilities.empty(elem);
-            WinJS.UI.Pages.render(e.detail.location, elem)
+		WinJS.UI.Animation.exitPage(elem.children).then(function () {
+			WinJS.Utilities.empty(elem);
+			WinJS.UI.Pages.render(e.detail.location, elem)
                 .then(function () {
-                    return WinJS.UI.Animation.enterPage(elem.children)
+                	return WinJS.UI.Animation.enterPage(elem.children)
                 });
-        });
-    });
+		});
+	});
 
 	var state = 'unstarted';
 	var timerBinding = WinJS.Binding.as(Timer);
@@ -66,39 +66,39 @@
 		AudioUtil.init();
 		resize();
 	}
-	
-	function checkpointHandler(args){
+
+	function checkpointHandler(args) {
 		args.setPromise(AudioUtil.cleanupCaptureResources());
 	}
 
 	function backClick() {
 		navBack(true, { status: 1 });
 	}
-	
-	function resetTimer(){
+
+	function resetTimer() {
 		timerBinding.currentTime = 0;
 		timerBinding.startTime = 0;
 		timerBinding.pausedTime = 0;
 		timerBinding.elapsedTime = 0;
 		timerBinding.formattedTime = '0.000s';
 	}
-	
+
 	function navBack(isSuccess, data) {
 		WinJS.Navigation.back(1);
 		WinJS.Navigation.history = {};
 		var elem = document.getElementById('audioRecorderPluginPage');
 		var body = document.getElementsByTagName("body")[0];
-        WinJS.UI.Animation.exitPage(elem.children).then(function () {
+		WinJS.UI.Animation.exitPage(elem.children).then(function () {
 			body.removeChild(elem);
 			if (isSuccess) {
 				successCB(data);
 				return;
-			} 
+			}
 			errorCB(data);
 			return;
-        });
+		});
 	}
-	
+
 	function runTimer() {
 		if (state === 'recording') {
 			timerBinding.currentTime = Date.now();
@@ -135,11 +135,25 @@
 	}
 
 	function saveClick(evt) {
+		var capturedFile;
 		AudioUtil.stopRecord()
-		.then(function (tmpPath) {
-			navBack(true, { status: 2, filePath: tmpPath});
+		.then(function (file) {
+			capturedFile = file;
+			return file.getBasicPropertiesAsync();
+		})
+		.then(function (basicProperties) {
+			navBack(true, {
+				status: 2,
+				fileDetails: {
+					fullPath: capturedFile.path,
+					name: capturedFile.name,
+					size: basicProperties.size,
+					ext: capturedFile.fileType.replace('.', ''),
+					type: capturedFile.contentType
+				}
+			});
 		}).done(null, function error(err) {
-			navBack(false, { status: 3, error: err});
+			navBack(false, err);
 		});
 	}
 
@@ -170,5 +184,5 @@
 		};
 	}
 
-    require("cordova/exec/proxy").add("CDVAudioRecorder", CDVAudioRecorderProxy);
+	require("cordova/exec/proxy").add("CDVAudioRecorder", CDVAudioRecorderProxy);
 })();

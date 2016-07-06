@@ -105,22 +105,26 @@ public class CDVAudioRecorder extends CordovaPlugin {
 				if (extras != null) {
 					try {
 						JSONObject jsonData = new JSONObject();
-						jsonData.put("fullPath", extras.getString("filePath"));
-						jsonData.put("localURL", extras.getString("localURL"));
-						jsonData.put("name", extras.getString("fileName"));
-						jsonData.put("ext", extras.getString("fileExt"));
-						jsonData.put("size", extras.getString("fileSize"));
-						jsonData.put("type", extras.getString("fileType"));
-						Log.i(TAG, jsonData.toString());
+						JSONObject fileDetails = new JSONObject();
+						fileDetails.put("fullPath", extras.getString("filePath"));
+						fileDetails.put("localURL", extras.getString("localURL"));
+						fileDetails.put("name", extras.getString("fileName"));
+						fileDetails.put("ext", extras.getString("fileExt"));
+						fileDetails.put("size", extras.getString("fileSize"));
+						fileDetails.put("type", extras.getString("fileType"));
+						jsonData.put("fileDetails", fileDetails);
+						jsonData.put("status", 2);
 						callbackContextWithResult.success(jsonData);
 					}
 					catch (JSONException e)
 					{
+						callbackContextWithResult.error(e.getMessage());
 						e.printStackTrace();
 					}
 				}
 				// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 			}
+			callbackContextWithResult.error("Error recording");
 		}
 	}
 
