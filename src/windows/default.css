@@ -151,7 +151,12 @@
 .plugin-page #backButton {
     border: none;
     background-color: transparent;
+    color: white;
     height: 54px;
+    font-size: 17px;
+    font-weight: 500;
+    padding: 5px;
+    height: 44px;
 }
 
 .plugin-page #audioPlayer.recording #recordButton {
