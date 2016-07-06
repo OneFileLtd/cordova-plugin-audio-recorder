@@ -146,6 +146,7 @@
 				status: 2,
 				fileDetails: {
 					fullPath: capturedFile.path,
+					localURL: capturedFile.path,
 					name: capturedFile.name,
 					size: basicProperties.size,
 					ext: capturedFile.fileType.replace('.', ''),
