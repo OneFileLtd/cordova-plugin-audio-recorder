@@ -53,18 +53,18 @@
         right: 0;
     }
 
-    .plugin-page .aspect-landscape #audioPlayer {
-        bottom: 0;
-    }
+.aspect-landscape .plugin-page #audioPlayer {
+    bottom: 0;
+}
 
-    .plugin-page .bar-header {
-        padding: 5px;
-        height: 44px;
-        background-color: #3b444d;
-        color: white;
-        font-size: 17px;
-        font-weight: 500;
-    }
+.plugin-page .bar-header {
+    padding: 5px;
+    height: 44px;
+    background-color: #3b444d;
+    color: white;
+    font-size: 17px;
+    font-weight: 500;
+}
 
 @media (min-width: 350px) {
     .plugin-page .bar-header {
@@ -96,7 +96,7 @@
     line-height: 1em;
 }
 
-.plugin-page .aspect-landscape .time {
+.aspect-landscape .plugin-page .time {
     top: 10px;
 }
 
@@ -185,12 +185,12 @@
         display: block;
     }
 
-.plugin-page .aspect-landscape #saveButton {
+.aspect-landscape .plugin-page #saveButton {
     bottom: 15px;
 }
 
 @media (max-height: 380px) {
-    .plugin-page .aspect-landscape #saveButton {
+    .aspect-landscape .plugin-page #saveButton {
         bottom: 10px;
         font-size: 1em;
     }
@@ -261,7 +261,7 @@
     display: inline;
 }
 
-.plugin-page .aspect-landscape .pulse-container {
+.aspect-landscape .plugin-page .pulse-container {
     left: 22px;
     right: 22px;
 }
