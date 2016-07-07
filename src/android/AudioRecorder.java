@@ -313,6 +313,7 @@ public class AudioRecorder extends Activity {
 				else if(currentState == STATE_PAUSED)
 				{
 					startRecording();
+					AudioBtnFinishAndSave.setEnabled(false);
 
 					startButton.setBackgroundResource(R.drawable.pause_button);
 					currentState = STATE_RECORDING;
