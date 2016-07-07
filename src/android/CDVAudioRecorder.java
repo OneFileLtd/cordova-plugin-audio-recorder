@@ -61,6 +61,7 @@ public class CDVAudioRecorder extends CordovaPlugin {
 	private final String TAG = "CDVAudioRecorder";
 	private final int AUDIO_RECORDER_REQUEST_CODE = 1001;
 	private CallbackContext callbackContextWithResult;
+	private final String cordovaFilePrepend = "file://";
 
 	@Override
 	protected void pluginInitialize() {
@@ -106,8 +107,8 @@ public class CDVAudioRecorder extends CordovaPlugin {
 					try {
 						JSONObject jsonData = new JSONObject();
 						JSONObject fileDetails = new JSONObject();
-						fileDetails.put("fullPath", extras.getString("filePath"));
-						fileDetails.put("localURL", extras.getString("localURL"));
+						fileDetails.put("fullPath", cordovaFilePrepend + extras.getString("filePath"));
+						fileDetails.put("localURL", cordovaFilePrepend + extras.getString("localURL"));
 						fileDetails.put("name", extras.getString("fileName"));
 						fileDetails.put("ext", extras.getString("fileExt"));
 						fileDetails.put("size", extras.getString("fileSize"));
