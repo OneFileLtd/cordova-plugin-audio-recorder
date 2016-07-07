@@ -119,7 +119,7 @@ public class AudioRecorder extends Activity {
 	private static final DecimalFormat df2 = new DecimalFormat("#,###,###,##0.00");
 	private long uploadLimit = 0;
 
-	private final String finalStorageFile = "file:";
+	private final String finalStorageFile = "file://";
 	private final String tempPart1StorageFilePath = storageDirectory + "temp_audio_";
 	private final String tempStorageFilePath = storageDirectory + "temp_audio_0.pcm";
 	private final String finalStorageFileName = "onefileaudio.wav";

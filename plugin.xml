@@ -5,7 +5,7 @@
         id="cordova-plugin-audio-recorder"
         version="0.0.1">
 
-    <name>AudioRecorder</name>
+    <!--<name>AudioRecorder</name> -->
 
     <description>Cordova Plugin Audio Recorder</description>
     <license>Onefile Limited</license>
