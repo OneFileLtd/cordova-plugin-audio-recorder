@@ -110,7 +110,6 @@
     NSDate* modDate = [fileAttrs fileModificationDate];
     NSNumber* msDate = [NSNumber numberWithDouble:[modDate timeIntervalSince1970] * 1000];
     [fileDict setObject:msDate forKey:@"lastModifiedDate"];
-
     return fileDict;
 }
 @end
@@ -241,6 +240,7 @@
 @synthesize audioRecorderCommand = _audioRecorderCommand;
 @synthesize pluginResult = _pluginResult;
 #endif
+@synthesize errorResultMessage = _errorResultMessage;
 
 /* ~~~~~~~~~~ PLUGIN ~~~~~~~~~~~ */
 #pragma mark - View entry point for our new view.
@@ -249,6 +249,7 @@
 {
     NSLog(@"CDVRecorderViewController - initWithCommand");
     if ((self = [super init])) {
+        self.errorResultMessage = @"";
         self.audioRecorderCommand = theCommand;
         self.duration = theDuration;
         self.callbackId = theCallbackId;
@@ -264,25 +265,41 @@
 #pragma mark - Finish up and exit Plugin
 -(void)finishPlugin {
 #ifndef DEV_PLUGING
+    NSMutableDictionary *jSON = [[NSMutableDictionary alloc] init];
     NSDictionary* fileDict = [self.audioRecorderCommand getMediaDictionaryFromPath:self.recorderFilePath ofType:@"audio/wav"];
     if(fileDict)
     {
-        self.pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsArray:fileDict];
+        if(fileDict)
+            [jSON setObject:fileDict forKey:@"fileDetails"];
+        [jSON setObject:[NSNumber numberWithInt: STATUS_SUCCESS_WITH_FILE] forKey:@"status"];
     }
+    else
+        [jSON setObject:[NSNumber numberWithInt: STATUS_SUCCESS_NO_FILE] forKey:@"status"];
+    if(jSON)
+        self.pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:jSON];
+    NSLog(@"%@", jSON);
     // called when done button pressed or when error condition to do cleanup and remove view
     [[self.audioRecorderCommand.viewController.presentedViewController presentingViewController] dismissViewControllerAnimated:YES completion:nil];
     if (!self.pluginResult) {
         self.pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageToErrorObject:(int)self.errorCode];
     }
-    
     [self.audioRecorderCommand setInUse:NO];
     UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, nil);
     // return result
     [self.audioRecorderCommand.commandDelegate sendPluginResult:self.pluginResult callbackId:self.callbackId];
-    
+
     if (IsAtLeastiOSVersion(@"7.0")) {
         [[UIApplication sharedApplication] setStatusBarStyle:self.previousStatusBarStyle];
     }
+#endif
+}
+
+-(void)finishPlugin_Error {
+#ifndef DEV_PLUGING
+	[[self.audioRecorderCommand.viewController.presentedViewController presentingViewController] dismissViewControllerAnimated:YES completion:nil];
+	[self.audioRecorderCommand setInUse:NO];
+    CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString: self.errorResultMessage];
+    [self.audioRecorderCommand.commandDelegate sendPluginResult:result callbackId:self.callbackId];
 #endif
 }
 
@@ -303,7 +320,7 @@
     }];
 }
 
-#pragma mark - 
+#pragma mark -
 -(void) adviseUserPermission
 {
     UIAlertAction *resetAction = [UIAlertAction
@@ -313,7 +330,6 @@
                                   {
                                       NSLog(@"OKAY action");
                                   }];
-    
     UIAlertController *alertController = [UIAlertController
                                           alertControllerWithTitle:@"Mic Permission Error"
                                           message:@"This app does not have permission to use your mic, please go to the settings app and allow permission !!"
@@ -549,10 +565,10 @@
 {
     [super viewWillAppear:animated];
     NSLog(@"viewWillAppear");
-    
+
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(backgroundNotification:)
                                                  name:UIApplicationDidEnterBackgroundNotification object:nil];
-    
+
     self.isRecording = NO;
     self.isPaused = NO;
     self.isSavingRecording = NO;
@@ -679,6 +695,8 @@
 #pragma mark -
 -(void) audioPermssionError
 {
+    self.errorResultMessage = MIC_NO_PERMISSION;
+    [self finishPlugin_Error];
 }
 
 -(void) audioErrorWithTitle: (NSString *)title andMessage: message
