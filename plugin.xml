@@ -61,7 +61,7 @@
             <activity android:theme="@android:style/Theme.DeviceDefault.NoActionBar" />
         </config-file>
 
-        <preference name="android-manifest/application/android:theme" value="@style/Theme.AppCompat" />
+        <preference name="android-manifest/application/@android:theme" value="@style/Theme.AppCompat" />
 
         <framework src="com.android.support.appcompat-v7:24.1.1" />
 
