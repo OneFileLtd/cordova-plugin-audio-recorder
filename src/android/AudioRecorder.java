@@ -26,17 +26,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.DecimalFormat;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-
-import android.os.Build;
-import android.util.Log;
-import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Bitmap;
@@ -44,34 +33,22 @@ import android.widget.ImageView;
 import android.graphics.Paint.Style;
 
 import android.content.Intent;
+import android.app.Activity;
 
-import org.apache.cordova.file.FileUtils;
-import org.apache.cordova.file.LocalFilesystemURL;
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.ActivityCompat;
 
-import org.apache.cordova.CallbackContext;
-import org.apache.cordova.Config;
-import org.apache.cordova.CordovaArgs;
-import org.apache.cordova.CordovaHttpAuthHandler;
-import org.apache.cordova.CordovaPlugin;
-import org.apache.cordova.CordovaWebView;
-import org.apache.cordova.LOG;
-import org.apache.cordova.PluginManager;
-import org.apache.cordova.PluginResult;
-
-import org.apache.cordova.*;
+// TODO: This needs putting back in for the plugin, I think the resources and project path don't equate to the same path.
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import android.Manifest;
 
-import android.os.Bundle;
-import android.view.View;
-import android.app.Activity;
-
-// TODO: This needs putting back in for the plugin, I think the resources and project path don't equate to the same path.
 import uk.co.onefile.nomadionic.R;
 
-public class AudioRecorder extends Activity {
+public class AudioRecorder extends AppCompatActivity {
 
 	private static final Integer STATE_NOT_SET = 0;
 	private static final Integer STATE_RECORDING = 1;
@@ -118,11 +95,55 @@ public class AudioRecorder extends Activity {
 	private Handler mHandler = new Handler();
 	private static final DecimalFormat df2 = new DecimalFormat("#,###,###,##0.00");
 	private long uploadLimit = 0;
-	
+
 	private final String tempPart1StorageFilePath = storageDirectory + "temp_audio_";
 	private final String tempStorageFilePath = storageDirectory + "temp_audio_0.pcm";
 	private final String finalStorageFileName = "onefileaudio.wav";
 	private final String finalStorageFilePath = storageDirectory + finalStorageFileName;
+
+	private static final int RECORD_REQUEST_CODE = 101;
+	private static final int STORAGE_REQUEST_CODE = 102;
+
+	protected void requestPermission(String permissionType, int requestCode) {
+		int permission = ContextCompat.checkSelfPermission(this,
+			permissionType);
+
+		if (permission != PackageManager.PERMISSION_GRANTED) {
+			ActivityCompat.requestPermissions(this,
+				new String[]{permissionType}, requestCode
+			);
+		}
+	}
+
+	@Override
+	public void onRequestPermissionsResult(int requestCode,
+										   String permissions[], int[] grantResults) {
+		switch (requestCode) {
+			case RECORD_REQUEST_CODE: {
+
+				if (grantResults.length == 0
+					|| grantResults[0] !=
+					PackageManager.PERMISSION_GRANTED) {
+
+					Toast.makeText(this,
+						"Record permission required",
+						Toast.LENGTH_LONG).show();
+				}
+				return;
+			}
+			case STORAGE_REQUEST_CODE: {
+
+				if (grantResults.length == 0
+					|| grantResults[0] !=
+					PackageManager.PERMISSION_GRANTED) {
+					Toast.makeText(this,
+						"External Storage permission required",
+						Toast.LENGTH_LONG).show();
+				}
+				return;
+			}
+		}
+	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -135,6 +156,8 @@ public class AudioRecorder extends Activity {
 		{
 			restoreSession(savedInstanceState);
 		}
+		requestPermission(Manifest.permission.RECORD_AUDIO, RECORD_REQUEST_CODE);
+		requestPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, STORAGE_REQUEST_CODE);
 	}
 
 	@Override
@@ -145,8 +168,11 @@ public class AudioRecorder extends Activity {
 
 		if (audioRecordingTask != null)
 		{
-			audioRecordingTask.pause();
-			Log.i(TAG, "Pausing recording");
+			if(currentState == STATE_RECORDING) {
+				Log.i(TAG, "Pausing recording");
+				pauseRecording();
+				currentState = STATE_PAUSED;
+			}
 		}
 
 		while (!audioRecordingNotStarted)
@@ -175,6 +201,15 @@ public class AudioRecorder extends Activity {
 		if(extras != null)
 			data = extras.getString("entryDataString"); // retrieve the data using keyName
 		Log.i(TAG, data);
+		try {
+			JSONObject jsnobject = new JSONObject(data);
+			maxSize = jsnobject.getLong("maxupload");
+			maxSize = maxSize * (1024L * 1024L);
+			Log.i(TAG, "maxSize: " + maxSize);
+		} catch (JSONException e)
+		{
+			e.printStackTrace();
+		}
 		// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 		checkExternalStorage();
 		setUpButtons();
@@ -184,6 +219,7 @@ public class AudioRecorder extends Activity {
 	public void onSaveInstanceState(Bundle savedInstanceState)
 	{
 		Log.i(TAG, "onSaveInstanceState() Called");
+		savedInstanceState.putInt("currentState", currentState);
 		savedInstanceState.putInt("pauseCount", pauseCount);
 		savedInstanceState.putLong("sizeSoFar", sizeSoFar);
 		savedInstanceState.putBoolean("audioRecordingNotStarted", audioRecordingNotStarted);
@@ -245,6 +281,7 @@ public class AudioRecorder extends Activity {
 	private void restoreSession(Bundle savedInstanceState)
 	{
 		Log.i(TAG, "restoreSession()");
+		currentState = savedInstanceState.getInt("currentState");
 		pauseCount = savedInstanceState.getInt("pauseCount");
 		sizeSoFar = savedInstanceState.getLong("sizeSoFar");
 		audioRecordingNotStarted = savedInstanceState.getBoolean("audioRecordingNotStarted");
@@ -281,13 +318,21 @@ public class AudioRecorder extends Activity {
 		final Button startButton = (Button) findViewById(R.id.AudioStartRecording);
 		final Button AudioBtnFinishAndSave = (Button) findViewById(R.id.AudioBtnFinishAndSave);
 
-		if(currentState == STATE_NOT_SET || currentState == STATE_STOPPED) // if (audioRecordingNotStarted)
+		Log.i(TAG, "currentState: " + currentState);
+		if(currentState == STATE_NOT_SET || currentState == STATE_STOPPED)
 		{
 			startButton.setBackgroundResource(R.drawable.record_button);
 			AudioBtnFinishAndSave.setEnabled(false);
 			AudioBtnFinishAndSave.setAlpha(.5f);
+		} else {
+			// Returning from the background paused.
+			if (currentState == STATE_PAUSED) {
+				Log.i(TAG, "Paused state");
+				startButton.setBackgroundResource(R.drawable.continue_button);
+				AudioBtnFinishAndSave.setEnabled(true);
+				AudioBtnFinishAndSave.setAlpha(1f);
+			}
 		}
-
 		startButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view)
 			{
@@ -444,7 +489,7 @@ public class AudioRecorder extends Activity {
 				startButton.setEnabled(false);
 
 				Toast.makeText(getApplicationContext(),"An error occured trying to record audio",
-						Toast.LENGTH_LONG).show();
+					Toast.LENGTH_LONG).show();
 			}
 		});
 	}
@@ -584,7 +629,7 @@ public class AudioRecorder extends Activity {
 			try
 			{
 				audioRecord = new AudioRecord(MediaRecorder.AudioSource.MIC, frequency, channelConfiguration,
-						audioEncoding, bufferSize);
+					audioEncoding, bufferSize);
 			}
 			catch(Exception e)
 			{

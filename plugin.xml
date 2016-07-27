@@ -57,8 +57,12 @@
         </config-file>
 
         <config-file target="AndroidManifest.xml" parent="/manifest/application">
+            <application android:theme="@style/Theme.AppCompat" />
             <activity android:name="uk.co.onefile.nomadionic.audiocapture.AudioRecorder" />
+            <activity android:theme="@android:style/Theme.DeviceDefault.NoActionBar" />
         </config-file>
+
+        <framework src="com.android.support.appcompat-v7:21+" />
 
         <source-file src="src/android/CDVAudioRecorder.java" target-dir="src/uk/co/onefile/nomadionic/audiocapture" />
         <source-file src="src/android/AudioRecorder.java" target-dir="src/uk/co/onefile/nomadionic/audiocapture" />
@@ -76,6 +80,7 @@
         <resource-file src="src/android/res/values/dimensions.xml" target="res/values/dimensions.xml" />
         <resource-file src="src/android/res/values/colors.xml" target="res/values/colors.xml" />
         <resource-file src="src/android/res/values/strings.xml" target="res/values/strings.xml" />
+        <resource-file src="src/android/res/values/themes.xml" target="res/values/themes.xml" />
 
     </platform>
 
