@@ -23,8 +23,17 @@ typedef enum {
     STATE_SAVE,
     STATE_SAVING,
     STATE_EXIT,
-    STATE_EXITING
+    STATE_EXITING,
+    STATE_MAX_REACHED
 } STATE_VALUES;
+
+typedef enum {
+    STATUS_ERROR = 1,
+    STATUS_SUCCESS_WITH_FILE = 2,
+    STATUS_SUCCESS_NO_FILE = 3
+} CDV_PLUGIN_STATUS;
+
+#define MIC_NO_PERMISSION @"This app does not have permission to use the microphone"
 
 /************************************************************************************************************
  *      CDV Audio Navigation Controller
@@ -91,6 +100,7 @@ BOOL _isTimed;
     CDVAudioRecorder *_audioRecorderCommand;
     CDVPluginResult *_pluginResult;
 #endif
+    NSString *_errorResultMessage;
     UIStatusBarStyle _previousStatusBarStyle;
 }
 
@@ -131,12 +141,15 @@ BOOL _isTimed;
 @property (nonatomic, strong) CDVAudioRecorder *audioRecorderCommand;
 @property (nonatomic, strong) CDVPluginResult *pluginResult;
 #endif
+@property (nonatomic, retain) NSString *errorResultMessage;
 
 - (IBAction)recorderButtonPressed:(id)sender;
 - (IBAction)backButtonPressed:(id)sender;
 - (IBAction)saveButtonPressed:(id)sender;
 
 #ifndef DEV_PLUGING
-- (id)initWithCommand:(CDVPlugin *)theCommand duration:(NSNumber*)theDuration callbackId:(NSString*)theCallbackId;
+- (id)initWithCommand:(CDVPlugin *)theCommand maxUpload:(double)maxUpload callbackId:(NSString*)theCallbackId;
 #endif
+-(void)finishPlugin;
+-(void)finishPlugin_Error;
 @end

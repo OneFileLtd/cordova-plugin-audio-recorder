@@ -2,6 +2,9 @@
 
 #define DOCUMENTS_FOLDER [NSHomeDirectory() stringByAppendingPathComponent:@"Documents"]
 #define DEGREES_TO_RADIANS(degrees)  ((M_PI * degrees)/ 180)
+#define MEGA_BYTES (1000.0f * 1000.0f)
+#define DEFAULT_MAX_UPLOAD (30.0f * MEGA_BYTES)
+#define kTIMER_INTERVAL 0.20
 
 /************************************************************************************************************
  *      CDV Audio Navigation Controller
@@ -53,11 +56,11 @@
         options = [NSDictionary dictionary];
     }
 
-    NSNumber* duration = [options objectForKey:@"duration"];
+    double maxupload = [[options objectForKey:@"maxupload"] doubleValue];
+    maxupload = maxupload * MEGA_BYTES;
     // the default value of duration is 0 so use nil (no duration) if default value
-    if (duration) {
-        duration = [duration doubleValue] == 0 ? nil : duration;
-    }
+    maxupload = (maxupload == 0) ? DEFAULT_MAX_UPLOAD : maxupload;
+
     CDVPluginResult* result = nil;
 
     if (NSClassFromString(@"CDVRecorderViewController") == nil) {
@@ -65,7 +68,7 @@
     } else if (self.inUse == YES) {
         result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageToErrorObject:AUDIO_APPLICATION_BUSY];
     } else {
-        CDVRecorderViewController *recorderViewController = [[CDVRecorderViewController alloc] initWithCommand:self duration:duration callbackId:callbackId];
+        CDVRecorderViewController *recorderViewController = [[CDVRecorderViewController alloc] initWithCommand:self maxUpload:maxupload callbackId:callbackId];
         CDVRecorderNavigationController* navController = [[CDVRecorderNavigationController alloc] initWithRootViewController:recorderViewController];
         self.inUse = YES;
         [self.viewController presentViewController:navController animated:YES completion:nil];
@@ -110,7 +113,6 @@
     NSDate* modDate = [fileAttrs fileModificationDate];
     NSNumber* msDate = [NSNumber numberWithDouble:[modDate timeIntervalSince1970] * 1000];
     [fileDict setObject:msDate forKey:@"lastModifiedDate"];
-
     return fileDict;
 }
 @end
@@ -128,12 +130,15 @@
     BOOL _isRecording;
     BOOL _isPaused;
     BOOL _isSavingRecording;
-    NSInteger _recSeconds;
-    NSInteger _recMinutes;
+    float _recMilli;
+    int _recSeconds;
+    int _recMinutes;
+    int _recHours;
     NSTimer *_timer;
     NSTimer *_circleTimer;
     //maximum recording size:
-    float _MaxRecSize;
+    double _MaxRecSize;
+    double _CurrentRecSize;
 
     //vars for diplying the audio curve:
     UIBezierPath *_bezPath;
@@ -159,15 +164,17 @@
 @property BOOL isRecording;
 @property BOOL isPaused;
 @property BOOL isSavingRecording;
-@property NSInteger recSeconds;
-@property NSInteger recMinutes;
-@property NSInteger recHours;
+@property float recMilli;
+@property int recSeconds;
+@property int recMinutes;
+@property int recHours;
 @property int startX;
 @property int startY;
 @property int countX;
 @property float averagePower;
 @property float peakPower;
-@property float MaxRecSize;
+@property double MaxRecSize;
+@property double CurrentRecSize;
 @property BOOL micPermission;
 
 - (void)startRecording;
@@ -201,11 +208,13 @@
 @synthesize isRecording = _isRecording;
 @synthesize isPaused = _isPaused;
 @synthesize isSavingRecording = _isSavingRecording;
+@synthesize recMilli = recMilli;
 @synthesize recSeconds = _recSeconds;
 @synthesize recMinutes = _recMinutes;
 @synthesize recHours = _recHours;
 @synthesize timer = _timer;
 @synthesize MaxRecSize = _MaxRecSize;
+@synthesize CurrentRecSize = _CurrentRecSize;
 @synthesize bezPath = _bezPath;
 @synthesize startX = _startX;
 @synthesize startY = _startY;
@@ -241,16 +250,22 @@
 @synthesize audioRecorderCommand = _audioRecorderCommand;
 @synthesize pluginResult = _pluginResult;
 #endif
+@synthesize errorResultMessage = _errorResultMessage;
 
 /* ~~~~~~~~~~ PLUGIN ~~~~~~~~~~~ */
 #pragma mark - View entry point for our new view.
 #ifndef DEV_PLUGING
-- (id)initWithCommand:(CDVAudioRecorder *)theCommand duration:(NSNumber *)theDuration callbackId:(NSString *)theCallbackId
+- (id)initWithCommand:(CDVAudioRecorder *)theCommand maxUpload:(double)maxUpload callbackId:(NSString *)theCallbackId
 {
-    NSLog(@"CDVRecorderViewController - initWithCommand");
+    NSLog(@"CDVRecorderViewController - initWithCommand: %f", maxUpload);
     if ((self = [super init])) {
+        self.errorResultMessage = @"";
         self.audioRecorderCommand = theCommand;
-        self.duration = theDuration;
+        self.MaxRecSize = maxUpload;
+        self.CurrentRecSize = 0;
+        self.recMilli = 0.0;
+        self.recMinutes = 0;
+        self.recHours = 0;
         self.callbackId = theCallbackId;
         self.errorCode = AUDIO_NO_MEDIA_FILES;
         self.isTimed = self.duration != nil;
@@ -264,25 +279,41 @@
 #pragma mark - Finish up and exit Plugin
 -(void)finishPlugin {
 #ifndef DEV_PLUGING
+    NSMutableDictionary *jSON = [[NSMutableDictionary alloc] init];
     NSDictionary* fileDict = [self.audioRecorderCommand getMediaDictionaryFromPath:self.recorderFilePath ofType:@"audio/wav"];
     if(fileDict)
     {
-        self.pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsArray:fileDict];
+        if(fileDict)
+            [jSON setObject:fileDict forKey:@"fileDetails"];
+        [jSON setObject:[NSNumber numberWithInt: STATUS_SUCCESS_WITH_FILE] forKey:@"status"];
     }
+    else
+        [jSON setObject:[NSNumber numberWithInt: STATUS_SUCCESS_NO_FILE] forKey:@"status"];
+    if(jSON)
+        self.pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:jSON];
+    NSLog(@"%@", jSON);
     // called when done button pressed or when error condition to do cleanup and remove view
     [[self.audioRecorderCommand.viewController.presentedViewController presentingViewController] dismissViewControllerAnimated:YES completion:nil];
     if (!self.pluginResult) {
         self.pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageToErrorObject:(int)self.errorCode];
     }
-    
     [self.audioRecorderCommand setInUse:NO];
     UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, nil);
     // return result
     [self.audioRecorderCommand.commandDelegate sendPluginResult:self.pluginResult callbackId:self.callbackId];
-    
+
     if (IsAtLeastiOSVersion(@"7.0")) {
         [[UIApplication sharedApplication] setStatusBarStyle:self.previousStatusBarStyle];
     }
+#endif
+}
+
+-(void)finishPlugin_Error {
+#ifndef DEV_PLUGING
+	[[self.audioRecorderCommand.viewController.presentedViewController presentingViewController] dismissViewControllerAnimated:YES completion:nil];
+	[self.audioRecorderCommand setInUse:NO];
+    CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString: self.errorResultMessage];
+    [self.audioRecorderCommand.commandDelegate sendPluginResult:result callbackId:self.callbackId];
 #endif
 }
 
@@ -303,7 +334,7 @@
     }];
 }
 
-#pragma mark - 
+#pragma mark -
 -(void) adviseUserPermission
 {
     UIAlertAction *resetAction = [UIAlertAction
@@ -313,7 +344,6 @@
                                   {
                                       NSLog(@"OKAY action");
                                   }];
-    
     UIAlertController *alertController = [UIAlertController
                                           alertControllerWithTitle:@"Mic Permission Error"
                                           message:@"This app does not have permission to use your mic, please go to the settings app and allow permission !!"
@@ -343,6 +373,17 @@
 
     switch(self.currentState)
     {
+        case STATE_MAX_REACHED:
+            [self.recorderButton setImage:[UIImage imageNamed:[self resolveImageResource:@"CDVAudioRecorder.bundle/pause"]] forState:UIControlStateNormal];
+            [self.recorderButton setImage:[UIImage imageNamed:[self resolveImageResource:@"CDVAudioRecorder.bundle/pause"]] forState:UIControlStateSelected];
+            [self.recorderButton setImage:[UIImage imageNamed:[self resolveImageResource:@"CDVAudioRecorder.bundle/pause"]] forState:UIControlStateDisabled];
+            [self.recorderButton setImage:[UIImage imageNamed:[self resolveImageResource:@"CDVAudioRecorder.bundle/pause"]] forState:UIControlStateHighlighted];
+
+            [self.saveCancelButton setImage:[UIImage imageNamed:[self resolveImageResource:@"CDVAudioRecorder.bundle/save"]] forState:UIControlStateNormal];
+            [self.saveCancelButton setImage:[UIImage imageNamed:[self resolveImageResource:@"CDVAudioRecorder.bundle/save"]] forState:UIControlStateSelected];
+            [self.saveCancelButton setImage:[UIImage imageNamed:[self resolveImageResource:@"CDVAudioRecorder.bundle/save"]] forState:UIControlStateDisabled];
+            [self.saveCancelButton setImage:[UIImage imageNamed:[self resolveImageResource:@"CDVAudioRecorder.bundle/save"]] forState:UIControlStateHighlighted];
+            break;
         case STATE_PAUSED:
             [self.recorderButton setImage:[UIImage imageNamed:[self resolveImageResource:@"CDVAudioRecorder.bundle/continue"]] forState:UIControlStateNormal];
             [self.recorderButton setImage:[UIImage imageNamed:[self resolveImageResource:@"CDVAudioRecorder.bundle/continue"]] forState:UIControlStateSelected];
@@ -382,6 +423,10 @@
 {
     switch(self.currentState)
     {
+        case STATE_MAX_REACHED:
+            self.saveCancelButton.enabled = YES;
+            self.recorderButton.enabled = NO;
+            break;
         case STATE_RECORDING:
             [self pauseRecording];
             self.currentState = STATE_PAUSED;
@@ -389,10 +434,13 @@
             self.saveCancelButton.enabled = YES;
             break;
         case STATE_PAUSED:
-            [self resumeRecording];
-            [self performSelector:@selector(ripples) withObject:nil afterDelay:0.1];
-            self.currentState = STATE_RECORDING;
-            self.txtRecordingName.enabled = NO;
+            if(self.CurrentRecSize < self.MaxRecSize)
+            {
+                [self resumeRecording];
+                [self performSelector:@selector(ripples) withObject:nil afterDelay:0.1];
+                self.currentState = STATE_RECORDING;
+                self.txtRecordingName.enabled = NO;
+            }
             break;
         case STATE_SAVE:
             NSLog(@"Saving");
@@ -423,11 +471,14 @@
         case STATE_NOT_SET:
         case STATE_STOPPED:
         default:
-            [self startRecording];
-            [self performSelector:@selector(ripples) withObject:nil afterDelay:0.1];
-            self.currentState = STATE_RECORDING;
-            self.saveCancelButton.enabled = NO;
-            self.txtRecordingName.enabled = NO;
+            if(self.CurrentRecSize < self.MaxRecSize)
+            {
+                [self startRecording];
+                [self performSelector:@selector(ripples) withObject:nil afterDelay:0.1];
+                self.currentState = STATE_RECORDING;
+                self.saveCancelButton.enabled = NO;
+                self.txtRecordingName.enabled = NO;
+            }
             break;
     }
     [self changeButtonState];
@@ -466,6 +517,7 @@
     float value = self.fadeColor;
     [circleLayer setStrokeColor:[UIColor colorWithRed:value green:value blue:value alpha:1.0].CGColor];
     [circleLayer setLineWidth:20.0f];
+    self.circlesView.hidden = NO;
     if(self.lastCircleLayer)
         [self.lastCircleLayer removeFromSuperlayer];
     [[self.circlesView layer] addSublayer:circleLayer];
@@ -549,10 +601,10 @@
 {
     [super viewWillAppear:animated];
     NSLog(@"viewWillAppear");
-    
+
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(backgroundNotification:)
                                                  name:UIApplicationDidEnterBackgroundNotification object:nil];
-    
+
     self.isRecording = NO;
     self.isPaused = NO;
     self.isSavingRecording = NO;
@@ -562,9 +614,8 @@
     self.currentState = STATE_NOT_SET;
 
     //Get the centre setttings and display the maximum audio recording size
-    NSString *maxSizeText = [NSString stringWithFormat:@"%d MB", 30000];
+    NSString *maxSizeText = [NSString stringWithFormat:@"%f MB", self.MaxRecSize];
     [self.maxFileSizeLabel setText:maxSizeText];
-    self.MaxRecSize = 30.0;
     self.value = 0;
     self.segment = 0;
     self.currentState = STATE_NOT_SET;
@@ -645,40 +696,38 @@
 #pragma mark -
 - (void) handleTimer: (NSTimer *)timer
 {
-    self.recSeconds++;
-    if(self.recSeconds == 60){
-        self.recSeconds=0;
-        self.recMinutes++;
-        if(self.recMinutes >= 60)
-        {
-            self.recHours++;
-            self.recMinutes = 0;
-        }
-    }
+    self.CurrentRecSize = [[NSFileManager defaultManager] attributesOfItemAtPath:[[NSURL fileURLWithPath:self.recorderFilePath] path] error:nil].fileSize;
+    NSLog(@"%f", self.CurrentRecSize);
+    self.value = 1.0 * (self.CurrentRecSize / self.MaxRecSize);
+    self.value = (self.value > 1.0) ? 1.0 : self.value;
 
-    NSString *timertext = [NSString stringWithFormat:@"%0.2ld:%0.2ld:%0.2ld", (long)self.recHours, (long)self.recMinutes, (long)self.recSeconds];
-    self.timeElapsedLabel.text = timertext;
-    float bytesUsed =  32000 *  ((self.recMinutes * 60) + self.recSeconds);
-    float MBUsed = bytesUsed / (float)1024.0 / (float)1024.0;
-
-    NSString *MBUsedString = [NSString stringWithFormat:@"%.1f MB", MBUsed];
-
-    [self.fileSizeLabel setText:MBUsedString];
-
-    if(MBUsed >= (self.MaxRecSize-0.25))
+    self.recMilli += kTIMER_INTERVAL;
+    if(self.recMilli >= 1.0)
     {
-        [self stopRecording];
-        [self.viewAmplitude setHidden:YES];
+        self.recMilli = 0;
+        self.recSeconds++;
+        if(self.recSeconds == 60){
+            self.recSeconds=0;
+            self.recMinutes++;
+            if(self.recMinutes >= 60)
+            {
+                self.recHours++;
+                self.recMinutes = 0;
+            }
+        }
+        self.timeElapsedLabel.text = [NSString stringWithFormat:@"%0.2ld:%0.2ld:%0.2ld", (long)self.recHours, (long)self.recMinutes, (long)self.recSeconds];
+        [self drawPie];
     }
-    self.value = 1.0 * (MBUsed / self.MaxRecSize);
-    [self drawPie];
-    if(self.value >= 1.0f && self.recorder && self.recorder.recording)
-        [self stopRecording];
+
+    if((self.recorder && self.recorder.recording && self.CurrentRecSize >= self.MaxRecSize))
+        [self endRecording];
 }
 
 #pragma mark -
 -(void) audioPermssionError
 {
+    self.errorResultMessage = MIC_NO_PERMISSION;
+    [self finishPlugin_Error];
 }
 
 -(void) audioErrorWithTitle: (NSString *)title andMessage: message
@@ -898,14 +947,33 @@
             return;
         }
     }
+
     // start recording
     [self.recorder record];
-    self.timer = [NSTimer scheduledTimerWithTimeInterval: 1.0
+    self.timer = [NSTimer scheduledTimerWithTimeInterval: kTIMER_INTERVAL
                                              target: self
                                            selector: @selector(handleTimer:)
                                            userInfo: nil
                                             repeats: YES];
     [self.timer fire];
+}
+
+- (void)endRecording
+{
+    NSLog(@"ending recorder");
+    self.isRecording = NO;
+    [self.timer invalidate];
+    [self.recorder stop];
+    self.value = 1.0;
+    [self drawPie];
+    self.timeElapsedLabel.text = [NSString stringWithFormat:@"%0.2ld:%0.2ld:%0.2ld", (long)self.recHours, (long)self.recMinutes, (long)self.recSeconds];
+    self.circlesView.hidden = YES;
+    if(self.circles)
+        [self.circles removeAllObjects];
+    if(self.lastCircleLayer)
+        [self.lastCircleLayer removeFromSuperlayer];
+    self.currentState = STATE_MAX_REACHED;
+    [self performButtonAction];
 }
 
 - (void)stopRecording
@@ -916,6 +984,8 @@
     [self.recorder stop];
     self.currentState = STATE_STOPPED;
     [self changeButtonState];
+    if(self.lastCircleLayer)
+        [self.lastCircleLayer removeFromSuperlayer];
 }
 
 -(void)pauseRecording
@@ -934,7 +1004,7 @@
         //if recorder is already stopped dont start it again
         if(self.recorder && ![self.recorder isRecording])
         {
-            self.timer = [NSTimer scheduledTimerWithTimeInterval: 1.0
+            self.timer = [NSTimer scheduledTimerWithTimeInterval: kTIMER_INTERVAL
                                                           target: self
                                                         selector: @selector(handleTimer:)
                                                         userInfo: nil
