@@ -23,7 +23,8 @@ typedef enum {
     STATE_SAVE,
     STATE_SAVING,
     STATE_EXIT,
-    STATE_EXITING
+    STATE_EXITING,
+    STATE_MAX_REACHED
 } STATE_VALUES;
 
 typedef enum {
@@ -147,7 +148,7 @@ BOOL _isTimed;
 - (IBAction)saveButtonPressed:(id)sender;
 
 #ifndef DEV_PLUGING
-- (id)initWithCommand:(CDVPlugin *)theCommand duration:(NSNumber*)theDuration callbackId:(NSString*)theCallbackId;
+- (id)initWithCommand:(CDVPlugin *)theCommand maxUpload:(double)maxUpload callbackId:(NSString*)theCallbackId;
 #endif
 -(void)finishPlugin;
 -(void)finishPlugin_Error;
