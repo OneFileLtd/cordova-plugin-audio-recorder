@@ -56,11 +56,10 @@
             <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
         </config-file>
 
-        <config-file target="AndroidManifest.xml" parent="/manifest">
-            <application android:name="uk.co.onefile.nomadionic.audiocapture.AudioRecorder"
-						 android:theme="@style/Theme.AppCompat"/>
-            <activity android:theme="@android:style/Theme.DeviceDefault.NoActionBar" />
-        </config-file>
+		<config-file target="AndroidManifest.xml" parent="/manifest/application">
+			<activity android:name="uk.co.onefile.nomadionic.audiocapture.AudioRecorder"
+					  android:theme="@android:style/Theme.DeviceDefault.NoActionBar"/>
+		</config-file>
 
         <framework src="com.android.support.appcompat-v7:24.1.1" />
 
@@ -81,6 +80,8 @@
         <resource-file src="src/android/res/values/colors.xml" target="res/values/colors.xml" />
         <resource-file src="src/android/res/values/strings.xml" target="res/values/strings.xml" />
         <resource-file src="src/android/res/values/themes.xml" target="res/values/themes.xml" />
+
+		<framework src="com.android.support:appcompat-v7:+"/>
 
     </platform>
 
