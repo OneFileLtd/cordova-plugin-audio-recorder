@@ -57,8 +57,7 @@
         </config-file>
 
 		<config-file target="AndroidManifest.xml" parent="/manifest/application">
-			<activity android:name="uk.co.onefile.nomadionic.audiocapture.AudioRecorder"
-					  android:theme="@android:style/Theme.DeviceDefault.NoActionBar"/>
+			<activity android:name="uk.co.onefile.nomadionic.audiocapture.AudioRecorder" />
 		</config-file>
 
         <source-file src="src/android/CDVAudioRecorder.java" target-dir="src/uk/co/onefile/nomadionic/audiocapture" />
