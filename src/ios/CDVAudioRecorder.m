@@ -140,12 +140,6 @@
     double _MaxRecSize;
     double _CurrentRecSize;
 
-    //vars for diplying the audio curve:
-    UIBezierPath *_bezPath;
-    int _startX;
-    int _startY;
-    int _countX;
-
     NSData *_headerData;
     NSOutputStream *_outputStream;
 
@@ -158,7 +152,6 @@
 @property (nonatomic, retain) AVAudioRecorder *recorder;
 @property (nonatomic, retain) NSTimer *timer;
 @property (nonatomic, retain) NSTimer *circleTimer;
-@property (nonatomic, retain) UIBezierPath *bezPath;
 @property (nonatomic, retain) NSData *headerData;
 @property (nonatomic, retain) NSOutputStream *outputStream;
 @property BOOL isRecording;
@@ -168,9 +161,6 @@
 @property int recSeconds;
 @property int recMinutes;
 @property int recHours;
-@property int startX;
-@property int startY;
-@property int countX;
 @property float averagePower;
 @property float peakPower;
 @property double MaxRecSize;
@@ -194,8 +184,6 @@
 @synthesize saveCancelButton = _saveCancelButton;
 @synthesize backButton = _backButton;
 @synthesize timeElapsedLabel = _timeElapsedLabel;
-@synthesize txtRecordingName = _txtRecordingName;
-@synthesize viewAmplitude = _viewAmplitude;
 @synthesize fileSizeLabel = _fileSizeLabel;
 @synthesize maxFileSizeLabel = _maxFileSizeLabel;
 @synthesize scrollView = _scrollView;
@@ -215,10 +203,6 @@
 @synthesize timer = _timer;
 @synthesize MaxRecSize = _MaxRecSize;
 @synthesize CurrentRecSize = _CurrentRecSize;
-@synthesize bezPath = _bezPath;
-@synthesize startX = _startX;
-@synthesize startY = _startY;
-@synthesize countX = _countX;
 
 @synthesize headerData = _headerData;
 @synthesize outputStream = _outputStream;
@@ -310,8 +294,8 @@
 
 -(void)finishPlugin_Error {
 #ifndef DEV_PLUGING
-	[[self.audioRecorderCommand.viewController.presentedViewController presentingViewController] dismissViewControllerAnimated:YES completion:nil];
-	[self.audioRecorderCommand setInUse:NO];
+    [[self.audioRecorderCommand.viewController.presentedViewController presentingViewController] dismissViewControllerAnimated:YES completion:nil];
+    [self.audioRecorderCommand setInUse:NO];
     CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString: self.errorResultMessage];
     [self.audioRecorderCommand.commandDelegate sendPluginResult:result callbackId:self.callbackId];
 #endif
@@ -430,16 +414,15 @@
         case STATE_RECORDING:
             [self pauseRecording];
             self.currentState = STATE_PAUSED;
-            self.txtRecordingName.enabled = YES;
             self.saveCancelButton.enabled = YES;
             break;
         case STATE_PAUSED:
             if(self.CurrentRecSize < self.MaxRecSize)
             {
+            	self.saveCancelButton.enabled = NO;
                 [self resumeRecording];
                 [self performSelector:@selector(ripples) withObject:nil afterDelay:0.1];
                 self.currentState = STATE_RECORDING;
-                self.txtRecordingName.enabled = NO;
             }
             break;
         case STATE_SAVE:
@@ -448,7 +431,6 @@
             [self saveRecording];
             [self finishPlugin];
             self.saveCancelButton.enabled = NO;
-            self.txtRecordingName.enabled = NO;
             self.isRecording = NO;
             self.isPaused = NO;
             self.isSavingRecording = NO;
@@ -464,7 +446,6 @@
             [self stopRecording];
             self.currentState = STATE_EXITING;
             self.saveCancelButton.enabled = NO;
-            self.txtRecordingName.enabled = NO;
             break;
         case STATE_EXITING:
             break;
@@ -477,7 +458,6 @@
                 [self performSelector:@selector(ripples) withObject:nil afterDelay:0.1];
                 self.currentState = STATE_RECORDING;
                 self.saveCancelButton.enabled = NO;
-                self.txtRecordingName.enabled = NO;
             }
             break;
     }
@@ -565,8 +545,6 @@
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
-    [self.txtRecordingName resignFirstResponder];
-    self.saveCancelButton.enabled = YES;
     return YES;
 }
 
@@ -604,7 +582,6 @@
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(backgroundNotification:)
                                                  name:UIApplicationDidEnterBackgroundNotification object:nil];
-
     self.isRecording = NO;
     self.isPaused = NO;
     self.isSavingRecording = NO;
@@ -681,7 +658,7 @@
             }
             break;
         }
-            // All this not implemented yet.
+		// All this not implemented yet.
         case NSStreamEventNone:
         case NSStreamEventOpenCompleted:
         case NSStreamEventHasBytesAvailable:
@@ -735,78 +712,6 @@
 }
 
 #pragma mark -
--(void)updateMeter
-{
-    do {
-        [self.recorder updateMeters];
-        self.averagePower   = [self.recorder averagePowerForChannel:0];
-        self.peakPower      = [self.recorder peakPowerForChannel:0];
-        self.averagePower = (self.averagePower +30) *  5;
-        [NSThread sleepForTimeInterval:0.1]; // 10 FPS
-        [self performSelectorOnMainThread:@selector(updateAmpLabel:) withObject:[NSNumber numberWithFloat:self.averagePower] waitUntilDone:false];
-    } while (self.isRecording);
-}
-
-- (IBAction)nameValidation:(id)sender{
-    NSString *recordingName = [self.txtRecordingName text];
-    recordingName = [recordingName stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-
-    if([recordingName length] > 0)
-    {
-
-    }else{
-    }
-}
-
--(void)updateAmpLabel: (NSNumber *)averagePowerLocal
-{
-    float avPower = [averagePowerLocal floatValue];
-    if(avPower == -450)
-        return;
-    float freq = 4.0;
-    float amp = avPower;
-    //beginning of wave
-    self.bezPath=[[UIBezierPath alloc]init];
-    self.bezPath.lineWidth=2;
-    self.bezPath.lineCapStyle = kCGLineCapRound;
-    self.bezPath.flatness = 0.0;
-    self.bezPath.miterLimit=-10;
-
-    [self.bezPath moveToPoint:CGPointMake(self.countX, self.startY)];
-
-    self.countX = self.countX+freq;
-    [self.bezPath addQuadCurveToPoint:CGPointMake(self.countX, self.startY)
-                    controlPoint:CGPointMake(self.countX - (freq / 2), self.startY-amp)];
-
-    self.countX = self.countX+freq;
-    [self.bezPath addQuadCurveToPoint:CGPointMake(self.countX, self.startY)
-                    controlPoint:CGPointMake(self.countX - (freq / 2), self.startY+amp)];
-    //end of wave
-
-    [self.scrollView setContentSize:CGSizeMake(self.countX+10, self.scrollView.frame.size.height)];
-
-    CAShapeLayer *pathLayer = [CAShapeLayer layer];
-    pathLayer.frame = CGRectMake(0.0f, 0.0f, self.scrollView.contentSize.width, self.scrollView.contentSize.height);
-    pathLayer.path = self.bezPath.CGPath;
-    pathLayer.strokeColor = [[UIColor whiteColor] CGColor];
-    pathLayer.fillColor = nil;
-    pathLayer.lineWidth = 0.75f;
-    pathLayer.lineJoin = kCALineJoinBevel;
-
-    [self.subview.layer addSublayer:pathLayer];
-
-    CABasicAnimation *pathAnimation = [CABasicAnimation animationWithKeyPath:@"strokeEnd"];
-    pathAnimation.duration = 0.1f;
-    pathAnimation.fromValue = [NSNumber numberWithFloat:0.0f];
-    pathAnimation.toValue = [NSNumber numberWithFloat:1.0f];
-    [pathLayer addAnimation:pathAnimation forKey:@"strokeEnd"];
-
-    if(self.scrollView.contentSize.width > self.scrollView.frame.size.width)
-        self.scrollView.contentOffset = CGPointMake(self.scrollView.contentSize.width - self.scrollView.frame.size.width, 0);
-
-}
-
-#pragma mark -
 - (void)startRecording {
     // Permission only required for iOS7 and up.
     if([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0)
@@ -832,7 +737,6 @@
     }
     self.isRecording = YES;
     self.isPaused = NO;
-
     self.recSeconds = 0;
     self.recMinutes = 0;
 
@@ -886,8 +790,8 @@
     NSURL *url = [NSURL fileURLWithPath:self.recorderFilePath];
     err = nil;
     self.recorder = [[ AVAudioRecorder alloc] initWithURL:url
-                                            settings:recordSetting
-                                               error:&err];
+                                                 settings:recordSetting
+                                                    error:&err];
     if(!self.recorder)
     {
         NSLog(@"recorder: %@ %ld %@", [err domain], (long)[err code], [[err userInfo] description]);
@@ -902,28 +806,7 @@
 
     [self.recorder setDelegate:self];
     [self.recorder prepareToRecord];
-    self.recorder.meteringEnabled = YES;
-
-    //stup the curve stuff:
-    self.bezPath=[[UIBezierPath alloc]init];
-    self.bezPath.lineWidth=2;
-    self.bezPath.lineCapStyle = kCGLineCapRound;
-    self.bezPath.flatness = 0.0;
-    self.bezPath.miterLimit=-10;
-
-    self.startX = 10;
-    self.startY = self.scrollView.frame.size.height / 2;
-
-    self.countX = self.startX;
-    [self.bezPath moveToPoint:CGPointMake(self.startX, self.startY)];
-
-    self.countX = self.countX+10;
-
-    NSOperationQueue *queue             = [[NSOperationQueue alloc] init];
-    NSInvocationOperation *operation    = [[NSInvocationOperation alloc] initWithTarget:self
-                                                                               selector:@selector(updateMeter)
-                                                                                 object:nil];
-    [queue addOperation: operation];
+    self.recorder.meteringEnabled = NO;
 
     // Permission only required for iOS7 and up.
     if([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0)
@@ -951,10 +834,10 @@
     // start recording
     [self.recorder record];
     self.timer = [NSTimer scheduledTimerWithTimeInterval: kTIMER_INTERVAL
-                                             target: self
-                                           selector: @selector(handleTimer:)
-                                           userInfo: nil
-                                            repeats: YES];
+                                                  target: self
+                                                selector: @selector(handleTimer:)
+                                                userInfo: nil
+                                                 repeats: YES];
     [self.timer fire];
 }
 
@@ -1020,78 +903,72 @@
 -(void)saveRecording
 {
     NSLog(@"Saving recording record...");
-    NSString *recordingName = [self.txtRecordingName text];
-    recordingName = [recordingName stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-    if([recordingName length] > 0)
-    {
-        //update the wav header:
-        NSURL *RecordingPath = [NSURL fileURLWithPath:self.recorderFilePath];
+    //update the wav header:
+    NSURL *RecordingPath = [NSURL fileURLWithPath:self.recorderFilePath];
 
+    NSDictionary *attributes = [[NSFileManager defaultManager] attributesOfItemAtPath:[RecordingPath path] error:NULL];
+    unsigned long long fileSize = [attributes fileSize]; // in bytes
 
-        NSDictionary *attributes = [[NSFileManager defaultManager] attributesOfItemAtPath:[RecordingPath path] error:NULL];
-        unsigned long long fileSize = [attributes fileSize]; // in bytes
+    unsigned long long totalAudioLen = 0;
+    unsigned long long totalDataLen = 0;
+    long longSampleRate = 16000.0;
+    int channels = 1;
+    long byteRate = 16 * 16000.0 * channels/8;
 
-        unsigned long long totalAudioLen = 0;
-        unsigned long long totalDataLen = 0;
-        long longSampleRate = 16000.0;
-        int channels = 1;
-        long byteRate = 16 * 16000.0 * channels/8;
+    totalAudioLen = fileSize - 44;
+    totalDataLen = fileSize;
 
-        totalAudioLen = fileSize - 44;
-        totalDataLen = fileSize;
+    Byte *header = (Byte*)malloc(44);
+    header[0] = 'R';  // RIFF/WAVE header
+    header[1] = 'I';
+    header[2] = 'F';
+    header[3] = 'F';
+    header[4] = (Byte) (totalDataLen & 0xff);
+    header[5] = (Byte) ((totalDataLen >> 8) & 0xff);
+    header[6] = (Byte) ((totalDataLen >> 16) & 0xff);
+    header[7] = (Byte) ((totalDataLen >> 24) & 0xff);
+    header[8] = 'W';
+    header[9] = 'A';
+    header[10] = 'V';
+    header[11] = 'E';
+    header[12] = 'f';  // 'fmt ' chunk
+    header[13] = 'm';
+    header[14] = 't';
+    header[15] = ' ';
+    header[16] = 16;  // 4 bytes: size of 'fmt ' chunk
+    header[17] = 0;
+    header[18] = 0;
+    header[19] = 0;
+    header[20] = 1;  // format = 1
+    header[21] = 0;
+    header[22] = (Byte) channels;
+    header[23] = 0;
+    header[24] = (Byte) (longSampleRate & 0xff);
+    header[25] = (Byte) ((longSampleRate >> 8) & 0xff);
+    header[26] = (Byte) ((longSampleRate >> 16) & 0xff);
+    header[27] = (Byte) ((longSampleRate >> 24) & 0xff);
+    header[28] = (Byte) (byteRate & 0xff);
+    header[29] = (Byte) ((byteRate >> 8) & 0xff);
+    header[30] = (Byte) ((byteRate >> 16) & 0xff);
+    header[31] = (Byte) ((byteRate >> 24) & 0xff);
+    header[32] = (Byte) (2 * 8 / 8);  // block align
+    header[33] = 0;
+    header[34] = 16;  // bits per sample
+    header[35] = 0;
+    header[36] = 'd';
+    header[37] = 'a';
+    header[38] = 't';
+    header[39] = 'a';
+    header[40] = (Byte) (totalAudioLen & 0xff);
+    header[41] = (Byte) ((totalAudioLen >> 8) & 0xff);
+    header[42] = (Byte) ((totalAudioLen >> 16) & 0xff);
+    header[43] = (Byte) ((totalAudioLen >> 24) & 0xff);
 
-        Byte *header = (Byte*)malloc(44);
-        header[0] = 'R';  // RIFF/WAVE header
-        header[1] = 'I';
-        header[2] = 'F';
-        header[3] = 'F';
-        header[4] = (Byte) (totalDataLen & 0xff);
-        header[5] = (Byte) ((totalDataLen >> 8) & 0xff);
-        header[6] = (Byte) ((totalDataLen >> 16) & 0xff);
-        header[7] = (Byte) ((totalDataLen >> 24) & 0xff);
-        header[8] = 'W';
-        header[9] = 'A';
-        header[10] = 'V';
-        header[11] = 'E';
-        header[12] = 'f';  // 'fmt ' chunk
-        header[13] = 'm';
-        header[14] = 't';
-        header[15] = ' ';
-        header[16] = 16;  // 4 bytes: size of 'fmt ' chunk
-        header[17] = 0;
-        header[18] = 0;
-        header[19] = 0;
-        header[20] = 1;  // format = 1
-        header[21] = 0;
-        header[22] = (Byte) channels;
-        header[23] = 0;
-        header[24] = (Byte) (longSampleRate & 0xff);
-        header[25] = (Byte) ((longSampleRate >> 8) & 0xff);
-        header[26] = (Byte) ((longSampleRate >> 16) & 0xff);
-        header[27] = (Byte) ((longSampleRate >> 24) & 0xff);
-        header[28] = (Byte) (byteRate & 0xff);
-        header[29] = (Byte) ((byteRate >> 8) & 0xff);
-        header[30] = (Byte) ((byteRate >> 16) & 0xff);
-        header[31] = (Byte) ((byteRate >> 24) & 0xff);
-        header[32] = (Byte) (2 * 8 / 8);  // block align
-        header[33] = 0;
-        header[34] = 16;  // bits per sample
-        header[35] = 0;
-        header[36] = 'd';
-        header[37] = 'a';
-        header[38] = 't';
-        header[39] = 'a';
-        header[40] = (Byte) (totalAudioLen & 0xff);
-        header[41] = (Byte) ((totalAudioLen >> 8) & 0xff);
-        header[42] = (Byte) ((totalAudioLen >> 16) & 0xff);
-        header[43] = (Byte) ((totalAudioLen >> 24) & 0xff);
+    self.headerData = [NSData dataWithBytes:header length:44];
+    free(header);
 
-        self.headerData = [NSData dataWithBytes:header length:44];
-        free(header);
-
-        self.outputStream = [NSOutputStream outputStreamToFileAtPath:[RecordingPath path]
-                                                              append:NO];
-    }
+    self.outputStream = [NSOutputStream outputStreamToFileAtPath:[RecordingPath path]
+                                                          append:NO];
 }
 
 #pragma mark -
@@ -1101,7 +978,7 @@
 
 - (void)audioRecorderDidFinishRecording:(AVAudioRecorder *) aRecorder successfully:(BOOL)flag
 {
-   NSLog (@"audioRecorderDidFinishRecording: successfully:%d",flag);
+    NSLog (@"audioRecorderDidFinishRecording: successfully:%d",flag);
 }
 
 #pragma mark -
