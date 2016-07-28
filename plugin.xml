@@ -61,8 +61,6 @@
 					  android:theme="@android:style/Theme.DeviceDefault.NoActionBar"/>
 		</config-file>
 
-        <framework src="com.android.support.appcompat-v7:24.1.1" />
-
         <source-file src="src/android/CDVAudioRecorder.java" target-dir="src/uk/co/onefile/nomadionic/audiocapture" />
         <source-file src="src/android/AudioRecorder.java" target-dir="src/uk/co/onefile/nomadionic/audiocapture" />
 
