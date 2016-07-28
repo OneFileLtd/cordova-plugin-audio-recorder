@@ -104,7 +104,7 @@ public class AudioRecorder extends AppCompatActivity {
 	private static final int RECORD_REQUEST_CODE = 101;
 	private static final int STORAGE_REQUEST_CODE = 102;
 
-	protected void requestPermission(String permissionType, int requestCode) {
+	protected boolean requestPermission(String permissionType, int requestCode) {
 		int permission = ContextCompat.checkSelfPermission(this,
 			permissionType);
 
@@ -112,7 +112,9 @@ public class AudioRecorder extends AppCompatActivity {
 			ActivityCompat.requestPermissions(this,
 				new String[]{permissionType}, requestCode
 			);
+			return false;
 		}
+		return true;
 	}
 
 	@Override
@@ -143,6 +145,22 @@ public class AudioRecorder extends AppCompatActivity {
 				return;
 			}
 		}
+		checkPermissions();
+	}
+
+	private boolean checkPermissions()
+	{
+		int permissionCheck = ContextCompat.checkSelfPermission(this.getApplicationContext(), Manifest.permission.RECORD_AUDIO);
+		if(permissionCheck != PackageManager.PERMISSION_GRANTED) {
+			requestPermission(Manifest.permission.RECORD_AUDIO, RECORD_REQUEST_CODE);
+			return false;
+		}
+		permissionCheck = ContextCompat.checkSelfPermission(this.getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
+		if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
+			requestPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, STORAGE_REQUEST_CODE);
+			return false;
+		}
+		return true;
 	}
 
 	@Override
@@ -156,8 +174,6 @@ public class AudioRecorder extends AppCompatActivity {
 		{
 			restoreSession(savedInstanceState);
 		}
-		requestPermission(Manifest.permission.RECORD_AUDIO, RECORD_REQUEST_CODE);
-		requestPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, STORAGE_REQUEST_CODE);
 	}
 
 	@Override
@@ -213,6 +229,7 @@ public class AudioRecorder extends AppCompatActivity {
 		// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 		checkExternalStorage();
 		setUpButtons();
+		checkPermissions();
 	}
 
 	@Override
@@ -339,10 +356,12 @@ public class AudioRecorder extends AppCompatActivity {
 				Log.i(TAG, "startButton.setOnClickListener()");
 				if(currentState == STATE_NOT_SET || currentState == STATE_STOPPED)
 				{
-					startRecording();
+					if(checkPermissions()) {
+						startRecording();
 
-					startButton.setBackgroundResource(R.drawable.pause_button);
-					currentState = STATE_RECORDING;
+						startButton.setBackgroundResource(R.drawable.pause_button);
+						currentState = STATE_RECORDING;
+					}
 				}
 
 				else if(currentState == STATE_RECORDING)
@@ -355,13 +374,15 @@ public class AudioRecorder extends AppCompatActivity {
 					currentState = STATE_PAUSED;
 				}
 
-				else if(currentState == STATE_PAUSED)
-				{
-					startRecording();
-					AudioBtnFinishAndSave.setEnabled(false);
+				else if(currentState == STATE_PAUSED) {
+					if (checkPermissions()) {
+						startRecording();
 
-					startButton.setBackgroundResource(R.drawable.pause_button);
-					currentState = STATE_RECORDING;
+						AudioBtnFinishAndSave.setEnabled(false);
+
+						startButton.setBackgroundResource(R.drawable.pause_button);
+						currentState = STATE_RECORDING;
+					}
 				}
 
 			}
