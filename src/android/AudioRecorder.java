@@ -1,4 +1,4 @@
-package uk.co.onefile.nomadionic.audiocapture;
+package org.apache.cordova.audiocapture;
 
 import android.graphics.Color;
 import android.media.AudioFormat;
@@ -46,7 +46,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import uk.co.onefile.nomadionic.R;
+import org.apache.cordova.R;
 
 public class AudioRecorder extends AppCompatActivity {
 

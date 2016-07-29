@@ -46,7 +46,7 @@
 
         <config-file target="res/xml/config.xml" parent="/*">
             <feature name="CDVAudioRecorder" >
-                <param name="android-package" value="uk.co.onefile.nomadionic.audiocapture.CDVAudioRecorder"/>
+                <param name="android-package" value="org.apache.cordova.audiocapture.CDVAudioRecorder"/>
             </feature>
         </config-file>
 
@@ -57,11 +57,11 @@
         </config-file>
 
 		<config-file target="AndroidManifest.xml" parent="/manifest/application">
-			<activity android:name="uk.co.onefile.nomadionic.audiocapture.AudioRecorder" />
+			<activity android:name="org.apache.cordova.audiocapture.AudioRecorder" />
 		</config-file>
 
-        <source-file src="src/android/CDVAudioRecorder.java" target-dir="src/uk/co/onefile/nomadionic/audiocapture" />
-        <source-file src="src/android/AudioRecorder.java" target-dir="src/uk/co/onefile/nomadionic/audiocapture" />
+        <source-file src="src/android/CDVAudioRecorder.java" target-dir="org/apache/cordova/audiocapture" />
+        <source-file src="src/android/AudioRecorder.java" target-dir="org/apache/cordova/audiocapture" />
 
         <resource-file src="src/android/res/drawable/continue_button.png" target="res/drawable/continue_button.png" />
         <resource-file src="src/android/res/drawable/pause_button.png" target="res/drawable/pause_button.png" />
