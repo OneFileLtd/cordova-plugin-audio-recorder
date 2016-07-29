@@ -70,7 +70,6 @@ typedef enum {
     UIButton *_recorderButton;
     UIButton *_backButton;
 
-    UITextField *_txtRecordingName;
     UILabel *_timeElapsedLabel;
     UIView *_viewAmplitude;
     UILabel *_fileSizeLabel;
@@ -95,7 +94,7 @@ typedef enum {
     CDVAUDIOError _errorCode;
     NSString *_callbackId;
     NSNumber *_duration;
-BOOL _isTimed;
+    BOOL _isTimed;
 #ifndef DEV_PLUGING
     CDVAudioRecorder *_audioRecorderCommand;
     CDVPluginResult *_pluginResult;
@@ -116,8 +115,6 @@ BOOL _isTimed;
 @property (nonatomic, retain) IBOutlet UILabel *fileSizeLabel;
 @property (nonatomic, retain) IBOutlet UILabel *maxFileSizeLabel;
 @property (nonatomic, retain) IBOutlet UILabel *timeElapsedLabel;
-@property (nonatomic, retain) IBOutlet UITextField *txtRecordingName;
-@property (nonatomic, retain) IBOutlet UIView *viewAmplitude;
 @property (nonatomic, retain) IBOutlet UIView *subview;
 @property (nonatomic, retain) IBOutlet UIView *circle;
 @property (nonatomic, retain) IBOutlet UIView *circlesView;
