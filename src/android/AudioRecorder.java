@@ -46,7 +46,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import org.apache.cordova.R;
+// TODO: This needs to point to the app resource folder, so this plugin won't work elsewhere without modifying this structure
+import uk.co.onefile.onefileeportfolio.R;
 
 public class AudioRecorder extends AppCompatActivity {
 
