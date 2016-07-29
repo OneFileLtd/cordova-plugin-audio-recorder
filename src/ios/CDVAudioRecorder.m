@@ -552,7 +552,8 @@
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     NSLog(@"initWithNibName");
-    nibNameOrNil = @"CDVAudioRecorder";
+    BOOL iPad = ([[UIDevice currentDevice].model isEqualToString:@"iPad"]);
+    nibNameOrNil = iPad ? @"CDVAudioRecorder~ipad" : @"CDVAudioRecorder";
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
