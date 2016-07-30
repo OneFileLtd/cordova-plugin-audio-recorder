@@ -27,6 +27,7 @@
         <header-file src="src/ios/CDVAudioRecorder.h" />
         <source-file src="src/ios/CDVAudioRecorder.m" />
         <resource-file src="src/ios/CDVAudioRecorder.xib" />
+        <resource-file src="src/ios/CDVAudioRecorder~ipad.xib" />
         <resource-file src="src/ios/CDVAudioRecorder.bundle" />
 
         <framework src="AVFoundation.framework" />
