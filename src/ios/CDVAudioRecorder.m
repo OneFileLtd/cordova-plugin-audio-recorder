@@ -5,6 +5,7 @@
 #define MEGA_BYTES (1000.0f * 1000.0f)
 #define DEFAULT_MAX_UPLOAD (30.0f * MEGA_BYTES)
 #define kTIMER_INTERVAL 0.20
+#define NAVIGATION_BAR_HEIGHT 88
 
 /************************************************************************************************************
  *      CDV Audio Navigation Controller
@@ -211,7 +212,7 @@
 @synthesize peakPower = _peakPower;
 @synthesize subview = _subview;
 @synthesize circle = _circle;
-
+@synthesize container = _container;
 @synthesize value = _value;
 @synthesize currentState = _currentState;
 
@@ -302,6 +303,88 @@
 }
 
 /* ~~~~~~~~~~ VIEW ~~~~~~~~~~~ */
+#pragma mark - initWithNibName
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+{
+    NSLog(@"initWithNibName");
+    BOOL iPad = ([[UIDevice currentDevice].model isEqualToString:@"iPad"]);
+    nibNameOrNil = iPad ? @"CDVAudioRecorder~ipad" : @"CDVAudioRecorder";
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    if (self) {
+        // Custom initialization
+    }
+    return self;
+}
+
+#pragma mark - View Methods
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    NSLog(@"viewDidLoad");
+    // Do any additional setup after loading the view.
+}
+
+- (void)viewDidUnload
+{
+    [super viewDidUnload];
+    NSLog(@"viewDidUnload");
+    // Release any retained subviews of the main view.
+}
+
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    NSLog(@"viewWillAppear");
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(backgroundNotification:)
+                                                 name:UIApplicationDidEnterBackgroundNotification object:nil];
+    self.isRecording = NO;
+    self.isPaused = NO;
+    self.isSavingRecording = NO;
+    self.recSeconds = 0;
+    self.recMinutes = 0;
+    self.recHours = 0;
+    self.currentState = STATE_NOT_SET;
+
+    //Get the centre setttings and display the maximum audio recording size
+    NSString *maxSizeText = [NSString stringWithFormat:@"%f MB", self.MaxRecSize];
+    [self.maxFileSizeLabel setText:maxSizeText];
+    self.value = 0;
+    self.segment = 0;
+    self.currentState = STATE_NOT_SET;
+
+    UIBarButtonItem *btnDone = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(backButtonPressed:)];
+    self.navigationController.topViewController.navigationItem.leftBarButtonItem = btnDone;
+    btnDone.enabled=TRUE;
+    btnDone.style=UIBarButtonSystemItemDone;
+    self.saveCancelButton.enabled = NO;
+    [self changeButtonState];
+    [self checkPermission];
+
+    BOOL iPad = ([[UIDevice currentDevice].model isEqualToString:@"iPad"]);
+    if(!iPad)
+    {
+        CGRect screenRect = [[UIScreen mainScreen] applicationFrame];
+        self.container.frame = CGRectMake(((screenRect.size.width / 2) - (self.container.frame.size.width / 2)),
+                                          ((screenRect.size.height / 2) - (self.container.frame.size.height / 2) + NAVIGATION_BAR_HEIGHT),
+                                          self.container.frame.size.width,
+                                          self.container.frame.size.height);
+        NSLog(@"%f %f %f %f", self.container.frame.origin.x, self.container.frame.origin.y, self.container.frame.size.width, self.container.frame.size.height);
+    }
+}
+
+-(void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    NSLog(@"viewDidAppear");
+}
+
+-(void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    NSLog(@"viewWillDisappear");
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidEnterBackgroundNotification object:nil];
+}
+
 #pragma mark - ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #pragma mark - Check permission to use Microphone
 -(void)checkPermission
@@ -546,78 +629,6 @@
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
     return YES;
-}
-
-#pragma mark -
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    NSLog(@"initWithNibName");
-    BOOL iPad = ([[UIDevice currentDevice].model isEqualToString:@"iPad"]);
-    nibNameOrNil = iPad ? @"CDVAudioRecorder~ipad" : @"CDVAudioRecorder";
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
-
-#pragma mark - View Methods
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-    NSLog(@"viewDidLoad");
-    // Do any additional setup after loading the view.
-}
-
-- (void)viewDidUnload
-{
-    [super viewDidUnload];
-    NSLog(@"viewDidUnload");
-    // Release any retained subviews of the main view.
-}
-
--(void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    NSLog(@"viewWillAppear");
-
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(backgroundNotification:)
-                                                 name:UIApplicationDidEnterBackgroundNotification object:nil];
-    self.isRecording = NO;
-    self.isPaused = NO;
-    self.isSavingRecording = NO;
-    self.recSeconds = 0;
-    self.recMinutes = 0;
-    self.recHours = 0;
-    self.currentState = STATE_NOT_SET;
-
-    //Get the centre setttings and display the maximum audio recording size
-    NSString *maxSizeText = [NSString stringWithFormat:@"%f MB", self.MaxRecSize];
-    [self.maxFileSizeLabel setText:maxSizeText];
-    self.value = 0;
-    self.segment = 0;
-    self.currentState = STATE_NOT_SET;
-
-    UIBarButtonItem *btnDone = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(backButtonPressed:)];
-    self.navigationController.topViewController.navigationItem.leftBarButtonItem = btnDone;
-    btnDone.enabled=TRUE;
-    btnDone.style=UIBarButtonSystemItemDone;
-    self.saveCancelButton.enabled = NO;
-    [self changeButtonState];
-    [self checkPermission];
-}
-
--(void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-    NSLog(@"viewDidAppear");
-}
-
--(void)viewWillDisappear:(BOOL)animated
-{
-    [super viewWillDisappear:animated];
-    NSLog(@"viewWillDisappear");
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidEnterBackgroundNotification object:nil];
 }
 
 #pragma mark - Buttons
@@ -903,73 +914,76 @@
 #pragma mark -
 -(void)saveRecording
 {
-    NSLog(@"Saving recording record...");
-    //update the wav header:
-    NSURL *RecordingPath = [NSURL fileURLWithPath:self.recorderFilePath];
+    if(self.recorderFilePath)
+    {
+        NSLog(@"Saving recording record...");
+        //update the wav header:
+        NSURL *RecordingPath = [NSURL fileURLWithPath:self.recorderFilePath];
 
-    NSDictionary *attributes = [[NSFileManager defaultManager] attributesOfItemAtPath:[RecordingPath path] error:NULL];
-    unsigned long long fileSize = [attributes fileSize]; // in bytes
+        NSDictionary *attributes = [[NSFileManager defaultManager] attributesOfItemAtPath:[RecordingPath path] error:NULL];
+        unsigned long long fileSize = [attributes fileSize]; // in bytes
 
-    unsigned long long totalAudioLen = 0;
-    unsigned long long totalDataLen = 0;
-    long longSampleRate = 16000.0;
-    int channels = 1;
-    long byteRate = 16 * 16000.0 * channels/8;
+        unsigned long long totalAudioLen = 0;
+        unsigned long long totalDataLen = 0;
+        long longSampleRate = 16000.0;
+        int channels = 1;
+        long byteRate = 16 * 16000.0 * channels/8;
 
-    totalAudioLen = fileSize - 44;
-    totalDataLen = fileSize;
+        totalAudioLen = fileSize - 44;
+        totalDataLen = fileSize;
 
-    Byte *header = (Byte*)malloc(44);
-    header[0] = 'R';  // RIFF/WAVE header
-    header[1] = 'I';
-    header[2] = 'F';
-    header[3] = 'F';
-    header[4] = (Byte) (totalDataLen & 0xff);
-    header[5] = (Byte) ((totalDataLen >> 8) & 0xff);
-    header[6] = (Byte) ((totalDataLen >> 16) & 0xff);
-    header[7] = (Byte) ((totalDataLen >> 24) & 0xff);
-    header[8] = 'W';
-    header[9] = 'A';
-    header[10] = 'V';
-    header[11] = 'E';
-    header[12] = 'f';  // 'fmt ' chunk
-    header[13] = 'm';
-    header[14] = 't';
-    header[15] = ' ';
-    header[16] = 16;  // 4 bytes: size of 'fmt ' chunk
-    header[17] = 0;
-    header[18] = 0;
-    header[19] = 0;
-    header[20] = 1;  // format = 1
-    header[21] = 0;
-    header[22] = (Byte) channels;
-    header[23] = 0;
-    header[24] = (Byte) (longSampleRate & 0xff);
-    header[25] = (Byte) ((longSampleRate >> 8) & 0xff);
-    header[26] = (Byte) ((longSampleRate >> 16) & 0xff);
-    header[27] = (Byte) ((longSampleRate >> 24) & 0xff);
-    header[28] = (Byte) (byteRate & 0xff);
-    header[29] = (Byte) ((byteRate >> 8) & 0xff);
-    header[30] = (Byte) ((byteRate >> 16) & 0xff);
-    header[31] = (Byte) ((byteRate >> 24) & 0xff);
-    header[32] = (Byte) (2 * 8 / 8);  // block align
-    header[33] = 0;
-    header[34] = 16;  // bits per sample
-    header[35] = 0;
-    header[36] = 'd';
-    header[37] = 'a';
-    header[38] = 't';
-    header[39] = 'a';
-    header[40] = (Byte) (totalAudioLen & 0xff);
-    header[41] = (Byte) ((totalAudioLen >> 8) & 0xff);
-    header[42] = (Byte) ((totalAudioLen >> 16) & 0xff);
-    header[43] = (Byte) ((totalAudioLen >> 24) & 0xff);
+        Byte *header = (Byte*)malloc(44);
+        header[0] = 'R';  // RIFF/WAVE header
+        header[1] = 'I';
+        header[2] = 'F';
+        header[3] = 'F';
+        header[4] = (Byte) (totalDataLen & 0xff);
+        header[5] = (Byte) ((totalDataLen >> 8) & 0xff);
+        header[6] = (Byte) ((totalDataLen >> 16) & 0xff);
+        header[7] = (Byte) ((totalDataLen >> 24) & 0xff);
+        header[8] = 'W';
+        header[9] = 'A';
+        header[10] = 'V';
+        header[11] = 'E';
+        header[12] = 'f';  // 'fmt ' chunk
+        header[13] = 'm';
+        header[14] = 't';
+        header[15] = ' ';
+        header[16] = 16;  // 4 bytes: size of 'fmt ' chunk
+        header[17] = 0;
+        header[18] = 0;
+        header[19] = 0;
+        header[20] = 1;  // format = 1
+        header[21] = 0;
+        header[22] = (Byte) channels;
+        header[23] = 0;
+        header[24] = (Byte) (longSampleRate & 0xff);
+        header[25] = (Byte) ((longSampleRate >> 8) & 0xff);
+        header[26] = (Byte) ((longSampleRate >> 16) & 0xff);
+        header[27] = (Byte) ((longSampleRate >> 24) & 0xff);
+        header[28] = (Byte) (byteRate & 0xff);
+        header[29] = (Byte) ((byteRate >> 8) & 0xff);
+        header[30] = (Byte) ((byteRate >> 16) & 0xff);
+        header[31] = (Byte) ((byteRate >> 24) & 0xff);
+        header[32] = (Byte) (2 * 8 / 8);  // block align
+        header[33] = 0;
+        header[34] = 16;  // bits per sample
+        header[35] = 0;
+        header[36] = 'd';
+        header[37] = 'a';
+        header[38] = 't';
+        header[39] = 'a';
+        header[40] = (Byte) (totalAudioLen & 0xff);
+        header[41] = (Byte) ((totalAudioLen >> 8) & 0xff);
+        header[42] = (Byte) ((totalAudioLen >> 16) & 0xff);
+        header[43] = (Byte) ((totalAudioLen >> 24) & 0xff);
 
-    self.headerData = [NSData dataWithBytes:header length:44];
-    free(header);
+        self.headerData = [NSData dataWithBytes:header length:44];
+        free(header);
 
-    self.outputStream = [NSOutputStream outputStreamToFileAtPath:[RecordingPath path]
-                                                          append:NO];
+        self.outputStream = [NSOutputStream outputStreamToFileAtPath:[RecordingPath path]
+                                                              append:NO];
+    }
 }
 
 #pragma mark -
@@ -982,7 +996,7 @@
     NSLog (@"audioRecorderDidFinishRecording: successfully:%d",flag);
 }
 
-#pragma mark -
+#pragma mark - Orientation Methods
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
     return YES;

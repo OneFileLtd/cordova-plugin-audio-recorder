@@ -78,6 +78,7 @@ typedef enum {
     UIView *_subview;
     UIToolbar *_controlsToolbar;
     int _userFilterID;
+    UIView *_container;
     UIView *_viewSaving;
     UIView *_circle;
 
@@ -115,6 +116,7 @@ typedef enum {
 @property (nonatomic, retain) IBOutlet UILabel *fileSizeLabel;
 @property (nonatomic, retain) IBOutlet UILabel *maxFileSizeLabel;
 @property (nonatomic, retain) IBOutlet UILabel *timeElapsedLabel;
+@property (nonatomic, retain) IBOutlet UIView *container;
 @property (nonatomic, retain) IBOutlet UIView *subview;
 @property (nonatomic, retain) IBOutlet UIView *circle;
 @property (nonatomic, retain) IBOutlet UIView *circlesView;
