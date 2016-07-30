@@ -359,7 +359,11 @@
     self.saveCancelButton.enabled = NO;
     [self changeButtonState];
     [self checkPermission];
+}
 
+-(void)viewDidLayoutSubviews
+{
+    [super viewDidLayoutSubviews];
     BOOL iPad = ([[UIDevice currentDevice].model isEqualToString:@"iPad"]);
     if(!iPad)
     {
