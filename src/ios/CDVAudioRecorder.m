@@ -369,7 +369,7 @@
     {
         CGRect screenRect = [[UIScreen mainScreen] applicationFrame];
         self.container.frame = CGRectMake(((screenRect.size.width / 2) - (self.container.frame.size.width / 2)),
-                                          ((screenRect.size.height / 2) - (self.container.frame.size.height / 2) + NAVIGATION_BAR_HEIGHT),
+                                          ((screenRect.size.height / 2) - (self.container.frame.size.height / 2)),
                                           self.container.frame.size.width,
                                           self.container.frame.size.height);
         NSLog(@"%f %f %f %f", self.container.frame.origin.x, self.container.frame.origin.y, self.container.frame.size.width, self.container.frame.size.height);
