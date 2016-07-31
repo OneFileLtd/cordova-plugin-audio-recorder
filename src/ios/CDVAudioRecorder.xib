@@ -33,7 +33,7 @@
                             <rect key="frame" x="0.0" y="85" width="320" height="320"/>
                         </view>
                         <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UXZ-rU-Dta" userLabel="Circle">
-                            <rect key="frame" x="49" y="138" width="222" height="222"/>
+                            <rect key="frame" x="49" y="135" width="222" height="222"/>
                             <subviews>
                                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MtI-9e-kOr" userLabel="Start/Stop Button">
                                     <rect key="frame" x="0.0" y="0.0" width="222" height="222"/>
