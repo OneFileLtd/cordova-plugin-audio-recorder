@@ -729,6 +729,7 @@
 
 #pragma mark -
 - (void)startRecording {
+	[UIApplication sharedApplication].idleTimerDisabled = YES;
     // Permission only required for iOS7 and up.
     if([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0)
     {
@@ -860,6 +861,7 @@
 - (void)endRecording
 {
     NSLog(@"ending recorder");
+    [UIApplication sharedApplication].idleTimerDisabled = NO;
     self.isRecording = NO;
     [self.timer invalidate];
     [self.recorder stop];
@@ -894,6 +896,7 @@
     self.timer = nil;
     [self.recorder pause];
     self.isPaused = YES;
+    [UIApplication sharedApplication].idleTimerDisabled = NO;
 }
 
 - (void)resumeRecording
