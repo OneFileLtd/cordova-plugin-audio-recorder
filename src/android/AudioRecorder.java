@@ -879,9 +879,10 @@ public class AudioRecorder extends AppCompatActivity {
 				}
 
 				in.close();
-
 				outFile.flush();
 				outFile.close();
+				bos.close();
+				os.close();
 			}
 			catch (IOException e)
 			{
