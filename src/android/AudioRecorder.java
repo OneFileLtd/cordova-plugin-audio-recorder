@@ -407,7 +407,7 @@ public class AudioRecorder extends AppCompatActivity {
 
 	private long getMaxFileSize()
 	{
-		return 30000000;
+		return maxSize;
 	}
 
 	private void checkEvidenceFolderExists()
