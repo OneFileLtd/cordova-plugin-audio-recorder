@@ -167,7 +167,6 @@ public class AudioRecorder extends AppCompatActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		Log.i(TAG, "onCreate()");
 		setContentView(R.layout.activity_main);
 		setTitle("Audio Recorder");
 
@@ -181,12 +180,10 @@ public class AudioRecorder extends AppCompatActivity {
 	protected void onPause()
 	{
 		super.onPause();
-		Log.i(TAG, "onPause()");
 
 		if (audioRecordingTask != null)
 		{
 			if(currentState == STATE_RECORDING) {
-				Log.i(TAG, "Pausing recording");
 				pauseRecording();
 				currentState = STATE_PAUSED;
 			}
@@ -201,7 +198,6 @@ public class AudioRecorder extends AppCompatActivity {
 	protected void onResume()
 	{
 		super.onResume();
-		Log.i(TAG, "onResume()");
 		setContentView(R.layout.activity_main);
 		recordingTime = (TextView) findViewById(R.id.recordingTime);
 		recordingSize = (TextView) findViewById(R.id.recordingSize);
@@ -217,12 +213,10 @@ public class AudioRecorder extends AppCompatActivity {
 		Bundle extras = intent.getExtras();
 		if(extras != null)
 			data = extras.getString("entryDataString"); // retrieve the data using keyName
-		Log.i(TAG, data);
 		try {
 			JSONObject jsnobject = new JSONObject(data);
 			maxSize = jsnobject.getLong("maxupload");
 			maxSize = maxSize * (1024L * 1024L);
-			Log.i(TAG, "maxSize: " + maxSize);
 		} catch (JSONException e)
 		{
 			e.printStackTrace();
@@ -236,7 +230,6 @@ public class AudioRecorder extends AppCompatActivity {
 	@Override
 	public void onSaveInstanceState(Bundle savedInstanceState)
 	{
-		Log.i(TAG, "onSaveInstanceState() Called");
 		savedInstanceState.putInt("currentState", currentState);
 		savedInstanceState.putInt("pauseCount", pauseCount);
 		savedInstanceState.putLong("sizeSoFar", sizeSoFar);
@@ -264,7 +257,6 @@ public class AudioRecorder extends AppCompatActivity {
 
 		public void run()
 		{
-			Log.i(TAG, "Runnable mUpdateTimeTask()");
 			long millis = System.currentTimeMillis() - mStartTime;
 			int seconds = (int) (millis / 1000);
 			int minutes = seconds / 60;
@@ -278,7 +270,6 @@ public class AudioRecorder extends AppCompatActivity {
 			{
 				float fsize = audioRecordingTask.getSize() + sizeSoFar;
 				fsize = bytesToMeg(fsize);
-
 				size = Double.valueOf(df2.format(fsize));
 			}
 			else
@@ -298,7 +289,6 @@ public class AudioRecorder extends AppCompatActivity {
 
 	private void restoreSession(Bundle savedInstanceState)
 	{
-		Log.i(TAG, "restoreSession()");
 		currentState = savedInstanceState.getInt("currentState");
 		pauseCount = savedInstanceState.getInt("pauseCount");
 		sizeSoFar = savedInstanceState.getLong("sizeSoFar");
@@ -330,13 +320,10 @@ public class AudioRecorder extends AppCompatActivity {
 
 	private void setUpButtons()
 	{
-		Log.i(TAG, "setUpButtons()");
-
 		//drawCircles();
 		final Button startButton = (Button) findViewById(R.id.AudioStartRecording);
 		final Button AudioBtnFinishAndSave = (Button) findViewById(R.id.AudioBtnFinishAndSave);
 
-		Log.i(TAG, "currentState: " + currentState);
 		if(currentState == STATE_NOT_SET || currentState == STATE_STOPPED)
 		{
 			startButton.setBackgroundResource(R.drawable.record_button);
@@ -345,7 +332,6 @@ public class AudioRecorder extends AppCompatActivity {
 		} else {
 			// Returning from the background paused.
 			if (currentState == STATE_PAUSED) {
-				Log.i(TAG, "Paused state");
 				startButton.setBackgroundResource(R.drawable.continue_button);
 				AudioBtnFinishAndSave.setEnabled(true);
 				AudioBtnFinishAndSave.setAlpha(1f);
@@ -354,7 +340,6 @@ public class AudioRecorder extends AppCompatActivity {
 		startButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view)
 			{
-				Log.i(TAG, "startButton.setOnClickListener()");
 				if(currentState == STATE_NOT_SET || currentState == STATE_STOPPED)
 				{
 					if(checkPermissions()) {
@@ -395,15 +380,17 @@ public class AudioRecorder extends AppCompatActivity {
 		AudioBtnFinishAndSave.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view)
 			{
-				Log.i(TAG, "AudioBtnFinishAndSave.setOnClickListener()");
 				savingLayout.setVisibility(View.VISIBLE);
 				startButton.setVisibility(View.GONE);
 				SaveAudio saveAudio = new SaveAudio(pauseCount);
-				saveAudio.execute((Integer) null);
+				saveAudio.execute((Integer) null);				
+			}
+		});
+	}
 
+	private void setupReturnedJsonObject(){
 				File filenew = new File(finalStorageFilePath);
 				int fileSize = Integer.parseInt(String.valueOf(filenew.length()));
-
 				// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 				// PASS BACK ANY INFORMATION BACK TO THE PLUGIN ENTRY POINT.
 				Intent intent = new Intent();
@@ -416,26 +403,19 @@ public class AudioRecorder extends AppCompatActivity {
 				setResult(Activity.RESULT_OK, intent);
 				// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 				finish();
-			}
-		});
 	}
-
 
 	private long getMaxFileSize()
 	{
-		Log.i(TAG, "getMaxFileSize");
 		return 30000000;
 	}
 
 	private void checkEvidenceFolderExists()
 	{
-		Log.i(TAG, "checkEvidenceFolderExists");
-
 		File dir = new File(storageDirectory);
 
 		if (!dir.exists())
 		{
-			Log.i(TAG, "Creating Nomad Folder");
 			dir.mkdirs();
 		}
 		maxSize = getMaxFileSize();
@@ -443,8 +423,6 @@ public class AudioRecorder extends AppCompatActivity {
 
 	private void checkExternalStorage()
 	{
-		Log.i(TAG, "checkExternalStorage");
-
 		String state = Environment.getExternalStorageState();
 		if (Environment.MEDIA_MOUNTED.equals(state))
 		{
@@ -460,11 +438,9 @@ public class AudioRecorder extends AppCompatActivity {
 
 	private void onAudioRecorderLowMemory()
 	{
-		Log.i(TAG, "onAudioRecorderLowMemory()");
 		runOnUiThread(new Runnable() {
 			public void run()
 			{
-				Log.i(TAG, "onAudioRecorderLowMemory() - runOnUiThread");
 				final Button startButton = (Button) findViewById(R.id.AudioStartRecording);
 				Button AudioBtnFinishAndSave = (Button) findViewById(R.id.AudioBtnFinishAndSave);
 				AudioBtnFinishAndSave.setVisibility(View.VISIBLE);
@@ -482,8 +458,6 @@ public class AudioRecorder extends AppCompatActivity {
 
 	private void onAudioRecorderPaused()
 	{
-		Log.i(TAG, "onAudioRecorderPaused()");
-
 		audioRecordingNotStarted = true;
 		audioHasBeenRecorded = true;
 		audioIsBeingRecorded = false;
@@ -493,8 +467,6 @@ public class AudioRecorder extends AppCompatActivity {
 
 	private void onAudioRecorderError()
 	{
-		Log.i(TAG, "onAudioRecorderError()");
-
 		audioRecordingNotStarted = true;
 		audioHasBeenRecorded = false;
 		audioIsBeingRecorded = false;
@@ -518,7 +490,6 @@ public class AudioRecorder extends AppCompatActivity {
 
 	public void notifyAudioRecordingHasBegun()
 	{
-		Log.i(TAG, "notifyAudioRecordingHasBegun()");
 		audioRecordingNotStarted = false;
 		audioIsBeingRecorded = true;
 		currentState_AudioTask = STATE_AUDIO_TASK_RECORDING;
@@ -526,14 +497,11 @@ public class AudioRecorder extends AppCompatActivity {
 
 	public void updateTotalSize(long sizeOfThisRecording)
 	{
-		Log.i(TAG, "updateTotalSize()");
 		sizeSoFar = sizeSoFar + sizeOfThisRecording;
 	}
 
 	private void createEvidenceFolder()
 	{
-		Log.i(TAG, "createEvidenceFolder()");
-
 		String state = android.os.Environment.getExternalStorageState();
 
 		if (!state.equals(android.os.Environment.MEDIA_MOUNTED))
@@ -543,14 +511,12 @@ public class AudioRecorder extends AppCompatActivity {
 		File dir = new File(storageDirectory);
 		if (!dir.exists())
 		{
-			Log.i(TAG, "Creating Nomad Folder");
 			dir.mkdirs();
 		}
 	}
 
 	private void startRecording()
 	{
-		Log.i(TAG, "startRecording()");
 		if (mStartTime == 0L)
 			mStartTime = System.currentTimeMillis();
 		mStartTime = System.currentTimeMillis() - mTotalTime;
@@ -563,8 +529,6 @@ public class AudioRecorder extends AppCompatActivity {
 		createEvidenceFolder();
 		getFilePath();
 
-		Log.i(TAG, "Recording to file: " + audioOutputPath);
-
 		audioRecordingTask = new AudioRecordingTask();
 		audioRecordingTask.setUp(this, audioOutputPath, maxSize, sizeSoFar);
 		audioRecordingTask.execute();
@@ -572,8 +536,6 @@ public class AudioRecorder extends AppCompatActivity {
 
 	private void pauseRecording()
 	{
-		Log.i(TAG, "pauseRecording()");
-
 		mHandler.removeCallbacks(mUpdateTimeTask);
 
 		if (audioRecordingTask != null)
@@ -582,15 +544,12 @@ public class AudioRecorder extends AppCompatActivity {
 
 	private void getFilePath()
 	{
-		Log.i(TAG, "getFilePath()");
-
 		File file = new File(storageDirectory + "temp_audio_" + pauseCount + ".pcm");
 
 		if (!file.exists())
 		{
 			try
 			{
-				Log.i(TAG, "getFilePath() - file.createNewFile");
 				file.createNewFile();
 			}
 			catch (IOException e2)
@@ -630,8 +589,6 @@ public class AudioRecorder extends AppCompatActivity {
 			this.maxSize = maxSize;
 			this.sizeSoFar = sizeSoFar;
 			activity.currentState_AudioTask = STATE_AUDIO_TASK_NOT_SET;
-			Log.i(TAG, "AudioRecordingTask - maxSize " + maxSize);
-			Log.i(TAG, "AudioRecordingTask - sizeSoFar " + sizeSoFar);
 		}
 
 		@Override
@@ -694,7 +651,6 @@ public class AudioRecorder extends AppCompatActivity {
 				stopped = true;
 				error = true;
 				activity.currentState_AudioTask = STATE_AUDIO_TASK_ERROR;
-				Log.i(activity.TAG, "audio recording not started - STATE_AUDIO_TASK_ERROR");
 			}
 
 			while (!stopped)
@@ -714,7 +670,6 @@ public class AudioRecorder extends AppCompatActivity {
 				{
 					stopped = true;
 					activity.currentState_AudioTask = STATE_AUDIO_TASK_STOPPED;
-					Log.i(activity.TAG, "dataOutStream too big - STATE_AUDIO_TASK_STOPPED");
 				}
 			}
 
@@ -812,13 +767,12 @@ public class AudioRecorder extends AppCompatActivity {
 					File f1 = new File(tempStorageFilePath);
 					File f2 = new File(tempPart1StorageFilePath  + (x + 1) + ".pcm");
 					mergePCM(f1, f2);
-					Log.i(TAG, tempPart1StorageFilePath  + (x + 1) + ".pcm");
 				}
 			}
 			File f1 = new File(tempStorageFilePath);
-			Log.i(TAG, tempStorageFilePath);
 			// Convert the PCM data into a readable WAVE format:
 			convertPCMtoWAV(f1);
+			setupReturnedJsonObject();
 			return null;
 		}
 
@@ -830,7 +784,6 @@ public class AudioRecorder extends AppCompatActivity {
 
 		private void convertPCMtoWAV(File fileToConvert)
 		{
-			Log.i(TAG, "Starting conversion");
 			try
 			{
 				long mySubChunk1Size = 16;
@@ -848,7 +801,6 @@ public class AudioRecorder extends AppCompatActivity {
 
 				OutputStream os;
 				os = new FileOutputStream(new File(finalStorageFilePath));
-				Log.i(TAG,finalStorageFilePath);
 
 				BufferedOutputStream bos = new BufferedOutputStream(os);
 				DataOutputStream outFile = new DataOutputStream(bos);
@@ -940,7 +892,6 @@ public class AudioRecorder extends AppCompatActivity {
 		@Override
 		protected void onPostExecute(Void result)
 		{
-			Log.i(TAG, "Finished conversion");
 			super.onPostExecute(result);
 		}
 	} // private class SaveAudio extends AsyncTask<Object, Integer, Void> {}
