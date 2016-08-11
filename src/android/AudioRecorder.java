@@ -1,5 +1,6 @@
 package org.apache.cordova.audiocapture;
 
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.media.AudioFormat;
 import android.media.AudioRecord;
@@ -25,6 +26,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.DecimalFormat;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -41,8 +44,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v4.app.ActivityCompat;
 
-// TODO: This needs putting back in for the plugin, I think the resources and project path don't equate to the same path.
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -71,10 +72,10 @@ public class AudioRecorder extends AppCompatActivity {
 	private Integer currentState_AudioTask = STATE_AUDIO_TASK_NOT_SET;
 
 	public static final Integer RECORDING_FREQUENCY = 11025;
+	public static final String PREFS_NAME = "MyPrefsFile";
 	public String storageDirectory = Environment.getExternalStorageDirectory().getPath() + "/.audiorecorder/";
 
 	private String TAG = "Audio Recorder";
-	private Integer maxUpload = 0;
 	private String audioOutputPath = "";
 	private Integer pauseCount = -1;
 	private String fileSizeErrorMsg = "";
@@ -107,11 +108,11 @@ public class AudioRecorder extends AppCompatActivity {
 
 	protected boolean requestPermission(String permissionType, int requestCode) {
 		int permission = ContextCompat.checkSelfPermission(this,
-			permissionType);
+				permissionType);
 
 		if (permission != PackageManager.PERMISSION_GRANTED) {
 			ActivityCompat.requestPermissions(this,
-				new String[]{permissionType}, requestCode
+					new String[]{permissionType}, requestCode
 			);
 			return false;
 		}
@@ -125,23 +126,23 @@ public class AudioRecorder extends AppCompatActivity {
 			case RECORD_REQUEST_CODE: {
 
 				if (grantResults.length == 0
-					|| grantResults[0] !=
-					PackageManager.PERMISSION_GRANTED) {
+						|| grantResults[0] !=
+						PackageManager.PERMISSION_GRANTED) {
 
 					Toast.makeText(this,
-						"Record permission required",
-						Toast.LENGTH_LONG).show();
+							"Record permission required",
+							Toast.LENGTH_LONG).show();
 				}
 				return;
 			}
 			case STORAGE_REQUEST_CODE: {
 
 				if (grantResults.length == 0
-					|| grantResults[0] !=
-					PackageManager.PERMISSION_GRANTED) {
+						|| grantResults[0] !=
+						PackageManager.PERMISSION_GRANTED) {
 					Toast.makeText(this,
-						"External Storage permission required",
-						Toast.LENGTH_LONG).show();
+							"External Storage permission required",
+							Toast.LENGTH_LONG).show();
 				}
 				return;
 			}
@@ -189,9 +190,16 @@ public class AudioRecorder extends AppCompatActivity {
 			}
 		}
 
-		while (!audioRecordingNotStarted)
-		{
-		}
+		SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+		SharedPreferences.Editor editor = settings.edit();
+		editor.putInt("currentState", STATE_PAUSED);
+		editor.putInt("pauseCount", pauseCount);
+		editor.putLong("sizeSoFar", sizeSoFar);
+		editor.putBoolean("audioRecordingNotStarted", true);
+		editor.putBoolean("audioHasBeenRecorded", audioHasBeenRecorded);
+		editor.putString("timeText", timeText);
+		editor.putString("sizeText", sizeText);
+		editor.commit();
 	}
 
 	@Override
@@ -221,10 +229,28 @@ public class AudioRecorder extends AppCompatActivity {
 		{
 			e.printStackTrace();
 		}
+
 		// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 		checkExternalStorage();
 		setUpButtons();
 		checkPermissions();
+	}
+
+	@Override
+	public void onStart(){
+		super.onStart();
+
+		if( currentState != STATE_NOT_SET){
+			SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+
+			currentState = settings.getInt("currentState", 0);
+			pauseCount = settings.getInt("pauseCount", 0);
+			sizeSoFar = settings.getLong("sizeSoFar", 0);
+			audioRecordingNotStarted = settings.getBoolean("audioRecordingNotStarted", false);
+			audioHasBeenRecorded = settings.getBoolean("audioHasBeenRecorded", false);
+			timeText = settings.getString("timeText","");
+			sizeText = settings.getString("sizeText","");
+		}
 	}
 
 	@Override
@@ -237,6 +263,7 @@ public class AudioRecorder extends AppCompatActivity {
 		savedInstanceState.putBoolean("audioHasBeenRecorded", audioHasBeenRecorded);
 		savedInstanceState.putString("timeText", timeText);
 		savedInstanceState.putString("sizeText", sizeText);
+
 		super.onSaveInstanceState(savedInstanceState);
 	}
 
@@ -383,26 +410,26 @@ public class AudioRecorder extends AppCompatActivity {
 				savingLayout.setVisibility(View.VISIBLE);
 				startButton.setVisibility(View.GONE);
 				SaveAudio saveAudio = new SaveAudio(pauseCount);
-				saveAudio.execute((Integer) null);				
+				saveAudio.execute((Integer) null);
 			}
 		});
 	}
 
 	private void setupReturnedJsonObject(){
-				File filenew = new File(finalStorageFilePath);
-				int fileSize = Integer.parseInt(String.valueOf(filenew.length()));
-				// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-				// PASS BACK ANY INFORMATION BACK TO THE PLUGIN ENTRY POINT.
-				Intent intent = new Intent();
-				intent.putExtra("filePath", finalStorageFilePath);
-				intent.putExtra("localURL", finalStorageFilePath);
-				intent.putExtra("fileName", finalStorageFileName);
-				intent.putExtra("fileExt", "wav");
-				intent.putExtra("fileType", "audio/wav");
-				intent.putExtra("fileSize", Integer.toString(fileSize));
-				setResult(Activity.RESULT_OK, intent);
-				// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-				finish();
+		File filenew = new File(finalStorageFilePath);
+		int fileSize = Integer.parseInt(String.valueOf(filenew.length()));
+		// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		// PASS BACK ANY INFORMATION BACK TO THE PLUGIN ENTRY POINT.
+		Intent intent = new Intent();
+		intent.putExtra("filePath", finalStorageFilePath);
+		intent.putExtra("localURL", finalStorageFilePath);
+		intent.putExtra("fileName", finalStorageFileName);
+		intent.putExtra("fileExt", "wav");
+		intent.putExtra("fileType", "audio/wav");
+		intent.putExtra("fileSize", Integer.toString(fileSize));
+		setResult(Activity.RESULT_OK, intent);
+		// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		finish();
 	}
 
 	private long getMaxFileSize()
@@ -483,7 +510,7 @@ public class AudioRecorder extends AppCompatActivity {
 				startButton.setEnabled(false);
 
 				Toast.makeText(getApplicationContext(),"An error occured trying to record audio",
-					Toast.LENGTH_LONG).show();
+						Toast.LENGTH_LONG).show();
 			}
 		});
 	}
@@ -537,7 +564,6 @@ public class AudioRecorder extends AppCompatActivity {
 	private void pauseRecording()
 	{
 		mHandler.removeCallbacks(mUpdateTimeTask);
-
 		if (audioRecordingTask != null)
 			audioRecordingTask.pause();
 	}
@@ -608,7 +634,7 @@ public class AudioRecorder extends AppCompatActivity {
 			try
 			{
 				audioRecord = new AudioRecord(MediaRecorder.AudioSource.MIC, frequency, channelConfiguration,
-					audioEncoding, bufferSize);
+						audioEncoding, bufferSize);
 			}
 			catch(Exception e)
 			{
