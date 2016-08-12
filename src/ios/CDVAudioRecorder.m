@@ -1003,16 +1003,4 @@
 {
     return YES;
 }
-
-- (UIInterfaceOrientationMask)supportedInterfaceOrientations
-{
-    return UIInterfaceOrientationMaskAll;
-}
-
-// Returns interface orientation masks.
-- (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation
-{
-    return UIInterfaceOrientationPortrait | UIInterfaceOrientationPortraitUpsideDown |
-    UIInterfaceOrientationLandscapeLeft | UIInterfaceOrientationLandscapeRight;
-}
 @end
