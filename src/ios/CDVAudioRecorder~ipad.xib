@@ -58,7 +58,7 @@
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Jak-cN-TVG" userLabel="Start/Stop Button">
                             <rect key="frame" x="0.0" y="0.0" width="222" height="222"/>
-                            <state key="normal" title="START" image="record.png"/>
+                            <state key="normal" title="START"/>
                             <variation key="heightClass=compact" fixedFrame="YES">
                                 <rect key="frame" x="0.0" y="0.0" width="222" height="222"/>
                             </variation>
@@ -122,7 +122,7 @@
                 </label>
                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IXh-Rg-2Y4">
                     <rect key="frame" x="180" y="494" width="240" height="57"/>
-                    <state key="normal" title="SAVE" image="save.png"/>
+                    <state key="normal" title="SAVE"/>
                     <variation key="heightClass=compact" fixedFrame="YES">
                         <rect key="frame" x="180" y="315" width="240" height="57"/>
                     </variation>
@@ -155,8 +155,4 @@
             <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
         </view>
     </objects>
-    <resources>
-        <image name="record.png" width="317" height="320"/>
-        <image name="save.png" width="574" height="138"/>
-    </resources>
 </document>

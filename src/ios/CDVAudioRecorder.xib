@@ -37,7 +37,7 @@
                             <subviews>
                                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MtI-9e-kOr" userLabel="Start/Stop Button">
                                     <rect key="frame" x="0.0" y="0.0" width="222" height="222"/>
-                                    <state key="normal" title="Button" image="record.png"/>
+                                    <state key="normal" title="Button"/>
                                     <connections>
                                         <action selector="recorderButtonPressed:" destination="-2" eventType="touchUpInside" id="CGB-4v-XcH"/>
                                     </connections>
@@ -52,7 +52,7 @@
                         </label>
                         <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gcZ-o5-isJ" userLabel="Save">
                             <rect key="frame" x="40" y="401" width="240" height="57"/>
-                            <state key="normal" title="Button" image="save.png"/>
+                            <state key="normal" title="Button"/>
                             <connections>
                                 <action selector="saveButtonPressed:" destination="-2" eventType="touchUpInside" id="DFI-R6-TMM"/>
                             </connections>
@@ -65,8 +65,4 @@
             <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
         </view>
     </objects>
-    <resources>
-        <image name="record.png" width="317" height="320"/>
-        <image name="save.png" width="574" height="138"/>
-    </resources>
 </document>

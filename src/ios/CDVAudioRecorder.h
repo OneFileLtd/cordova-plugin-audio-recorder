@@ -91,7 +91,7 @@ typedef enum {
     CGFloat _fadeColor;
     CAShapeLayer *_lastCircleLayer;
     CAShapeLayer *_lastRingLayer;
-
+    CAShapeLayer *_lastBackgroundRingLayer;
     CDVAUDIOError _errorCode;
     NSString *_callbackId;
     NSNumber *_duration;
@@ -122,6 +122,7 @@ typedef enum {
 @property (nonatomic, retain) IBOutlet UIView *circlesView;
 @property (nonatomic, retain) CAShapeLayer *lastCircleLayer;
 @property (nonatomic, retain) CAShapeLayer *lastRingLayer;
+@property (nonatomic, retain) CAShapeLayer *lastBackgroundRingLayer;
 
 @property CGFloat value;
 @property CGFloat segment;

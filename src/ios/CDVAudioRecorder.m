@@ -223,7 +223,7 @@
 @synthesize fadeColor = _fadeColor;
 @synthesize lastCircleLayer = _lastCircleLayer;
 @synthesize lastRingLayer = _lastRingLayer;
-
+@synthesize lastBackgroundRingLayer = _lastBackgroundRingLayer;
 @synthesize errorCode = _errorCode;
 @synthesize callbackId = _callbackId;
 @synthesize duration = _duration;
@@ -306,12 +306,10 @@
 #pragma mark - initWithNibName
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
-    NSLog(@"initWithNibName");
     BOOL iPad = ([[UIDevice currentDevice].model isEqualToString:@"iPad"]);
     nibNameOrNil = iPad ? @"CDVAudioRecorder~ipad" : @"CDVAudioRecorder";
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        // Custom initialization
     }
     return self;
 }
@@ -320,21 +318,16 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    NSLog(@"viewDidLoad");
-    // Do any additional setup after loading the view.
 }
 
 - (void)viewDidUnload
 {
     [super viewDidUnload];
-    NSLog(@"viewDidUnload");
-    // Release any retained subviews of the main view.
 }
 
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    NSLog(@"viewWillAppear");
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(backgroundNotification:)
                                                  name:UIApplicationDidEnterBackgroundNotification object:nil];
     self.isRecording = NO;
@@ -357,6 +350,7 @@
     btnDone.enabled=TRUE;
     btnDone.style=UIBarButtonSystemItemDone;
     self.saveCancelButton.enabled = NO;
+    [self drawPie];
     [self changeButtonState];
     [self checkPermission];
 }
@@ -372,20 +366,17 @@
                                           ((screenRect.size.height / 2) - (self.container.frame.size.height / 2)),
                                           self.container.frame.size.width,
                                           self.container.frame.size.height);
-        NSLog(@"%f %f %f %f", self.container.frame.origin.x, self.container.frame.origin.y, self.container.frame.size.width, self.container.frame.size.height);
     }
 }
 
 -(void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    NSLog(@"viewDidAppear");
 }
 
 -(void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    NSLog(@"viewWillDisappear");
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidEnterBackgroundNotification object:nil];
 }
 
@@ -395,11 +386,9 @@
 {
     [[AVAudioSession sharedInstance] requestRecordPermission:^(BOOL granted) {
         if (granted) {
-            NSLog(@"Permission granted");
             self.micPermission = YES;
         }
         else {
-            NSLog(@"Permission denied");
             self.micPermission = NO;
         }
     }];
@@ -413,7 +402,6 @@
                                   style:UIAlertActionStyleDestructive
                                   handler:^(UIAlertAction *action)
                                   {
-                                      NSLog(@"OKAY action");
                                   }];
     UIAlertController *alertController = [UIAlertController
                                           alertControllerWithTitle:@"Mic Permission Error"
@@ -513,7 +501,6 @@
             }
             break;
         case STATE_SAVE:
-            NSLog(@"Saving");
             [self stopRecording];
             [self saveRecording];
             [self finishPlugin];
@@ -555,44 +542,41 @@
 -(void)drawPie
 {
     CGFloat radius = MIN(self.circle.frame.size.width,self.circle.frame.size.height)/2;
-    CGFloat inset  = 20;
+    CGFloat inset  = 18;
+    CAShapeLayer *backgroundring = [CAShapeLayer layer];
+    backgroundring.path = [UIBezierPath bezierPathWithRoundedRect:CGRectInset(self.circle.bounds, inset, inset) cornerRadius:radius-inset].CGPath;
+    backgroundring.fillColor   = [UIColor clearColor].CGColor;
+    backgroundring.strokeColor = [UIColor grayColor].CGColor;
+    backgroundring.lineWidth   = 14; // Width circle for progress
+    backgroundring.strokeStart = self.value;
+    backgroundring.strokeEnd = 1.0;
+
     CAShapeLayer *ring = [CAShapeLayer layer];
-    ring.path = [UIBezierPath bezierPathWithRoundedRect:CGRectInset(self.circle.bounds, inset, inset)
-                                           cornerRadius:radius-inset].CGPath;
+    ring.path = [UIBezierPath bezierPathWithRoundedRect:CGRectInset(self.circle.bounds, inset, inset) cornerRadius:radius-inset].CGPath;
     ring.fillColor   = [UIColor clearColor].CGColor;
     ring.strokeColor = (self.value > 0.9f) ? [UIColor redColor].CGColor : [UIColor orangeColor].CGColor;
-    ring.lineWidth   = 10;
+    ring.lineWidth   = 14; // Width circle for progress
     ring.strokeStart = 0;
     ring.strokeEnd = self.value;
-    [self.circle.layer addSublayer:ring];
-}
 
--(void)drawCircle:(CGFloat)radius
-{
-    CAShapeLayer *circleLayer = [CAShapeLayer layer];
-    float centreX = (self.circlesView.frame.size.width / 2);
-    float centreY = (self.circlesView.frame.size.height / 2);
-    float width = self.circlesView.frame.size.width;
-    float height = self.circlesView.frame.size.height;
-    [circleLayer setBounds:CGRectMake(0, 0, width, height)];
-    [circleLayer setPosition:CGPointMake(centreX, centreY)];
-    UIBezierPath *path = [UIBezierPath bezierPathWithArcCenter:CGPointMake(centreX, centreY) radius:radius startAngle:0 endAngle:DEGREES_TO_RADIANS(360) clockwise:YES];
-    [circleLayer setPath:[path CGPath]];
-    [circleLayer setFillColor:[UIColor blackColor].CGColor];
-    if(self.fadeColor > 0.0)
-        self.fadeColor -= 0.05;
-    float value = self.fadeColor;
-    [circleLayer setStrokeColor:[UIColor colorWithRed:value green:value blue:value alpha:1.0].CGColor];
-    [circleLayer setLineWidth:20.0f];
-    self.circlesView.hidden = NO;
-    if(self.lastCircleLayer)
-        [self.lastCircleLayer removeFromSuperlayer];
-    [[self.circlesView layer] addSublayer:circleLayer];
-    self.lastCircleLayer = circleLayer;
+    if(self.lastRingLayer) {
+        [self.lastRingLayer removeFromSuperlayer];
+        self.lastRingLayer = nil;
+    }
+    if(self.lastBackgroundRingLayer) {
+        [self.lastBackgroundRingLayer removeFromSuperlayer];
+        self.lastBackgroundRingLayer = nil;
+    }
+    [self.circle.layer addSublayer:backgroundring];
+    [self.circle.layer addSublayer:ring];
+
+    self.lastRingLayer = ring;
+    self.lastBackgroundRingLayer = backgroundring;
 }
 
 -(void)ripples
 {
+    BOOL canStop = NO;
     if(!self.circles)
     {
         CGFloat radius = 100.0;
@@ -600,27 +584,46 @@
         self.circles = [[NSMutableArray alloc] initWithCapacity:10];
         [self.circles addObject:radiusObject];
     } else {
-        for(int index = 0; index < [self.circles count]; index++)
+        NSNumber *current = [self.circles objectAtIndex:0];
+        CGFloat radius = [current floatValue];
+        radius += 3.0;
+        if(radius > 160.0)
         {
-            NSNumber *current = [self.circles objectAtIndex:index];
-            CGFloat value = [current floatValue];
-            value += 3.0;
-            if(value > 250.0)
-            {
-                value = 100.0;
-                self.fadeColor = 1.0;
-            }
-            [self.circles setObject:[NSNumber numberWithFloat:value] atIndexedSubscript:index];
-            [self drawCircle:value];
+            radius = 86.0;
+            self.fadeColor = 1.0;
+            canStop = YES;
         }
+        [self.circles setObject:[NSNumber numberWithFloat:radius] atIndexedSubscript:0];
+
+        CAShapeLayer *circleLayer = [CAShapeLayer layer];
+        float centreX = (self.circlesView.frame.size.width / 2);
+        float centreY = (self.circlesView.frame.size.height / 2);
+        float width = self.circlesView.frame.size.width;
+        float height = self.circlesView.frame.size.height;
+        [circleLayer setBounds:CGRectMake(0, 0, width, height)];
+        [circleLayer setPosition:CGPointMake(centreX, centreY)];
+        UIBezierPath *path = [UIBezierPath bezierPathWithArcCenter:CGPointMake(centreX, centreY) radius:radius startAngle:0 endAngle:DEGREES_TO_RADIANS(360) clockwise:YES];
+        [circleLayer setPath:[path CGPath]];
+        [circleLayer setFillColor:[UIColor blackColor].CGColor];
+        if(self.fadeColor > 0.0)
+            self.fadeColor -= 0.04;
+        float value = self.fadeColor;
+        [circleLayer setStrokeColor:[UIColor colorWithRed:value green:value blue:value alpha:1.0].CGColor];
+        [circleLayer setLineWidth:20.0f];
+        self.circlesView.hidden = NO;
+        if(self.lastCircleLayer) {
+            [self.lastCircleLayer removeFromSuperlayer];
+            self.lastCircleLayer = nil;
+        }
+        [[self.circlesView layer] addSublayer:circleLayer];
+        self.lastCircleLayer = circleLayer;
     }
-    if(self.currentState == STATE_RECORDING)
+    if(self.currentState == STATE_RECORDING || (self.currentState == STATE_PAUSED && !canStop))
         [self performSelector:@selector(ripples) withObject:nil afterDelay:0.05];
 }
 
 -(void)backgroundNotification:(NSNotification *)notification
 {
-    NSLog(@"backgroundNotification");
     if(self.currentState == STATE_RECORDING)
     {
         [self.circles removeAllObjects];
@@ -645,7 +648,6 @@
 }
 
 - (IBAction)backButtonPressed:(id)sender {
-    NSLog(@"CLOSING VIEW");
     self.currentState = STATE_SAVE;
     [self performButtonAction];
 }
@@ -669,7 +671,6 @@
                 // Don't forget to check the return value of 'write'
                 //[outputStream write:(uint8_t *)&length maxLength:4];
                 [self.outputStream write:[self.headerData bytes] maxLength:length];
-                NSLog(@"Data written to file!");
                 [self.outputStream close];
             }
             break;
@@ -690,7 +691,6 @@
 - (void) handleTimer: (NSTimer *)timer
 {
     self.CurrentRecSize = [[NSFileManager defaultManager] attributesOfItemAtPath:[[NSURL fileURLWithPath:self.recorderFilePath] path] error:nil].fileSize;
-    NSLog(@"%f", self.CurrentRecSize);
     self.value = 1.0 * (self.CurrentRecSize / self.MaxRecSize);
     self.value = (self.value > 1.0) ? 1.0 : self.value;
 
@@ -762,8 +762,6 @@
     NSError *err = nil;
     [audioSession setCategory :AVAudioSessionCategoryPlayAndRecord error:&err];
     if(err){
-        NSLog(@"audioSession: %@ %ld %@", [err domain], (long)[err code], [[err userInfo] description]);
-
         NSString *title = @"Microphone Error !";
         NSString *messaage = [NSString stringWithFormat: @"Error during microphone use:\nerror code: %ld.\n%@", (long)[err code], [[err userInfo] description] ];
         [self audioErrorWithTitle: title andMessage: messaage];
@@ -772,7 +770,6 @@
     [audioSession setActive:YES error:&err];
     err = nil;
     if(err){
-        NSLog(@"audioSession: %@ %ld %@", [err domain], (long)[err code], [[err userInfo] description]);
         NSString *title = @"Microphone Error !";
         NSString *message = [NSString stringWithFormat: @"Error during microphone use:\nerror code: %ld.\n%@", (long)[err code], [[err userInfo] description] ];
         [self audioErrorWithTitle: title andMessage: message];
@@ -811,7 +808,6 @@
                                                     error:&err];
     if(!self.recorder)
     {
-        NSLog(@"recorder: %@ %ld %@", [err domain], (long)[err code], [[err userInfo] description]);
         return;
     }
 
@@ -860,7 +856,6 @@
 
 - (void)endRecording
 {
-    NSLog(@"ending recorder");
     [UIApplication sharedApplication].idleTimerDisabled = NO;
     self.isRecording = NO;
     [self.timer invalidate];
@@ -879,7 +874,6 @@
 
 - (void)stopRecording
 {
-    NSLog(@"stop recorder");
     self.isRecording = NO;
     [self.timer invalidate];
     [self.recorder stop];
@@ -891,7 +885,6 @@
 
 -(void)pauseRecording
 {
-    NSLog(@"paused recorder");
     [self.timer invalidate];
     self.timer = nil;
     [self.recorder pause];
@@ -923,7 +916,6 @@
 {
     if(self.recorderFilePath)
     {
-        NSLog(@"Saving recording record...");
         //update the wav header:
         NSURL *RecordingPath = [NSURL fileURLWithPath:self.recorderFilePath];
 
@@ -995,17 +987,32 @@
 
 #pragma mark -
 -(void)audioRecorderBeginInterruption:(AVAudioRecorder *)recorder {
-    NSLog (@"audioRecorderBeginInterruption:");
 }
 
 - (void)audioRecorderDidFinishRecording:(AVAudioRecorder *) aRecorder successfully:(BOOL)flag
 {
-    NSLog (@"audioRecorderDidFinishRecording: successfully:%d",flag);
 }
 
 #pragma mark - Orientation Methods
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
     return YES;
+}
+
+- (BOOL)shouldAutorotate
+{
+    return YES;
+}
+
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations
+{
+    return UIInterfaceOrientationMaskAll;
+}
+
+// Returns interface orientation masks.
+- (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation
+{
+    return UIInterfaceOrientationPortrait | UIInterfaceOrientationPortraitUpsideDown |
+    UIInterfaceOrientationLandscapeLeft | UIInterfaceOrientationLandscapeRight;
 }
 @end
