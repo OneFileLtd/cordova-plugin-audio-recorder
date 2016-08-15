@@ -103,7 +103,7 @@ public class AudioRecorder extends AppCompatActivity {
 	private final String finalStorageFileName = "onefileaudio.wav";
 	private final String finalStorageFilePath = storageDirectory + finalStorageFileName;
 
-	private static final int RECORD_REQUEST_CODE = 0;
+	private static final int RECORD_REQUEST_CODE = 101;
 	private static final int STORAGE_REQUEST_CODE = 102;
 
 	protected boolean requestPermission(String permissionType, int requestCode) {
