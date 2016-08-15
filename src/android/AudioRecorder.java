@@ -103,46 +103,35 @@ public class AudioRecorder extends AppCompatActivity {
 	private final String finalStorageFileName = "onefileaudio.wav";
 	private final String finalStorageFilePath = storageDirectory + finalStorageFileName;
 
-	private static final int RECORD_REQUEST_CODE = 101;
+	private static final int RECORD_REQUEST_CODE = 0;
 	private static final int STORAGE_REQUEST_CODE = 102;
 
 	protected boolean requestPermission(String permissionType, int requestCode) {
-		int permission = ContextCompat.checkSelfPermission(this,
-				permissionType);
+		int permission = ContextCompat.checkSelfPermission(this, permissionType);
 
 		if (permission != PackageManager.PERMISSION_GRANTED) {
-			ActivityCompat.requestPermissions(this,
-					new String[]{permissionType}, requestCode
-			);
+			ActivityCompat.requestPermissions(this,	new String[]{permissionType}, requestCode);
 			return false;
 		}
 		return true;
 	}
 
 	@Override
-	public void onRequestPermissionsResult(int requestCode,
-										   String permissions[], int[] grantResults) {
+	public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
 		switch (requestCode) {
 			case RECORD_REQUEST_CODE: {
 
-				if (grantResults.length == 0
-						|| grantResults[0] !=
-						PackageManager.PERMISSION_GRANTED) {
-
-					Toast.makeText(this,
-							"Record permission required",
-							Toast.LENGTH_LONG).show();
+				if (grantResults.length == 0 || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+					Toast.makeText(this, "Record permission required", Toast.LENGTH_LONG).show();
+					finish();
 				}
 				return;
 			}
 			case STORAGE_REQUEST_CODE: {
 
-				if (grantResults.length == 0
-						|| grantResults[0] !=
-						PackageManager.PERMISSION_GRANTED) {
-					Toast.makeText(this,
-							"External Storage permission required",
-							Toast.LENGTH_LONG).show();
+				if (grantResults.length == 0 || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+					Toast.makeText(this, "External Storage permission required", Toast.LENGTH_LONG).show();
+					finish();
 				}
 				return;
 			}
