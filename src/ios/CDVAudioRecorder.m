@@ -584,39 +584,41 @@
         self.circles = [[NSMutableArray alloc] initWithCapacity:10];
         [self.circles addObject:radiusObject];
     } else {
-        NSNumber *current = [self.circles objectAtIndex:0];
-        CGFloat radius = [current floatValue];
-        radius += 3.0;
-        if(radius > 160.0)
-        {
-            radius = 86.0;
-            self.fadeColor = 1.0;
-            canStop = YES;
-        }
-        [self.circles setObject:[NSNumber numberWithFloat:radius] atIndexedSubscript:0];
+    	if(self.circles && [self.circles count] > 0) {
+			NSNumber *current = [self.circles objectAtIndex:0];
+			CGFloat radius = [current floatValue];
+			radius += 3.0;
+			if(radius > 160.0)
+			{
+				radius = 86.0;
+				self.fadeColor = 1.0;
+				canStop = YES;
+			}
+			[self.circles setObject:[NSNumber numberWithFloat:radius] atIndexedSubscript:0];
 
-        CAShapeLayer *circleLayer = [CAShapeLayer layer];
-        float centreX = (self.circlesView.frame.size.width / 2);
-        float centreY = (self.circlesView.frame.size.height / 2);
-        float width = self.circlesView.frame.size.width;
-        float height = self.circlesView.frame.size.height;
-        [circleLayer setBounds:CGRectMake(0, 0, width, height)];
-        [circleLayer setPosition:CGPointMake(centreX, centreY)];
-        UIBezierPath *path = [UIBezierPath bezierPathWithArcCenter:CGPointMake(centreX, centreY) radius:radius startAngle:0 endAngle:DEGREES_TO_RADIANS(360) clockwise:YES];
-        [circleLayer setPath:[path CGPath]];
-        [circleLayer setFillColor:[UIColor blackColor].CGColor];
-        if(self.fadeColor > 0.0)
-            self.fadeColor -= 0.04;
-        float value = self.fadeColor;
-        [circleLayer setStrokeColor:[UIColor colorWithRed:value green:value blue:value alpha:1.0].CGColor];
-        [circleLayer setLineWidth:20.0f];
-        self.circlesView.hidden = NO;
-        if(self.lastCircleLayer) {
-            [self.lastCircleLayer removeFromSuperlayer];
-            self.lastCircleLayer = nil;
+			CAShapeLayer *circleLayer = [CAShapeLayer layer];
+			float centreX = (self.circlesView.frame.size.width / 2);
+			float centreY = (self.circlesView.frame.size.height / 2);
+			float width = self.circlesView.frame.size.width;
+			float height = self.circlesView.frame.size.height;
+			[circleLayer setBounds:CGRectMake(0, 0, width, height)];
+			[circleLayer setPosition:CGPointMake(centreX, centreY)];
+			UIBezierPath *path = [UIBezierPath bezierPathWithArcCenter:CGPointMake(centreX, centreY) radius:radius startAngle:0 endAngle:DEGREES_TO_RADIANS(360) clockwise:YES];
+			[circleLayer setPath:[path CGPath]];
+			[circleLayer setFillColor:[UIColor blackColor].CGColor];
+			if(self.fadeColor > 0.0)
+				self.fadeColor -= 0.04;
+			float value = self.fadeColor;
+			[circleLayer setStrokeColor:[UIColor colorWithRed:value green:value blue:value alpha:1.0].CGColor];
+			[circleLayer setLineWidth:20.0f];
+			self.circlesView.hidden = NO;
+			if(self.lastCircleLayer) {
+				[self.lastCircleLayer removeFromSuperlayer];
+				self.lastCircleLayer = nil;
+			}
+			[[self.circlesView layer] addSublayer:circleLayer];
+			self.lastCircleLayer = circleLayer;
         }
-        [[self.circlesView layer] addSublayer:circleLayer];
-        self.lastCircleLayer = circleLayer;
     }
     if(self.currentState == STATE_RECORDING || (self.currentState == STATE_PAUSED && !canStop))
         [self performSelector:@selector(ripples) withObject:nil afterDelay:0.05];
