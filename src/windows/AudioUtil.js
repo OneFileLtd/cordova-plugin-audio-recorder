@@ -166,4 +166,7 @@
 		return WinJS.Promise.join(promises).done(null, errorHandler);
 	}
 
+	function errorHandler(error) {
+		oMediaCapture = null;
+	}
 })();
