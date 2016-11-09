@@ -359,7 +359,7 @@
 {
     [super viewDidLayoutSubviews];
     BOOL iPad = ([[UIDevice currentDevice].model isEqualToString:@"iPad"]);
-    if(!iPad)
+    if(iPad)
     {
         CGRect screenRect = [[UIScreen mainScreen] applicationFrame];
         self.container.frame = CGRectMake(((screenRect.size.width / 2) - (self.container.frame.size.width / 2)),
@@ -417,7 +417,7 @@
     NSString* systemVersion = [[UIDevice currentDevice] systemVersion];
     BOOL isLessThaniOS4 = ([systemVersion compare:@"4.0" options:NSNumericSearch] == NSOrderedAscending);
     if (isLessThaniOS4) {
-        NSString* iPadResource = [NSString stringWithFormat:@"%@~ipad.png", resource];
+        NSString* iPadResource = [NSString stringWithFormat:@"%@.png", resource];
         if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad && [UIImage imageNamed:iPadResource]) {
             return iPadResource;
         } else {
@@ -494,7 +494,7 @@
         case STATE_PAUSED:
             if(self.CurrentRecSize < self.MaxRecSize)
             {
-            	self.saveCancelButton.enabled = NO;
+            	self.saveCancelButton.enabled = YES;
                 [self resumeRecording];
                 [self performSelector:@selector(ripples) withObject:nil afterDelay:0.1];
                 self.currentState = STATE_RECORDING;
@@ -531,7 +531,7 @@
                 [self startRecording];
                 [self performSelector:@selector(ripples) withObject:nil afterDelay:0.1];
                 self.currentState = STATE_RECORDING;
-                self.saveCancelButton.enabled = NO;
+                self.saveCancelButton.enabled = YES;
             }
             break;
     }

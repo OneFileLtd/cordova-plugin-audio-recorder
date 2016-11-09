@@ -1,158 +1,81 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10117" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11542" systemVersion="15G1108" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="ipad9_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11524"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <customFonts key="customFonts">
-        <mutableArray key="OpenSans-Light.ttf">
+        <array key="OpenSans-Light.ttf">
             <string>OpenSans-Light</string>
-        </mutableArray>
+        </array>
     </customFonts>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="AudioRecorderViewController">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="CDVRecorderViewController">
             <connections>
-                <outlet property="circle" destination="bXd-uY-5qh" id="5Ek-kh-kJU"/>
-                <outlet property="circlesView" destination="6Ys-HF-J6Y" id="dJP-gc-N4L"/>
-                <outlet property="recorderButton" destination="Jak-cN-TVG" id="B5n-TB-rxV"/>
-                <outlet property="saveCancelButton" destination="IXh-Rg-2Y4" id="EWf-FD-SNH"/>
-                <outlet property="timeElapsedLabel" destination="HPW-4D-do1" id="9sB-mO-5zV"/>
-                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+                <outlet property="circle" destination="sqJ-iA-wZh" id="2ai-hc-sIm"/>
+                <outlet property="circlesView" destination="jhw-eh-wWi" id="p2k-ze-Z8T"/>
+                <outlet property="container" destination="tvi-22-b4A" id="rUN-2r-XnD"/>
+                <outlet property="recorderButton" destination="Xub-2M-Yv1" id="whZ-Q8-yKd"/>
+                <outlet property="saveCancelButton" destination="5EO-o1-rer" id="Qhz-FB-KOU"/>
+                <outlet property="timeElapsedLabel" destination="fAS-pW-y6c" id="pdj-Uf-lr8"/>
+                <outlet property="view" destination="iN0-l3-epB" id="Hlp-rn-OfY"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
-            <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB">
+            <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6Ys-HF-J6Y">
-                    <rect key="frame" x="139" y="135" width="320" height="320"/>
-                    <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
-                    <variation key="heightClass=compact" fixedFrame="YES">
-                        <rect key="frame" x="140" y="40" width="320" height="320"/>
-                    </variation>
-                    <variation key="heightClass=regular" fixedFrame="YES">
-                        <rect key="frame" x="140" y="240" width="320" height="320"/>
-                    </variation>
-                    <variation key="widthClass=compact" fixedFrame="YES">
-                        <rect key="frame" x="40" y="127" width="320" height="320"/>
-                    </variation>
-                    <variation key="widthClass=regular" fixedFrame="YES">
-                        <rect key="frame" x="240" y="140" width="320" height="320"/>
-                    </variation>
-                    <variation key="heightClass=compact-widthClass=compact" fixedFrame="YES">
-                        <rect key="frame" x="40" y="40" width="320" height="320"/>
-                    </variation>
-                    <variation key="heightClass=compact-widthClass=regular" fixedFrame="YES">
-                        <rect key="frame" x="240" y="40" width="320" height="320"/>
-                    </variation>
-                    <variation key="heightClass=regular-widthClass=compact" fixedFrame="YES">
-                        <rect key="frame" x="40" y="240" width="320" height="320"/>
-                    </variation>
-                    <variation key="heightClass=regular-widthClass=regular" fixedFrame="YES">
-                        <rect key="frame" x="240" y="240" width="320" height="320"/>
-                    </variation>
-                </view>
-                <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bXd-uY-5qh">
-                    <rect key="frame" x="189" y="188" width="222" height="222"/>
+                <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tvi-22-b4A" userLabel="Container">
+                    <rect key="frame" x="224" y="273" width="320" height="480"/>
+                    <autoresizingMask key="autoresizingMask"/>
                     <subviews>
-                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Jak-cN-TVG" userLabel="Start/Stop Button">
-                            <rect key="frame" x="0.0" y="0.0" width="222" height="222"/>
-                            <state key="normal" title="START"/>
-                            <variation key="heightClass=compact" fixedFrame="YES">
-                                <rect key="frame" x="0.0" y="0.0" width="222" height="222"/>
-                            </variation>
+                        <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jhw-eh-wWi" userLabel="Circles View">
+                            <rect key="frame" x="-1" y="80" width="320" height="320"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        </view>
+                        <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="sqJ-iA-wZh" userLabel="Circle">
+                            <rect key="frame" x="48.297297297297291" y="129.02702702702709" width="222.00000000000028" height="221.99999999999994"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <subviews>
+                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Xub-2M-Yv1" userLabel="Start/Stop Button">
+                                    <rect key="frame" x="0.0" y="0.99999999999977263" width="221.99999999999989" height="222.00000000000014"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <state key="normal" title="Button">
+                                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    </state>
+                                    <connections>
+                                        <action selector="recorderButtonPressed:" destination="-2" eventType="touchUpInside" id="MYQ-Xd-6Nf"/>
+                                    </connections>
+                                </button>
+                            </subviews>
+                        </view>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="00:00:00" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fAS-pW-y6c" userLabel="Time">
+                            <rect key="frame" x="0.0" y="64" width="320" height="61"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" name="OpenSans-Light" family="Open Sans" pointSize="42"/>
+                            <color key="textColor" red="0.98823529409999999" green="0.74901960779999999" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5EO-o1-rer" userLabel="Save">
+                            <rect key="frame" x="39" y="400" width="240" height="57"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <state key="normal" title="Button">
+                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
                             <connections>
-                                <action selector="recorderButtonPressed:" destination="-2" eventType="touchUpInside" id="Fba-Bi-03M"/>
+                                <action selector="saveButtonPressed:" destination="-2" eventType="touchUpInside" id="ZJL-99-KbW"/>
                             </connections>
                         </button>
                     </subviews>
-                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                    <variation key="heightClass=compact" fixedFrame="YES">
-                        <rect key="frame" x="189" y="89" width="222" height="222"/>
-                    </variation>
-                    <variation key="heightClass=regular" fixedFrame="YES">
-                        <rect key="frame" x="189" y="289" width="222" height="222"/>
-                    </variation>
-                    <variation key="widthClass=compact" fixedFrame="YES">
-                        <rect key="frame" x="90" y="180" width="222" height="222"/>
-                    </variation>
-                    <variation key="widthClass=regular" fixedFrame="YES">
-                        <rect key="frame" x="289" y="189" width="222" height="222"/>
-                    </variation>
-                    <variation key="heightClass=compact-widthClass=compact" fixedFrame="YES">
-                        <rect key="frame" x="89" y="89" width="222" height="222"/>
-                    </variation>
-                    <variation key="heightClass=compact-widthClass=regular" fixedFrame="YES">
-                        <rect key="frame" x="289" y="89" width="222" height="222"/>
-                    </variation>
-                    <variation key="heightClass=regular-widthClass=compact" fixedFrame="YES">
-                        <rect key="frame" x="89" y="289" width="222" height="222"/>
-                    </variation>
-                    <variation key="heightClass=regular-widthClass=regular" fixedFrame="YES">
-                        <rect key="frame" x="289" y="289" width="222" height="222"/>
-                    </variation>
                 </view>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="00:00:00" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HPW-4D-do1">
-                    <rect key="frame" x="140" y="85" width="320" height="61"/>
-                    <fontDescription key="fontDescription" name="OpenSans-Light" family="Open Sans" pointSize="42"/>
-                    <color key="textColor" red="0.98823529409999999" green="0.74901960779999999" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                    <nil key="highlightedColor"/>
-                    <variation key="heightClass=compact" fixedFrame="YES">
-                        <rect key="frame" x="140" y="38" width="320" height="61"/>
-                    </variation>
-                    <variation key="widthClass=compact" fixedFrame="YES">
-                        <rect key="frame" x="40" y="79" width="320" height="61"/>
-                    </variation>
-                    <variation key="widthClass=regular" fixedFrame="YES">
-                        <rect key="frame" x="240" y="98" width="320" height="61"/>
-                    </variation>
-                    <variation key="heightClass=compact-widthClass=compact" fixedFrame="YES">
-                        <rect key="frame" x="40" y="30" width="320" height="61"/>
-                    </variation>
-                    <variation key="heightClass=compact-widthClass=regular" fixedFrame="YES">
-                        <rect key="frame" x="240" y="36" width="320" height="61"/>
-                    </variation>
-                    <variation key="heightClass=regular-widthClass=compact" fixedFrame="YES">
-                        <rect key="frame" x="40" y="160" width="320" height="61"/>
-                    </variation>
-                    <variation key="heightClass=regular-widthClass=regular" fixedFrame="YES">
-                        <rect key="frame" x="240" y="170" width="320" height="61"/>
-                    </variation>
-                </label>
-                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IXh-Rg-2Y4">
-                    <rect key="frame" x="180" y="494" width="240" height="57"/>
-                    <state key="normal" title="SAVE"/>
-                    <variation key="heightClass=compact" fixedFrame="YES">
-                        <rect key="frame" x="180" y="315" width="240" height="57"/>
-                    </variation>
-                    <variation key="heightClass=regular" fixedFrame="YES">
-                        <rect key="frame" x="180" y="600" width="240" height="57"/>
-                    </variation>
-                    <variation key="widthClass=compact" fixedFrame="YES">
-                        <rect key="frame" x="80" y="450" width="240" height="57"/>
-                    </variation>
-                    <variation key="widthClass=regular" fixedFrame="YES">
-                        <rect key="frame" x="281" y="504" width="240" height="57"/>
-                    </variation>
-                    <variation key="heightClass=compact-widthClass=compact" fixedFrame="YES">
-                        <rect key="frame" x="81" y="330" width="240" height="57"/>
-                    </variation>
-                    <variation key="heightClass=compact-widthClass=regular" fixedFrame="YES">
-                        <rect key="frame" x="281" y="321" width="240" height="57"/>
-                    </variation>
-                    <variation key="heightClass=regular-widthClass=compact" fixedFrame="YES">
-                        <rect key="frame" x="80" y="628" width="240" height="57"/>
-                    </variation>
-                    <variation key="heightClass=regular-widthClass=regular" fixedFrame="YES">
-                        <rect key="frame" x="280" y="600" width="240" height="57"/>
-                    </variation>
-                    <connections>
-                        <action selector="saveButtonPressed:" destination="-2" eventType="touchUpInside" id="0yz-fv-7qK"/>
-                    </connections>
-                </button>
             </subviews>
             <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+            <point key="canvasLocation" x="-23" y="-109"/>
         </view>
     </objects>
 </document>
