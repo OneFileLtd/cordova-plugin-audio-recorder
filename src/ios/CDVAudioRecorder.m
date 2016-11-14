@@ -358,15 +358,12 @@
 -(void)viewDidLayoutSubviews
 {
     [super viewDidLayoutSubviews];
-    BOOL iPad = ([[UIDevice currentDevice].model isEqualToString:@"iPad"]);
-    if(iPad)
-    {
-        CGRect screenRect = [[UIScreen mainScreen] applicationFrame];
-        self.container.frame = CGRectMake(((screenRect.size.width / 2) - (self.container.frame.size.width / 2)),
-                                          ((screenRect.size.height / 2) - (self.container.frame.size.height / 2)),
-                                          self.container.frame.size.width,
-                                          self.container.frame.size.height);
-    }
+
+    CGRect screenRect = [[UIScreen mainScreen] applicationFrame];
+    self.container.frame = CGRectMake(((screenRect.size.width / 2) - (self.container.frame.size.width / 2)),
+                                      ((screenRect.size.height / 2) - (self.container.frame.size.height / 2)),
+                                      self.container.frame.size.width,
+                                      self.container.frame.size.height);
 }
 
 -(void)viewDidAppear:(BOOL)animated
