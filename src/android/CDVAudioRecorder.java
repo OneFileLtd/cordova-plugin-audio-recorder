@@ -99,31 +99,42 @@ public class CDVAudioRecorder extends CordovaPlugin {
 		if(requestCode == AUDIO_RECORDER_REQUEST_CODE) {
 			if(resultCode == cordova.getActivity().RESULT_OK) {
 				Log.i(TAG, "plugin - onActivityResult - RESULT_OK");
-				// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-				// Returned information from the activity called above
-				String data = new String();
-				Bundle extras = intent.getExtras();
-				if (extras != null) {
-					try {
-						JSONObject jsonData = new JSONObject();
-						JSONObject fileDetails = new JSONObject();
-						fileDetails.put("fullPath", cordovaFilePrepend + extras.getString("filePath"));
-						fileDetails.put("localURL", cordovaFilePrepend + extras.getString("localURL"));
-						fileDetails.put("name", extras.getString("fileName"));
-						fileDetails.put("ext", extras.getString("fileExt"));
-						fileDetails.put("size", extras.getString("fileSize"));
-						fileDetails.put("type", extras.getString("fileType"));
-						jsonData.put("fileDetails", fileDetails);
-						jsonData.put("status", 2);
-						callbackContextWithResult.success(jsonData);
+				if (intent) {
+					// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+					// Returned information from the activity called above
+					String data = new String();
+					Bundle extras = intent.getExtras();
+					if (extras != null) {
+						try {
+							JSONObject jsonData = new JSONObject();
+							JSONObject fileDetails = new JSONObject();
+							fileDetails.put("fullPath", cordovaFilePrepend + extras.getString("filePath"));
+							fileDetails.put("localURL", cordovaFilePrepend + extras.getString("localURL"));
+							fileDetails.put("name", extras.getString("fileName"));
+							fileDetails.put("ext", extras.getString("fileExt"));
+							fileDetails.put("size", extras.getString("fileSize"));
+							fileDetails.put("type", extras.getString("fileType"));
+							jsonData.put("fileDetails", fileDetails);
+							jsonData.put("status", 2);
+							callbackContextWithResult.success(jsonData);
+							return;
+						} catch (JSONException e) {
+							callbackContextWithResult.error(e.getMessage());
+							e.printStackTrace();
+						}
 					}
-					catch (JSONException e)
-					{
-						callbackContextWithResult.error(e.getMessage());
-						e.printStackTrace();
-					}
+					// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 				}
-				// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+			} else {
+				try {
+					JSONObject jsonData = new JSONObject();
+					jsonData.put("status", 1);
+					callbackContextWithResult.success(jsonData);
+					return;
+				} catch (JSONException e) {
+					callbackContextWithResult.error(e.getMessage());
+					e.printStackTrace();
+				}
 			}
 			callbackContextWithResult.error("Error recording");
 		}

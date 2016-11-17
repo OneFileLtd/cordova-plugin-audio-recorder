@@ -256,10 +256,29 @@ public class AudioRecorder extends AppCompatActivity {
 		super.onSaveInstanceState(savedInstanceState);
 	}
 
+	private void forceFinishRecorder() {
+		final Button startButton = (Button) findViewById(R.id.AudioStartRecording);
+		final Button AudioBtnFinishAndSave = (Button) findViewById(R.id.AudioBtnFinishAndSave);
+		startButton.setEnabled(false);
+		AudioBtnFinishAndSave.setEnabled(false);
+		if(currentState == STATE_RECORDING) {
+			pauseRecording();
+			currentState = STATE_STOPPED;
+		}
+		if(pauseCount >= 0) {
+			SaveAudio saveAudio = new SaveAudio(pauseCount);
+			saveAudio.execute((Integer) null);
+		} else {
+			setResult(Activity.RESULT_OK, null);
+			finish();
+		}
+	}
+
 	@Override
 	public void onBackPressed()
 	{
 		Log.i(TAG, "onBackPressed");
+		forceFinishRecorder();
 	}
 
 	// Function that converst bytes to Megabytes
