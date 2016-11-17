@@ -99,7 +99,7 @@ public class CDVAudioRecorder extends CordovaPlugin {
 		if(requestCode == AUDIO_RECORDER_REQUEST_CODE) {
 			if(resultCode == cordova.getActivity().RESULT_OK) {
 				Log.i(TAG, "plugin - onActivityResult - RESULT_OK");
-				if (intent) {
+				if (intent != null) {
 					// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 					// Returned information from the activity called above
 					String data = new String();
