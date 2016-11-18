@@ -345,36 +345,32 @@ public class AudioRecorder extends AppCompatActivity {
 	private void drawProgress()
 	{
 		double size =  (audioRecordingTask != null) ? audioRecordingTask.currentSize : 0;
-		Bitmap bitMap = Bitmap.createBitmap(300, 300, Bitmap.Config.ARGB_8888);  //creates bmp
-		bitMap = bitMap.copy(bitMap.getConfig(), true);     //lets bmp to be mutable
-		Canvas canvas = new Canvas(bitMap);                 //draw a canvas in defined bmp
+		Bitmap bitMap = Bitmap.createBitmap(300, 300, Bitmap.Config.ARGB_8888);
+		bitMap = bitMap.copy(bitMap.getConfig(), true);
+		Canvas canvas = new Canvas(bitMap);
 
-		Paint paint = new Paint();                          //define paint and paint color
+		Paint paint = new Paint();
 		paint.setColor(Color.GRAY);
 		paint.setStyle(Style.FILL_AND_STROKE);
 		paint.setStrokeWidth(0.0f);
-		paint.setAntiAlias(true);                           //smooth edges
+		paint.setAntiAlias(true);
 
-		Paint paint2 = new Paint();                          //define paint and paint color
+		Paint paint2 = new Paint();
 		paint2.setColor(Color.parseColor("#eaa400"));
 		paint2.setStyle(Style.FILL);
 		paint2.setStrokeWidth(0.0f);
-		paint2.setAntiAlias(true);                           //smooth edges
+		paint2.setAntiAlias(true);
 
-		ImageView imageView = (ImageView) findViewById(R.id.circle);
+		ImageView imageView = (ImageView) findViewById(R.id.progressCircle);
 		imageView.setImageBitmap(bitMap);
-		// xpos, ypos, radius, paint
-		canvas.drawCircle(150, 150, 100, paint);
-		RectF rectf = new RectF(50, 50, 250, 250);
-		// oval Bounds, startAngle, SweepAngle, useCentre
+		canvas.drawCircle(150, 150, 104, paint);
+		RectF rectf = new RectF(48, 48, 252, 252);
 		canvas.drawArc(rectf, 270, (float)progress, true, paint2);
-		//invalidate to update bitmap in imageview
 		imageView.invalidate();
 
 		progress = ((360.0 / (long)maxSize) * size);
 		if(progress > 360.0)
 			progress =- 360;
-		Log.i(TAG, "drawCircle " + progress + " " + maxSize + " " + size);
 	}
 
 	private void setupCircleTimer()

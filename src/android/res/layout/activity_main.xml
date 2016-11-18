@@ -76,7 +76,7 @@
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="@color/Orange"
                     android:typeface="sans"
-                    android:textSize="14pt" />
+                    android:textSize="24pt" />
 
             <TextView
                     android:id="@+id/recordingSize"
@@ -88,7 +88,7 @@
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="@color/Orange"
                     android:typeface="sans"
-                    android:textSize="14pt"
+                    android:textSize="24pt"
                     android:visibility="gone" />
 
             <TextView
@@ -101,7 +101,7 @@
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="@color/Orange"
                     android:typeface="sans"
-                    android:textSize="14pt"
+                    android:textSize="24pt"
                     android:visibility="gone" />
         </RelativeLayout>
 
@@ -119,7 +119,7 @@
                     android:orientation="horizontal" >
 
                 <ImageView
-                        android:id="@+id/circle"
+                        android:id="@+id/progressCircle"
                         android:layout_width="300dp"
                         android:layout_height="300dp" />
             </LinearLayout>
