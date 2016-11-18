@@ -47,6 +47,10 @@ import android.support.v4.app.ActivityCompat;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Timer;
+import java.util.TimerTask;
+import android.graphics.RectF;
+
 // TODO: This needs to point to the app resource folder, so this plugin won't work elsewhere without modifying this structure
 import uk.co.onefile.onefileeportfolio.R;
 
@@ -75,7 +79,7 @@ public class AudioRecorder extends AppCompatActivity {
 	public static final String PREFS_NAME = "MyPrefsFile";
 	public String storageDirectory = Environment.getExternalStorageDirectory().getPath() + "/.audiorecorder/";
 
-	private String TAG = "Audio Recorder";
+	private String TAG = "AudioRecorder";
 	private String audioOutputPath = "";
 	private Integer pauseCount = -1;
 	private String fileSizeErrorMsg = "";
@@ -105,6 +109,8 @@ public class AudioRecorder extends AppCompatActivity {
 
 	private static final int RECORD_REQUEST_CODE = 101;
 	private static final int STORAGE_REQUEST_CODE = 102;
+	private Timer timer;
+	private double progress;
 
 	protected boolean requestPermission(String permissionType, int requestCode) {
 		int permission = ContextCompat.checkSelfPermission(this, permissionType);
@@ -170,7 +176,10 @@ public class AudioRecorder extends AppCompatActivity {
 	protected void onPause()
 	{
 		super.onPause();
-
+		if(timer != null) {
+			timer.cancel();
+			timer.purge();
+		}
 		if (audioRecordingTask != null)
 		{
 			if(currentState == STATE_RECORDING) {
@@ -333,29 +342,55 @@ public class AudioRecorder extends AppCompatActivity {
 		sizeText = savedInstanceState.getString("sizeText");
 	}
 
-	private void drawCircles()
+	private void drawProgress()
 	{
+		double size =  (audioRecordingTask != null) ? audioRecordingTask.currentSize : 0;
 		Bitmap bitMap = Bitmap.createBitmap(300, 300, Bitmap.Config.ARGB_8888);  //creates bmp
 		bitMap = bitMap.copy(bitMap.getConfig(), true);     //lets bmp to be mutable
 		Canvas canvas = new Canvas(bitMap);                 //draw a canvas in defined bmp
 
 		Paint paint = new Paint();                          //define paint and paint color
-		paint.setColor(Color.RED);
+		paint.setColor(Color.GRAY);
 		paint.setStyle(Style.FILL_AND_STROKE);
-		paint.setStrokeWidth(5.0f);
+		paint.setStrokeWidth(0.0f);
 		paint.setAntiAlias(true);                           //smooth edges
+
+		Paint paint2 = new Paint();                          //define paint and paint color
+		paint2.setColor(Color.parseColor("#eaa400"));
+		paint2.setStyle(Style.FILL);
+		paint2.setStrokeWidth(0.0f);
+		paint2.setAntiAlias(true);                           //smooth edges
 
 		ImageView imageView = (ImageView) findViewById(R.id.circle);
 		imageView.setImageBitmap(bitMap);
-
-		canvas.drawCircle(150, 150, 145, paint);
+		// xpos, ypos, radius, paint
+		canvas.drawCircle(150, 150, 100, paint);
+		RectF rectf = new RectF(50, 50, 250, 250);
+		// oval Bounds, startAngle, SweepAngle, useCentre
+		canvas.drawArc(rectf, 270, (float)progress, true, paint2);
 		//invalidate to update bitmap in imageview
 		imageView.invalidate();
+
+		progress = ((360.0 / (long)maxSize) * size);
+		if(progress > 360.0)
+			progress =- 360;
+		Log.i(TAG, "drawCircle " + progress + " " + maxSize + " " + size);
+	}
+
+	private void setupCircleTimer()
+	{
+		if(timer == null) {
+			timer = new Timer();
+			timer.schedule(new circleTask(), 0, 1000);
+			progress = ((360 / maxSize) * sizeSoFar);
+			if(progress > 360)
+				progress =- 360;
+		}
 	}
 
 	private void setUpButtons()
 	{
-		//drawCircles();
+		setupCircleTimer();
 		final Button startButton = (Button) findViewById(R.id.AudioStartRecording);
 		final Button AudioBtnFinishAndSave = (Button) findViewById(R.id.AudioBtnFinishAndSave);
 
@@ -518,7 +553,7 @@ public class AudioRecorder extends AppCompatActivity {
 				startButton.setEnabled(false);
 
 				Toast.makeText(getApplicationContext(),"An error occured trying to record audio",
-						Toast.LENGTH_LONG).show();
+					Toast.LENGTH_LONG).show();
 			}
 		});
 	}
@@ -608,7 +643,7 @@ public class AudioRecorder extends AppCompatActivity {
 		private long maxSize;
 		private long sizeSoFar;
 		private long sizeOfThisRecording;
-
+		private long currentSize;
 		DataOutputStream dataOutStream;
 
 		AudioRecordingTask()
@@ -622,6 +657,7 @@ public class AudioRecorder extends AppCompatActivity {
 			this.outputPath = outputPath;
 			this.maxSize = maxSize;
 			this.sizeSoFar = sizeSoFar;
+			this.currentSize = sizeSoFar;
 			activity.currentState_AudioTask = STATE_AUDIO_TASK_NOT_SET;
 		}
 
@@ -642,7 +678,7 @@ public class AudioRecorder extends AppCompatActivity {
 			try
 			{
 				audioRecord = new AudioRecord(MediaRecorder.AudioSource.MIC, frequency, channelConfiguration,
-						audioEncoding, bufferSize);
+					audioEncoding, bufferSize);
 			}
 			catch(Exception e)
 			{
@@ -699,8 +735,8 @@ public class AudioRecorder extends AppCompatActivity {
 				{
 					e1.printStackTrace();
 				}
-
-				if ((dataOutStream.size() + sizeSoFar) > maxSize)
+				currentSize = dataOutStream.size() + sizeSoFar;
+				if (currentSize > maxSize)
 				{
 					stopped = true;
 					activity.currentState_AudioTask = STATE_AUDIO_TASK_STOPPED;
@@ -929,4 +965,18 @@ public class AudioRecorder extends AppCompatActivity {
 			super.onPostExecute(result);
 		}
 	} // private class SaveAudio extends AsyncTask<Object, Integer, Void> {}
+
+	class circleTask extends TimerTask {
+
+		@Override
+		public void run() {
+			AudioRecorder.this.runOnUiThread(new Runnable() {
+
+				@Override
+				public void run() {
+					drawProgress();
+				}
+			});
+		}
+	};
 }
