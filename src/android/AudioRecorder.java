@@ -109,7 +109,8 @@ public class AudioRecorder extends AppCompatActivity {
 
 	private static final int RECORD_REQUEST_CODE = 101;
 	private static final int STORAGE_REQUEST_CODE = 102;
-	private Timer timer;
+	private Timer rippleTimer;
+	private Timer progressTimer;
 	private double progress;
 
 	protected boolean requestPermission(String permissionType, int requestCode) {
@@ -176,9 +177,13 @@ public class AudioRecorder extends AppCompatActivity {
 	protected void onPause()
 	{
 		super.onPause();
-		if(timer != null) {
-			timer.cancel();
-			timer.purge();
+		if(progressTimer != null) {
+			progressTimer.cancel();
+			progressTimer.purge();
+		}
+		if(rippleTimer != null) {
+			rippleTimer.cancel();
+			rippleTimer.purge();
 		}
 		if (audioRecordingTask != null)
 		{
@@ -373,20 +378,48 @@ public class AudioRecorder extends AppCompatActivity {
 			progress =- 360;
 	}
 
-	private void setupCircleTimer()
+	private void drawRipple()
 	{
-		if(timer == null) {
-			timer = new Timer();
-			timer.schedule(new circleTask(), 0, 1000);
+		double size =  (audioRecordingTask != null) ? audioRecordingTask.currentSize : 0;
+		Bitmap bitMap = Bitmap.createBitmap(300, 300, Bitmap.Config.ARGB_8888);
+		bitMap = bitMap.copy(bitMap.getConfig(), true);
+		Canvas canvas = new Canvas(bitMap);
+
+		Paint paint = new Paint();
+		paint.setColor(Color.GRAY);
+		paint.setStyle(Style.FILL_AND_STROKE);
+		paint.setStrokeWidth(0.0f);
+		paint.setAntiAlias(true);
+
+		ImageView imageView = (ImageView) findViewById(R.id.progressCircle);
+		imageView.setImageBitmap(bitMap);
+		canvas.drawCircle(150, 150, 140, paint);
+		imageView.invalidate();
+	}
+
+	private void setupProgressCircleTimer()
+	{
+		if(progressTimer == null) {
+			progressTimer = new Timer();
+			progressTimer.schedule(new progressCircleTask(), 0, 1000);
 			progress = ((360 / maxSize) * sizeSoFar);
 			if(progress > 360)
 				progress =- 360;
 		}
 	}
 
+	private void setupRippleCircleTimer()
+	{
+		if(rippleTimer == null) {
+			rippleTimer = new Timer();
+			rippleTimer.schedule(new rippleCircleTask(), 0, 30);
+		}
+	}
+
 	private void setUpButtons()
 	{
-		setupCircleTimer();
+		//setupRippleCircleTimer();
+		setupProgressCircleTimer();
 		final Button startButton = (Button) findViewById(R.id.AudioStartRecording);
 		final Button AudioBtnFinishAndSave = (Button) findViewById(R.id.AudioBtnFinishAndSave);
 
@@ -962,7 +995,7 @@ public class AudioRecorder extends AppCompatActivity {
 		}
 	} // private class SaveAudio extends AsyncTask<Object, Integer, Void> {}
 
-	class circleTask extends TimerTask {
+	class progressCircleTask extends TimerTask {
 
 		@Override
 		public void run() {
@@ -971,6 +1004,19 @@ public class AudioRecorder extends AppCompatActivity {
 				@Override
 				public void run() {
 					drawProgress();
+				}
+			});
+		}
+	};
+
+	class rippleCircleTask extends TimerTask {
+
+		@Override
+		public void run() {
+			AudioRecorder.this.runOnUiThread(new Runnable() {
+
+				@Override
+				public void run() {
 				}
 			});
 		}
