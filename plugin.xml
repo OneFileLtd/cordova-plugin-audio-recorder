@@ -13,9 +13,11 @@
     <repo>https://bitbucket.org/deviceboxmedia/cordova-plugin-audio-recorder.git</repo>
     <issue></issue>
 
-    <js-module src="www/AudioRecorder.js" name="AudioRecorder">
-        <clobbers target="AudioRecorder" />
-    </js-module>
+	<js-module src="www/AudioRecorder.js" name="AudioRecorder">
+		<clobbers target="AudioRecorder" />
+		<clobbers target="cordova.AudioRecorder.audioRecorder" />
+		<clobbers target="window.audioRecorder" />
+	</js-module>
 
     <!-- ios -->
     <platform name="ios">
@@ -40,14 +42,9 @@
 
     <!-- android -->
     <platform name="android">
-        <js-module src="www/AudioRecorder.js" name="AudioRecorder"> 
-            <merges target="cordova.AudioRecorder.audioRecorder" /> 
-            <merges target="window.audioRecorder" /> 
-        </js-module>
-
         <config-file target="res/xml/config.xml" parent="/*">
             <feature name="CDVAudioRecorder" >
-                <param name="android-package" value="org.apache.cordova.audiocapture.CDVAudioRecorder"/>
+                <param name="android-package" value="org.apache.cordova.audiorecorder.CDVAudioRecorder"/>
             </feature>
         </config-file>
 
@@ -58,11 +55,11 @@
         </config-file>
 
 		<config-file target="AndroidManifest.xml" parent="/manifest/application">
-			<activity android:name="org.apache.cordova.audiocapture.AudioRecorder" />
+			<activity android:name="org.apache.cordova.audiorecorder.AudioRecorder" />
 		</config-file>
 
-        <source-file src="src/android/CDVAudioRecorder.java" target-dir="src/org/apache/cordova/audiocapture" />
-        <source-file src="src/android/AudioRecorder.java" target-dir="src/org/apache/cordova/audiocapture" />
+        <source-file src="src/android/CDVAudioRecorder.java" target-dir="src/org/apache/cordova/audiorecorder" />
+        <source-file src="src/android/AudioRecorder.java" target-dir="src/org/apache/cordova/audiorecorder" />
 
         <resource-file src="src/android/res/drawable/continue_button.png" target="res/drawable/continue_button.png" />
         <resource-file src="src/android/res/drawable/pause_button.png" target="res/drawable/pause_button.png" />

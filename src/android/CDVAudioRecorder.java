@@ -16,7 +16,7 @@
        specific language governing permissions and limitations
        under the License.
 */
-package org.apache.cordova.audiocapture;
+package org.apache.cordova.audiorecorder;
 
 import java.io.File;
 import java.io.FileInputStream;

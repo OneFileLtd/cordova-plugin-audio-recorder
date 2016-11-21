@@ -1,4 +1,4 @@
-package org.apache.cordova.audiocapture;
+package org.apache.cordova.audiorecorder;
 
 import android.content.SharedPreferences;
 import android.graphics.Color;
