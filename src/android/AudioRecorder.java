@@ -70,7 +70,8 @@ public class AudioRecorder extends AppCompatActivity {
 	private static final Integer STATE_AUDIO_TASK_STOPPED = 1;
 	private static final Integer STATE_AUDIO_TASK_PAUSED = 2;
 	private static final Integer STATE_AUDIO_TASK_RECORDING = 3;
-	private static final Integer STATE_AUDIO_TASK_ERROR = 4;
+	private static final Integer STATE_AUDIO_TASK_FINISHED = 4;
+	private static final Integer STATE_AUDIO_TASK_ERROR = 5;
 
 	private Integer currentState = STATE_NOT_SET;
 	private Integer currentState_AudioTask = STATE_AUDIO_TASK_NOT_SET;
@@ -174,28 +175,43 @@ public class AudioRecorder extends AppCompatActivity {
 		}
 	}
 
-	@Override
-	protected void onPause()
-	{
-		super.onPause();
-		Log.i(TAG,"onPause");
+	private void stopProgressTimer() {
 		if(progressTimer != null) {
 			progressTimer.cancel();
 			progressTimer.purge();
 			progressTimer = null;
 		}
+	}
+
+	private void stopRippleTimer() {
 		if(rippleTimer != null) {
 			rippleTimer.cancel();
 			rippleTimer.purge();
 			rippleTimer = null;
 		}
+	}
+
+	@Override
+	protected void onPause()
+	{
+		super.onPause();
+		Log.i(TAG,"onPause");
 		if (audioRecordingTask != null)
 		{
 			if(currentState == STATE_RECORDING) {
+				Log.i(TAG,"onPause - pauseRecording()");
 				pauseRecording();
 				currentState = STATE_PAUSED;
 			}
 		}
+		stopProgressTimer();
+		stopRippleTimer();
+		while(currentState_AudioTask != STATE_AUDIO_TASK_FINISHED &&
+			currentState_AudioTask != STATE_AUDIO_TASK_STOPPED &&
+			currentState_AudioTask != STATE_AUDIO_TASK_NOT_SET) {
+
+		}
+		Log.i(TAG,"onPause - asyncTask Finished");
 	}
 
 	@Override
@@ -365,7 +381,7 @@ public class AudioRecorder extends AppCompatActivity {
 		double progress = ((360.0 / (float)maxSize) * (float)currentSize);
 		if(progress > 360)
 			progress =- 360;
-		Log.i(TAG, "maxSize: " + maxSize + "sizeSoFar: " + sizeSoFar + "progress: " + progress);
+		Log.i(TAG, "maxSize: " + maxSize + " currentSize: " + currentSize + " sizeSoFar: " + sizeSoFar + " progress: " + progress);
 		Bitmap bitMap = Bitmap.createBitmap(300, 300, Bitmap.Config.ARGB_8888);
 		bitMap = bitMap.copy(bitMap.getConfig(), true);
 		Canvas canvas = new Canvas(bitMap);
@@ -390,25 +406,6 @@ public class AudioRecorder extends AppCompatActivity {
 		imageView.invalidate();
 	}
 
-	private void drawRipple()
-	{
-		double size =  (audioRecordingTask != null) ? audioRecordingTask.currentSize : 0;
-		Bitmap bitMap = Bitmap.createBitmap(300, 300, Bitmap.Config.ARGB_8888);
-		bitMap = bitMap.copy(bitMap.getConfig(), true);
-		Canvas canvas = new Canvas(bitMap);
-
-		Paint paint = new Paint();
-		paint.setColor(Color.GRAY);
-		paint.setStyle(Style.FILL_AND_STROKE);
-		paint.setStrokeWidth(0.0f);
-		paint.setAntiAlias(true);
-
-		ImageView imageView = (ImageView) findViewById(R.id.progressCircle);
-		imageView.setImageBitmap(bitMap);
-		canvas.drawCircle(150, 150, 140, paint);
-		imageView.invalidate();
-	}
-
 	private void setupProgressCircleTimer()
 	{
 		Log.i(TAG, "progressTimer: " + progressTimer);
@@ -428,10 +425,9 @@ public class AudioRecorder extends AppCompatActivity {
 
 	private void setUpButtons()
 	{
-		setupProgressCircleTimer();
 		final Button startButton = (Button) findViewById(R.id.AudioStartRecording);
 		final Button AudioBtnFinishAndSave = (Button) findViewById(R.id.AudioBtnFinishAndSave);
-
+		drawProgress();
 		if(currentState == STATE_NOT_SET || currentState == STATE_STOPPED)
 		{
 			startButton.setBackgroundResource(R.drawable.record_button);
@@ -641,13 +637,19 @@ public class AudioRecorder extends AppCompatActivity {
 		audioRecordingTask = new AudioRecordingTask();
 		audioRecordingTask.setUp(this, audioOutputPath, maxSize, sizeSoFar);
 		audioRecordingTask.execute();
+		setupProgressCircleTimer();
 	}
 
 	private void pauseRecording()
 	{
+		Log.i(TAG, "pauseRecording");
 		mHandler.removeCallbacks(mUpdateTimeTask);
-		if (audioRecordingTask != null)
+		if (audioRecordingTask != null) {
+			Log.i(TAG, "pauseRecording - pause()");
 			audioRecordingTask.pause();
+		}
+		stopProgressTimer();
+		stopRippleTimer();
 	}
 
 	private void getFilePath()
@@ -703,7 +705,6 @@ public class AudioRecorder extends AppCompatActivity {
 		@Override
 		protected Void doInBackground(Void... unused)
 		{
-
 			activity.notifyAudioRecordingHasBegun();
 
 			int frequency = RECORDING_FREQUENCY;
@@ -781,9 +782,10 @@ public class AudioRecorder extends AppCompatActivity {
 					activity.currentState_AudioTask = STATE_AUDIO_TASK_STOPPED;
 				}
 			}
-
 			sizeOfThisRecording = dataOutStream.size();
-
+			if (activity != null) {
+				activity.updateTotalSize(sizeOfThisRecording);
+			}
 			try
 			{
 				dataOutStream.flush();
@@ -804,13 +806,11 @@ public class AudioRecorder extends AppCompatActivity {
 
 			if (activity != null)
 			{
-				activity.updateTotalSize(sizeOfThisRecording);
 				if (stopped && !paused && !error)
 				{
 					if (activity != null)
 					{
 						activity.onAudioRecorderPaused();
-						//activity.onAudioRecorderLowMemory();
 					}
 				}
 				else if (paused)
@@ -818,6 +818,7 @@ public class AudioRecorder extends AppCompatActivity {
 				else if (error)
 					activity.onAudioRecorderError();
 			}
+			activity.currentState_AudioTask = STATE_AUDIO_TASK_FINISHED;
 			return (null);
 		}
 
@@ -831,6 +832,7 @@ public class AudioRecorder extends AppCompatActivity {
 
 		public void pause()
 		{
+			Log.i(TAG, "AudioRecordingTask Pause()");
 			stopped = true;
 			paused = true;
 			activity.currentState_AudioTask = STATE_AUDIO_TASK_PAUSED;
