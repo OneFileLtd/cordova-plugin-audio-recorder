@@ -85,6 +85,7 @@ public class AudioRecorder extends AppCompatActivity {
 	private String fileSizeErrorMsg = "";
 	private long sizeSoFar = 50000;
 	private long maxSize = 30000000;
+	private long currentSize = 0;
 	private LinearLayout savingLayout;
 	private TextView recordingTime;
 	private TextView recordingSize;
@@ -111,7 +112,6 @@ public class AudioRecorder extends AppCompatActivity {
 	private static final int STORAGE_REQUEST_CODE = 102;
 	private Timer rippleTimer;
 	private Timer progressTimer;
-	private double progress;
 
 	protected boolean requestPermission(String permissionType, int requestCode) {
 		int permission = ContextCompat.checkSelfPermission(this, permissionType);
@@ -164,6 +164,7 @@ public class AudioRecorder extends AppCompatActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		Log.i(TAG,"onCreate");
 		setContentView(R.layout.activity_main);
 		setTitle("Audio Recorder");
 
@@ -177,13 +178,16 @@ public class AudioRecorder extends AppCompatActivity {
 	protected void onPause()
 	{
 		super.onPause();
+		Log.i(TAG,"onPause");
 		if(progressTimer != null) {
 			progressTimer.cancel();
 			progressTimer.purge();
+			progressTimer = null;
 		}
 		if(rippleTimer != null) {
 			rippleTimer.cancel();
 			rippleTimer.purge();
+			rippleTimer = null;
 		}
 		if (audioRecordingTask != null)
 		{
@@ -192,23 +196,13 @@ public class AudioRecorder extends AppCompatActivity {
 				currentState = STATE_PAUSED;
 			}
 		}
-
-		SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-		SharedPreferences.Editor editor = settings.edit();
-		editor.putInt("currentState", STATE_PAUSED);
-		editor.putInt("pauseCount", pauseCount);
-		editor.putLong("sizeSoFar", sizeSoFar);
-		editor.putBoolean("audioRecordingNotStarted", true);
-		editor.putBoolean("audioHasBeenRecorded", audioHasBeenRecorded);
-		editor.putString("timeText", timeText);
-		editor.putString("sizeText", sizeText);
-		editor.commit();
 	}
 
 	@Override
 	protected void onResume()
 	{
 		super.onResume();
+		Log.i(TAG,"onResume");
 		setContentView(R.layout.activity_main);
 		recordingTime = (TextView) findViewById(R.id.recordingTime);
 		recordingSize = (TextView) findViewById(R.id.recordingSize);
@@ -242,23 +236,13 @@ public class AudioRecorder extends AppCompatActivity {
 	@Override
 	public void onStart(){
 		super.onStart();
-
-		if( currentState != STATE_NOT_SET){
-			SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-
-			currentState = settings.getInt("currentState", 0);
-			pauseCount = settings.getInt("pauseCount", 0);
-			sizeSoFar = settings.getLong("sizeSoFar", 0);
-			audioRecordingNotStarted = settings.getBoolean("audioRecordingNotStarted", false);
-			audioHasBeenRecorded = settings.getBoolean("audioHasBeenRecorded", false);
-			timeText = settings.getString("timeText","");
-			sizeText = settings.getString("sizeText","");
-		}
+		Log.i(TAG,"onStart");
 	}
 
 	@Override
 	public void onSaveInstanceState(Bundle savedInstanceState)
 	{
+		Log.i(TAG,"onSaveInstanceState");
 		savedInstanceState.putInt("currentState", currentState);
 		savedInstanceState.putInt("pauseCount", pauseCount);
 		savedInstanceState.putLong("sizeSoFar", sizeSoFar);
@@ -266,7 +250,20 @@ public class AudioRecorder extends AppCompatActivity {
 		savedInstanceState.putBoolean("audioHasBeenRecorded", audioHasBeenRecorded);
 		savedInstanceState.putString("timeText", timeText);
 		savedInstanceState.putString("sizeText", sizeText);
+		savedInstanceState.putLong("mStartTime", mStartTime);
+		savedInstanceState.putLong("mTotalTime", mTotalTime);
+		savedInstanceState.putLong("maxSize", maxSize);
+		savedInstanceState.putLong("currentSize", currentSize);
 
+		Log.i(TAG,"currentState:" + currentState);
+		Log.i(TAG,"pauseCount:" + pauseCount);
+		Log.i(TAG,"audioRecordingNotStarted:" + audioRecordingNotStarted);
+		Log.i(TAG,"audioHasBeenRecorded:" + audioHasBeenRecorded);
+		Log.i(TAG,"timeText:" + timeText);
+		Log.i(TAG,"mStartTime:" + mStartTime);
+		Log.i(TAG,"mTotalTime:" + mTotalTime);
+		Log.i(TAG,"sizeSoFar:" + sizeSoFar);
+		Log.i(TAG,"currentSize:" + currentSize);
 		super.onSaveInstanceState(savedInstanceState);
 	}
 
@@ -338,6 +335,8 @@ public class AudioRecorder extends AppCompatActivity {
 
 	private void restoreSession(Bundle savedInstanceState)
 	{
+		Log.i(TAG,"~~~~~~~~~~~~~~~");
+		Log.i(TAG,"restoreSession:");
 		currentState = savedInstanceState.getInt("currentState");
 		pauseCount = savedInstanceState.getInt("pauseCount");
 		sizeSoFar = savedInstanceState.getLong("sizeSoFar");
@@ -345,11 +344,28 @@ public class AudioRecorder extends AppCompatActivity {
 		audioHasBeenRecorded = savedInstanceState.getBoolean("audioHasBeenRecorded");
 		timeText = savedInstanceState.getString("timeText");
 		sizeText = savedInstanceState.getString("sizeText");
+		mStartTime = savedInstanceState.getLong("mStartTime");
+		mTotalTime = savedInstanceState.getLong("mTotalTime");
+		maxSize = savedInstanceState.getLong("maxSize");
+		currentSize = savedInstanceState.getLong("currentSize");
+
+		Log.i(TAG,"currentState:" + currentState);
+		Log.i(TAG,"pauseCount:" + pauseCount);
+		Log.i(TAG,"audioRecordingNotStarted:" + audioRecordingNotStarted);
+		Log.i(TAG,"audioHasBeenRecorded:" + audioHasBeenRecorded);
+		Log.i(TAG,"timeText:" + timeText);
+		Log.i(TAG,"mStartTime:" + mStartTime);
+		Log.i(TAG,"mTotalTime:" + mTotalTime);
+		Log.i(TAG,"sizeSoFar:" + sizeSoFar);
+		Log.i(TAG,"currentSize:" + currentSize);
 	}
 
 	private void drawProgress()
 	{
-		double size =  (audioRecordingTask != null) ? audioRecordingTask.currentSize : 0;
+		double progress = ((360.0 / (float)maxSize) * (float)currentSize);
+		if(progress > 360)
+			progress =- 360;
+		Log.i(TAG, "maxSize: " + maxSize + "sizeSoFar: " + sizeSoFar + "progress: " + progress);
 		Bitmap bitMap = Bitmap.createBitmap(300, 300, Bitmap.Config.ARGB_8888);
 		bitMap = bitMap.copy(bitMap.getConfig(), true);
 		Canvas canvas = new Canvas(bitMap);
@@ -370,12 +386,8 @@ public class AudioRecorder extends AppCompatActivity {
 		imageView.setImageBitmap(bitMap);
 		canvas.drawCircle(150, 150, 104, paint);
 		RectF rectf = new RectF(48, 48, 252, 252);
-		canvas.drawArc(rectf, 270, (float)progress, true, paint2);
+		canvas.drawArc(rectf, 270, (long)progress, true, paint2);
 		imageView.invalidate();
-
-		progress = ((360.0 / (long)maxSize) * size);
-		if(progress > 360.0)
-			progress =- 360;
 	}
 
 	private void drawRipple()
@@ -399,12 +411,10 @@ public class AudioRecorder extends AppCompatActivity {
 
 	private void setupProgressCircleTimer()
 	{
+		Log.i(TAG, "progressTimer: " + progressTimer);
 		if(progressTimer == null) {
 			progressTimer = new Timer();
-			progressTimer.schedule(new progressCircleTask(), 0, 1000);
-			progress = ((360 / maxSize) * sizeSoFar);
-			if(progress > 360)
-				progress =- 360;
+			progressTimer.schedule(new progressCircleTask(), 0, 500);
 		}
 	}
 
@@ -418,7 +428,6 @@ public class AudioRecorder extends AppCompatActivity {
 
 	private void setUpButtons()
 	{
-		//setupRippleCircleTimer();
 		setupProgressCircleTimer();
 		final Button startButton = (Button) findViewById(R.id.AudioStartRecording);
 		final Button AudioBtnFinishAndSave = (Button) findViewById(R.id.AudioBtnFinishAndSave);
@@ -597,6 +606,7 @@ public class AudioRecorder extends AppCompatActivity {
 	public void updateTotalSize(long sizeOfThisRecording)
 	{
 		sizeSoFar = sizeSoFar + sizeOfThisRecording;
+		Log.i(TAG,"updateTotalSize:" + sizeSoFar);
 	}
 
 	private void createEvidenceFolder()
@@ -686,7 +696,7 @@ public class AudioRecorder extends AppCompatActivity {
 			this.outputPath = outputPath;
 			this.maxSize = maxSize;
 			this.sizeSoFar = sizeSoFar;
-			this.currentSize = sizeSoFar;
+			this.currentSize = 0;
 			activity.currentState_AudioTask = STATE_AUDIO_TASK_NOT_SET;
 		}
 
@@ -764,7 +774,7 @@ public class AudioRecorder extends AppCompatActivity {
 				{
 					e1.printStackTrace();
 				}
-				currentSize = dataOutStream.size() + sizeSoFar;
+				activity.currentSize = currentSize = dataOutStream.size() + sizeSoFar;
 				if (currentSize > maxSize)
 				{
 					stopped = true;
