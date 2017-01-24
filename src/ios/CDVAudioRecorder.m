@@ -551,7 +551,7 @@
     CAShapeLayer *ring = [CAShapeLayer layer];
     ring.path = [UIBezierPath bezierPathWithRoundedRect:CGRectInset(self.circle.bounds, inset, inset) cornerRadius:radius-inset].CGPath;
     ring.fillColor   = [UIColor clearColor].CGColor;
-    ring.strokeColor = (self.value > 0.9f) ? [UIColor redColor].CGColor : [UIColor orangeColor].CGColor;
+    ring.strokeColor = (self.value > 0.9f) ? [UIColor redColor].CGColor : [UIColor colorWithRed: 1.0 green: 1.0 blue: 1.0 alpha: 1.0];
     ring.lineWidth   = 14; // Width circle for progress
     ring.strokeStart = 0;
     ring.strokeEnd = self.value;
