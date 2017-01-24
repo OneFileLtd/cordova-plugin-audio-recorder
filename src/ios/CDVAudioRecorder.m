@@ -534,16 +534,22 @@
     }
     [self changeButtonState];
 }
+#define PROGRESS_BACKGROUND [UIColor colorWithRed: (92.0 / 255) green: (99.0 / 255) blue: (107.0 /255) alpha: 1.0].CGColor
+#define PROGRESS_FOREGROUND [UIColor colorWithRed: (255.0 / 255) green: (255.0 / 255) blue: (255.0 /255) alpha: 1.0].CGColor
+#define PROGRESS_FOREGROUND_WARNING [UIColor redColor].CGColor
 
 #pragma mark -
 -(void)drawPie
 {
+    // 1e242b   -   30, 36, 43
+    // 5c636b   -   92, 99, 107
+    // 3b434c   -   59, 67, 76
     CGFloat radius = MIN(self.circle.frame.size.width,self.circle.frame.size.height)/2;
     CGFloat inset  = 18;
     CAShapeLayer *backgroundring = [CAShapeLayer layer];
     backgroundring.path = [UIBezierPath bezierPathWithRoundedRect:CGRectInset(self.circle.bounds, inset, inset) cornerRadius:radius-inset].CGPath;
     backgroundring.fillColor   = [UIColor clearColor].CGColor;
-    backgroundring.strokeColor = [UIColor grayColor].CGColor;
+    backgroundring.strokeColor = PROGRESS_BACKGROUND;
     backgroundring.lineWidth   = 14; // Width circle for progress
     backgroundring.strokeStart = self.value;
     backgroundring.strokeEnd = 1.0;
@@ -551,7 +557,7 @@
     CAShapeLayer *ring = [CAShapeLayer layer];
     ring.path = [UIBezierPath bezierPathWithRoundedRect:CGRectInset(self.circle.bounds, inset, inset) cornerRadius:radius-inset].CGPath;
     ring.fillColor   = [UIColor clearColor].CGColor;
-    ring.strokeColor = (self.value > 0.9f) ? [UIColor redColor].CGColor : [UIColor colorWithRed: 1.0 green: 1.0 blue: 1.0 alpha: 1.0];
+    ring.strokeColor = (self.value > 0.9f) ? PROGRESS_FOREGROUND_WARNING : PROGRESS_FOREGROUND;
     ring.lineWidth   = 14; // Width circle for progress
     ring.strokeStart = 0;
     ring.strokeEnd = self.value;
