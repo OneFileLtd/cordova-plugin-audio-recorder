@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.view.WindowManager;
 
 import java.io.BufferedOutputStream;
 import java.io.DataOutputStream;
@@ -168,6 +169,8 @@ public class AudioRecorder extends AppCompatActivity {
 		setContentView(R.layout.activity_main);
 		setTitle("Audio Recorder");
 
+		WindowManager windowManager = (WindowManager)getSystemService(WINDOW_SERVICE);
+		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		if (savedInstanceState != null)
 		{
 			restoreSession(savedInstanceState);
@@ -194,6 +197,8 @@ public class AudioRecorder extends AppCompatActivity {
 	protected void onPause()
 	{
 		super.onPause();
+		WindowManager windowManager = (WindowManager)getSystemService(WINDOW_SERVICE);
+		getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		if (audioRecordingTask != null)
 		{
 			if(currentState == STATE_RECORDING) {
@@ -454,7 +459,6 @@ public class AudioRecorder extends AppCompatActivity {
 			public void onClick(View view)
 			{
 				savingLayout.setVisibility(View.VISIBLE);
-				startButton.setVisibility(View.GONE);
 				SaveAudio saveAudio = new SaveAudio(pauseCount);
 				saveAudio.execute((Integer) null);
 			}
