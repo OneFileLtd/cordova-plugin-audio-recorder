@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">AudioRecorder</string>
+    <string name="launcher_name">ic_launcher.png</string>
+    <string name="activity_name">AudioRecorder</string>
+</resources>

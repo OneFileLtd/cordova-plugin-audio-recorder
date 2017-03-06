@@ -1,0 +1,38 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>WinJSAudioRecorder</title>
+    <link href="default.css" rel="stylesheet" />
+</head>
+<body class="win-type-body">
+	<div class="bar-header">
+		<button id="backButton"><i class="icon">&#xf3cf;</i></button>
+	</div>
+    <div id="audioPlayer" class="unstarted">
+        <div class="pulse">
+            <div id="time" data-win-bind="innerHTML: formattedTime" class="time"></div>
+            <div class="pulse-container">
+                <div class="pulse-inner">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+            </div>
+            <div class="play-ring">
+                <svg height="100%" width="100%" viewBox="0 0 100 100">
+                    <g transform="translate(50,50), scale(50)">
+                        <path id="pieslice" fill="#E9A400" stroke d="M0,0"></path>
+                    </g>
+                </svg>
+            </div>
+            <button id="recordButton">
+                <span class="unstarted">Record</span>
+                <span class="paused">Continue</span>
+                <span class="recording">Pause</span>
+            </button>
+        </div>
+    </div>
+    <button id="saveButton">Save</button>
+</body>
+</html>
