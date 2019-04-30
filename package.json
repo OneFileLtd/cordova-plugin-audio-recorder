@@ -1,6 +1,6 @@
 {
   "name": "cordova-plugin-audio-recorder",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Cordova Audio Recorder Plugin",
   "cordova": {
     "id": "cordova-plugin-audio-recorder",
