@@ -1,6 +1,7 @@
 package org.apache.cordova.audiorecorder;
 
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.media.AudioFormat;
 import android.media.AudioRecord;
@@ -51,9 +52,6 @@ import org.json.JSONObject;
 import java.util.Timer;
 import java.util.TimerTask;
 import android.graphics.RectF;
-
-// TODO: This needs to point to the app resource folder, so this plugin won't work elsewhere without modifying this structure
-import uk.co.onefile.onefileeportfolio.R;
 
 public class AudioRecorder extends AppCompatActivity {
 
@@ -115,6 +113,9 @@ public class AudioRecorder extends AppCompatActivity {
 	private Timer rippleTimer;
 	private Timer progressTimer;
 
+	private Resources activityRes;
+	private String packageName;
+
 	protected boolean requestPermission(String permissionType, int requestCode) {
 		int permission = ContextCompat.checkSelfPermission(this, permissionType);
 
@@ -166,7 +167,10 @@ public class AudioRecorder extends AppCompatActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
+		activityRes = this.getResources();
+		packageName = this.getPackageName();
+		int activityMainId = activityRes.getIdentifier("activity_main", "layout", packageName);
+		setContentView(activityMainId);
 		setTitle("Audio Recorder");
 
 		WindowManager windowManager = (WindowManager)getSystemService(WINDOW_SERVICE);
@@ -209,9 +213,9 @@ public class AudioRecorder extends AppCompatActivity {
 		stopProgressTimer();
 		stopRippleTimer();
 		while(audioRecordingTask != null &&
-			currentState_AudioTask != STATE_AUDIO_TASK_FINISHED &&
-			currentState_AudioTask != STATE_AUDIO_TASK_STOPPED &&
-			currentState_AudioTask != STATE_AUDIO_TASK_NOT_SET) {
+				currentState_AudioTask != STATE_AUDIO_TASK_FINISHED &&
+				currentState_AudioTask != STATE_AUDIO_TASK_STOPPED &&
+				currentState_AudioTask != STATE_AUDIO_TASK_NOT_SET) {
 		}
 	}
 
@@ -219,11 +223,13 @@ public class AudioRecorder extends AppCompatActivity {
 	protected void onResume()
 	{
 		super.onResume();
-		setContentView(R.layout.activity_main);
-		recordingTime = (TextView) findViewById(R.id.recordingTime);
-		recordingSize = (TextView) findViewById(R.id.recordingSize);
-		maxRecordingSize = (TextView) findViewById(R.id.maxSize);
-		savingLayout = (LinearLayout) findViewById(R.id.savingLayout);
+		activityRes = this.getResources();
+		int activityMainId = activityRes.getIdentifier("activity_main", "layout", packageName);
+		setContentView(activityMainId);
+		recordingTime = (TextView) findViewById(activityRes.getIdentifier("recordingTime", "id", packageName));
+		recordingSize = (TextView) findViewById(activityRes.getIdentifier("recordingSize", "id", packageName));
+		maxRecordingSize = (TextView) findViewById(activityRes.getIdentifier("maxSize", "id", packageName));
+		savingLayout = (LinearLayout) findViewById(activityRes.getIdentifier("savingLayout", "id", packageName));
 		recordingTime.setText(timeText);
 		recordingSize.setText(sizeText);
 		maxRecordingSize.setText("Max recording size: "+uploadLimit+" MB");
@@ -273,8 +279,8 @@ public class AudioRecorder extends AppCompatActivity {
 	}
 
 	private void forceFinishRecorder() {
-		final Button startButton = (Button) findViewById(R.id.AudioStartRecording);
-		final Button AudioBtnFinishAndSave = (Button) findViewById(R.id.AudioBtnFinishAndSave);
+		final Button startButton = (Button) findViewById(activityRes.getIdentifier("AudioStartRecording", "id", this.getPackageName()));
+		final Button AudioBtnFinishAndSave = (Button) findViewById(activityRes.getIdentifier("AudioBtnFinishAndSave", "id", this.getPackageName()));
 		startButton.setEnabled(false);
 		AudioBtnFinishAndSave.setEnabled(false);
 		if(currentState == STATE_RECORDING) {
@@ -373,7 +379,7 @@ public class AudioRecorder extends AppCompatActivity {
 		paint2.setStrokeWidth(0.0f);
 		paint2.setAntiAlias(true);
 
-		ImageView imageView = (ImageView) findViewById(R.id.progressCircle);
+		ImageView imageView = (ImageView) findViewById(activityRes.getIdentifier("progressCircle", "id", this.getPackageName()));
 		imageView.setImageBitmap(bitMap);
 		canvas.drawCircle(150, 150, 104, paint);
 		RectF rectf = new RectF(48, 48, 252, 252);
@@ -399,18 +405,18 @@ public class AudioRecorder extends AppCompatActivity {
 
 	private void setUpButtons()
 	{
-		final Button startButton = (Button) findViewById(R.id.AudioStartRecording);
-		final Button AudioBtnFinishAndSave = (Button) findViewById(R.id.AudioBtnFinishAndSave);
+		final Button startButton = (Button) findViewById(activityRes.getIdentifier("AudioStartRecording", "id", this.getPackageName()));
+		final Button AudioBtnFinishAndSave = (Button) findViewById(activityRes.getIdentifier("AudioBtnFinishAndSave", "id", this.getPackageName()));
 		drawProgress();
 		if(currentState == STATE_NOT_SET || currentState == STATE_STOPPED)
 		{
-			startButton.setBackgroundResource(R.drawable.record_button);
+			startButton.setBackgroundResource(activityRes.getIdentifier("record_button", "drawable", this.getPackageName()));
 			AudioBtnFinishAndSave.setEnabled(false);
 			AudioBtnFinishAndSave.setAlpha(.5f);
 		} else {
 			// Returning from the background paused.
 			if (currentState == STATE_PAUSED) {
-				startButton.setBackgroundResource(R.drawable.continue_button);
+				startButton.setBackgroundResource(activityRes.getIdentifier("continue_button", "drawable", this.getPackageName()));
 				AudioBtnFinishAndSave.setEnabled(true);
 				AudioBtnFinishAndSave.setAlpha(1f);
 			}
@@ -423,7 +429,7 @@ public class AudioRecorder extends AppCompatActivity {
 					if(checkPermissions()) {
 						startRecording();
 
-						startButton.setBackgroundResource(R.drawable.pause_button);
+						startButton.setBackgroundResource(activityRes.getIdentifier("pause_button", "drawable", packageName));
 						currentState = STATE_RECORDING;
 					}
 				}
@@ -432,7 +438,7 @@ public class AudioRecorder extends AppCompatActivity {
 				{
 					pauseRecording();
 
-					startButton.setBackgroundResource(R.drawable.continue_button);
+					startButton.setBackgroundResource(activityRes.getIdentifier("continue_button", "drawable", packageName));
 					AudioBtnFinishAndSave.setEnabled(true);
 					AudioBtnFinishAndSave.setAlpha(1f);
 					currentState = STATE_PAUSED;
@@ -444,7 +450,7 @@ public class AudioRecorder extends AppCompatActivity {
 
 						AudioBtnFinishAndSave.setEnabled(false);
 
-						startButton.setBackgroundResource(R.drawable.pause_button);
+						startButton.setBackgroundResource(activityRes.getIdentifier("pause_button", "drawable", packageName));
 						currentState = STATE_RECORDING;
 					}
 				}
@@ -518,8 +524,8 @@ public class AudioRecorder extends AppCompatActivity {
 		runOnUiThread(new Runnable() {
 			public void run()
 			{
-				final Button startButton = (Button) findViewById(R.id.AudioStartRecording);
-				Button AudioBtnFinishAndSave = (Button) findViewById(R.id.AudioBtnFinishAndSave);
+				final Button startButton = (Button) findViewById(activityRes.getIdentifier("AudioStartRecording", "id", packageName));
+				Button AudioBtnFinishAndSave = (Button) findViewById(activityRes.getIdentifier("AudioBtnFinishAndSave", "id", packageName));
 				AudioBtnFinishAndSave.setVisibility(View.VISIBLE);
 				try
 				{
@@ -555,12 +561,12 @@ public class AudioRecorder extends AppCompatActivity {
 		runOnUiThread(new Runnable() {
 			public void run()
 			{
-				Button startButton = (Button) findViewById(R.id.AudioStartRecording);
-				startButton.setBackgroundResource(R.drawable.pause_button);
+				Button startButton = (Button) findViewById(activityRes.getIdentifier("AudioStartRecording", "id", packageName));
+				startButton.setBackgroundResource(activityRes.getIdentifier("pause_button", "id", packageName));
 				startButton.setEnabled(false);
 
 				Toast.makeText(getApplicationContext(),"An error occured trying to record audio",
-					Toast.LENGTH_LONG).show();
+						Toast.LENGTH_LONG).show();
 			}
 		});
 	}
@@ -688,7 +694,7 @@ public class AudioRecorder extends AppCompatActivity {
 			try
 			{
 				audioRecord = new AudioRecord(MediaRecorder.AudioSource.MIC, frequency, channelConfiguration,
-					audioEncoding, bufferSize);
+						audioEncoding, bufferSize);
 			}
 			catch(Exception e)
 			{
