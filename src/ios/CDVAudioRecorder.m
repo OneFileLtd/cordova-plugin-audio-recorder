@@ -353,6 +353,11 @@
     [self drawPie];
     [self changeButtonState];
     [self checkPermission];
+    if(![self isStorageAvailable])
+    {
+        self.errorResultMessage = STORAGE_LOW;
+        [self finishPlugin_Error];
+    }
 }
 
 -(void)viewDidLayoutSubviews
@@ -376,8 +381,26 @@
     [super viewWillDisappear:animated];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidEnterBackgroundNotification object:nil];
 }
-
 #pragma mark - ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#pragma mark - Check available storage space
+-(bool)isStorageAvailable()
+{
+    uint64_t totalSpace = 0;
+    uint64_t totalFreeSpace = 0;
+    __autoreleasing NSError *error = nil;
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSDictionary *dictionary = [[NSFileManager defaultManager] attributesOfFileSystemForPath:[paths lastObject] error: &error];
+    if (dictionary)
+    {
+       NSNumber *fileSystemSizeInBytes = [dictionary objectForKey: NSFileSystemSize];
+       NSNumber *freeFileSystemSizeInBytes = [dictionary objectForKey:NSFileSystemFreeSize];
+      totalSpace = [fileSystemSizeInBytes unsignedLongLongValue];
+      totalFreeSpace = [freeFileSystemSizeInBytes unsignedLongLongValue];
+      return self.MaxRecSize > ((totalFreeSpace / 1024ll) / 1024ll);
+    }
+    return false;
+}
+
 #pragma mark - Check permission to use Microphone
 -(void)checkPermission
 {
