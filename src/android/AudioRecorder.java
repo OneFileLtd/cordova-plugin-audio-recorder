@@ -167,6 +167,8 @@ public class AudioRecorder extends AppCompatActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+		setContentView(R.layout.disable_android_orientation_change);
 		activityRes = this.getResources();
 		packageName = this.getPackageName();
 		int activityMainId = activityRes.getIdentifier("activity_main", "layout", packageName);
@@ -249,10 +251,22 @@ public class AudioRecorder extends AppCompatActivity {
 			e.printStackTrace();
 		}
 
-		// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 		checkExternalStorage();
 		setUpButtons();
 		checkPermissions();
+
+		if(isStorageAvailable(uploadLimit * 2))
+		{
+			AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
+			alertDialog.setTitle("Storage Low");
+			alertDialog.setMessage("You do not have enough storage space to record audio!");
+			alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK", new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int which) {
+					dialog.dismiss();
+					forceFinishRecorder();
+				}});
+			alertDialog.show();
+		}
 	}
 
 	@Override
@@ -294,6 +308,7 @@ public class AudioRecorder extends AppCompatActivity {
 			setResult(Activity.RESULT_OK, null);
 			finish();
 		}
+		setContentView(R.layout.enable_android_orientation_change);
 	}
 
 	@Override
@@ -644,6 +659,15 @@ public class AudioRecorder extends AppCompatActivity {
 			}
 		}
 		audioOutputPath = file.getAbsolutePath();
+	}
+
+	private bool isStorageAvailable(long spaceRequired)
+	{
+		StatFs stat = new StatFs(Environment.getExternalStorageDirectory().getPath());
+
+		long bytesAvailable = (long)stat.getBlockSize() * (long)stat.getBlockCount();
+		long megAvailable   = bytesAvailable / 1024000;
+		return spaceRequired > megAvailable;
 	}
 
 	// ------------------------------------------------------------------
