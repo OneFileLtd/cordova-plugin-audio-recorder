@@ -383,7 +383,7 @@
 }
 #pragma mark - ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #pragma mark - Check available storage space
--(bool)isStorageAvailable()
+-(bool)isStorageAvailable
 {
     uint64_t totalSpace = 0;
     uint64_t totalFreeSpace = 0;
