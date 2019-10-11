@@ -353,11 +353,7 @@
     [self drawPie];
     [self changeButtonState];
     [self checkPermission];
-    if(![self isStorageAvailable])
-    {
-        self.errorResultMessage = STORAGE_LOW;
-        [self finishPlugin_Error];
-    }
+
 }
 
 -(void)viewDidLayoutSubviews
@@ -374,6 +370,7 @@
 -(void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+    [self checkAvailableStorage];
 }
 
 -(void)viewWillDisappear:(BOOL)animated
@@ -412,6 +409,28 @@
             self.micPermission = NO;
         }
     }];
+}
+
+#pragma mark -
+-(void) checkAvailableStorage
+{
+    if(![self isStorageAvailable])
+    {
+        UIAlertAction *resetAction = [UIAlertAction
+                                      actionWithTitle:NSLocalizedString(@"OKAY", @"OKAY")
+                                      style:UIAlertActionStyleDestructive
+                                      handler:^(UIAlertAction *action)
+                                      {
+                                        self.errorResultMessage = STORAGE_LOW;
+                                        [self finishPlugin_Error];
+                                      }];
+        UIAlertController *alertController = [UIAlertController
+                                              alertControllerWithTitle:@"Low Storage!"
+                                              message:@"You don't have enough storage space to record audio!!"
+                                              preferredStyle:UIAlertControllerStyleAlert];
+        [alertController addAction:resetAction];
+        [self presentViewController:alertController animated:YES completion:nil];
+    }
 }
 
 #pragma mark -
