@@ -353,6 +353,7 @@
     [self drawPie];
     [self changeButtonState];
     [self checkPermission];
+
 }
 
 -(void)viewDidLayoutSubviews
@@ -369,6 +370,7 @@
 -(void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+    [self checkAvailableStorage];
 }
 
 -(void)viewWillDisappear:(BOOL)animated
@@ -376,8 +378,26 @@
     [super viewWillDisappear:animated];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidEnterBackgroundNotification object:nil];
 }
-
 #pragma mark - ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#pragma mark - Check available storage space
+-(bool)isStorageAvailable
+{
+    uint64_t totalSpace = 0;
+    uint64_t totalFreeSpace = 0;
+    __autoreleasing NSError *error = nil;
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSDictionary *dictionary = [[NSFileManager defaultManager] attributesOfFileSystemForPath:[paths lastObject] error: &error];
+    if (dictionary)
+    {
+       NSNumber *fileSystemSizeInBytes = [dictionary objectForKey: NSFileSystemSize];
+       NSNumber *freeFileSystemSizeInBytes = [dictionary objectForKey:NSFileSystemFreeSize];
+      totalSpace = [fileSystemSizeInBytes unsignedLongLongValue];
+      totalFreeSpace = [freeFileSystemSizeInBytes unsignedLongLongValue];
+      return self.MaxRecSize > ((totalFreeSpace / 1024ll) / 1024ll);
+    }
+    return false;
+}
+
 #pragma mark - Check permission to use Microphone
 -(void)checkPermission
 {
@@ -389,6 +409,28 @@
             self.micPermission = NO;
         }
     }];
+}
+
+#pragma mark -
+-(void) checkAvailableStorage
+{
+    if(![self isStorageAvailable])
+    {
+        UIAlertAction *resetAction = [UIAlertAction
+                                      actionWithTitle:NSLocalizedString(@"OKAY", @"OKAY")
+                                      style:UIAlertActionStyleDestructive
+                                      handler:^(UIAlertAction *action)
+                                      {
+                                        self.errorResultMessage = STORAGE_LOW;
+                                        [self finishPlugin_Error];
+                                      }];
+        UIAlertController *alertController = [UIAlertController
+                                              alertControllerWithTitle:@"Low Storage!"
+                                              message:@"You don't have enough storage space to record audio!!"
+                                              preferredStyle:UIAlertControllerStyleAlert];
+        [alertController addAction:resetAction];
+        [self presentViewController:alertController animated:YES completion:nil];
+    }
 }
 
 #pragma mark -
