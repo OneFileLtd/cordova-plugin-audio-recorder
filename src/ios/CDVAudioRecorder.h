@@ -33,7 +33,8 @@ typedef enum {
     STATUS_SUCCESS_NO_FILE = 3
 } CDV_PLUGIN_STATUS;
 
-#define MIC_NO_PERMISSION @"This app does not have permission to use the microphone"
+#define MIC_NO_PERMISSION @"This app does not have permission to use the microphone!"
+#define STORAGE_LOW @"You do not have enough space to record audio!"
 
 /************************************************************************************************************
  *      CDV Audio Navigation Controller
