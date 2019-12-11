@@ -1,6 +1,7 @@
 package org.apache.cordova.audiorecorder;
 
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.media.AudioFormat;
@@ -52,6 +53,10 @@ import org.json.JSONObject;
 import java.util.Timer;
 import java.util.TimerTask;
 import android.graphics.RectF;
+import java.lang.Object;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.os.StatFs;
 
 public class AudioRecorder extends AppCompatActivity {
 
@@ -167,11 +172,10 @@ public class AudioRecorder extends AppCompatActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-		setContentView(R.layout.disable_android_orientation_change);
 		activityRes = this.getResources();
 		packageName = this.getPackageName();
 		int activityMainId = activityRes.getIdentifier("activity_main", "layout", packageName);
+		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		setContentView(activityMainId);
 		setTitle("Audio Recorder");
 
@@ -257,7 +261,7 @@ public class AudioRecorder extends AppCompatActivity {
 
 		if(isStorageAvailable(uploadLimit * 2))
 		{
-			AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
+			AlertDialog alertDialog = new AlertDialog.Builder(this).create();
 			alertDialog.setTitle("Storage Low");
 			alertDialog.setMessage("You do not have enough storage space to record audio!");
 			alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK", new DialogInterface.OnClickListener() {
@@ -308,7 +312,7 @@ public class AudioRecorder extends AppCompatActivity {
 			setResult(Activity.RESULT_OK, null);
 			finish();
 		}
-		setContentView(R.layout.enable_android_orientation_change);
+		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 	}
 
 	@Override
@@ -661,7 +665,7 @@ public class AudioRecorder extends AppCompatActivity {
 		audioOutputPath = file.getAbsolutePath();
 	}
 
-	private bool isStorageAvailable(long spaceRequired)
+	private boolean isStorageAvailable(long spaceRequired)
 	{
 		StatFs stat = new StatFs(Environment.getExternalStorageDirectory().getPath());
 
