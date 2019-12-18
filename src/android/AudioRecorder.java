@@ -176,6 +176,7 @@ public class AudioRecorder extends AppCompatActivity {
 		packageName = this.getPackageName();
 		int activityMainId = activityRes.getIdentifier("activity_main", "layout", packageName);
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+		setTheme(R.Style.AppTheme);
 		setContentView(activityMainId);
 		setTitle("Audio Recorder");
 
