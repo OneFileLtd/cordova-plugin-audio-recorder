@@ -15,13 +15,11 @@
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 90000
 - (UIInterfaceOrientationMask)supportedInterfaceOrientations
 {
-    // delegate to CVDRecorderViewController
     return [self.topViewController supportedInterfaceOrientations];
 }
 #else
 - (NSUInteger)supportedInterfaceOrientations
 {
-    // delegate to CVDRecorderViewController
     return [self.topViewController supportedInterfaceOrientations];
 }
 #endif
@@ -30,8 +28,8 @@
 #ifndef DEV_PLUGING
 
 /************************************************************************************************************
- *      CDVAudioRecorder - Initialisation point of the plugin, creates a Navigation Controller and Pushes
- *      the main audio recorder view controller on to it.
+ *      CDVAudioRecorder - Initialisation point of the plugin, creates a
+ *      Navigation Controller and Pushes the main audio recorder view controller on to it.
  ************************************************************************************************************/
 @implementation CDVAudioRecorder
 
@@ -59,7 +57,6 @@
 
     double maxupload = [[options objectForKey:@"maxupload"] doubleValue];
     maxupload = maxupload * MEGA_BYTES;
-    // the default value of duration is 0 so use nil (no duration) if default value
     maxupload = (maxupload == 0) ? DEFAULT_MAX_UPLOAD : maxupload;
 
     CDVPluginResult* result = nil;
@@ -88,7 +85,6 @@
     CDVFile *fs = [self.commandDelegate getCommandInstance:@"File"];
     if(!fullPath)
         return nil;
-    // Get canonical version of localPath
     NSURL *fileURL = [NSURL URLWithString:[NSString stringWithFormat:@"file://%@", fullPath]];
     NSURL *resolvedFileURL = [fileURL URLByResolvingSymlinksInPath];
     NSString *path = [resolvedFileURL path];
@@ -100,7 +96,6 @@
     if (url) {
         [fileDict setObject:[url absoluteURL] forKey:@"localURL"];
     }
-    // determine type
     if (!type) {
         id command = [self.commandDelegate getCommandInstance:@"File"];
         if ([command isKindOfClass:[CDVFile class]]) {
@@ -137,7 +132,6 @@
     int _recHours;
     NSTimer *_timer;
     NSTimer *_circleTimer;
-    //maximum recording size:
     double _MaxRecSize;
     double _CurrentRecSize;
 
@@ -277,14 +271,12 @@
     if(jSON)
         self.pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:jSON];
     NSLog(@"%@", jSON);
-    // called when done button pressed or when error condition to do cleanup and remove view
     [[self.audioRecorderCommand.viewController.presentedViewController presentingViewController] dismissViewControllerAnimated:YES completion:nil];
     if (!self.pluginResult) {
         self.pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageToErrorObject:(int)self.errorCode];
     }
     [self.audioRecorderCommand setInUse:NO];
     UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, nil);
-    // return result
     [self.audioRecorderCommand.commandDelegate sendPluginResult:self.pluginResult callbackId:self.callbackId];
 
     if (IsAtLeastiOSVersion(@"7.0")) {
@@ -320,11 +312,6 @@
     [super viewDidLoad];
 }
 
-- (void)viewDidUnload
-{
-    [super viewDidUnload];
-}
-
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
@@ -337,8 +324,6 @@
     self.recMinutes = 0;
     self.recHours = 0;
     self.currentState = STATE_NOT_SET;
-
-    //Get the centre setttings and display the maximum audio recording size
     NSString *maxSizeText = [NSString stringWithFormat:@"%f MB", self.MaxRecSize];
     [self.maxFileSizeLabel setText:maxSizeText];
     self.value = 0;
@@ -378,6 +363,7 @@
     [super viewWillDisappear:animated];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidEnterBackgroundNotification object:nil];
 }
+
 #pragma mark - ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #pragma mark - Check available storage space
 -(bool)isStorageAvailable
@@ -583,9 +569,6 @@
 #pragma mark -
 -(void)drawPie
 {
-    // 1e242b   -   30, 36, 43
-    // 5c636b   -   92, 99, 107
-    // 3b434c   -   59, 67, 76
     CGFloat radius = MIN(self.circle.frame.size.width,self.circle.frame.size.height)/2;
     CGFloat inset  = 18;
     CAShapeLayer *backgroundring = [CAShapeLayer layer];
@@ -713,16 +696,12 @@
         {
             if(stream == self.outputStream)
             {
-                // Convert from host to network endianness
                 uint32_t length = (uint32_t)htonl([self.headerData length]);
-                // Don't forget to check the return value of 'write'
-                //[outputStream write:(uint8_t *)&length maxLength:4];
                 [self.outputStream write:[self.headerData bytes] maxLength:length];
                 [self.outputStream close];
             }
             break;
         }
-		// All this not implemented yet.
         case NSStreamEventNone:
         case NSStreamEventOpenCompleted:
         case NSStreamEventHasBytesAvailable:
@@ -758,7 +737,6 @@
         self.timeElapsedLabel.text = [NSString stringWithFormat:@"%0.2ld:%0.2ld:%0.2ld", (long)self.recHours, (long)self.recMinutes, (long)self.recSeconds];
         [self drawPie];
     }
-
     if((self.recorder && self.recorder.recording && self.CurrentRecSize >= self.MaxRecSize))
         [self endRecording];
 }
@@ -786,7 +764,6 @@
         {
             [[AVAudioSession sharedInstance] requestRecordPermission:^(BOOL granted) {
                 if (granted) {
-                    // Microphone enabled code
                     permissionGranted = YES;
                 }
                 else {
@@ -857,10 +834,6 @@
     {
         return;
     }
-
-
-    //setup the scrollview
-
     self.subview = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 1500.0f, self.scrollView.frame.size.height)];
     [self.scrollView addSubview:self.subview];
 
@@ -872,12 +845,10 @@
     if([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0)
     {
         __block BOOL permissionGranted = NO;
-        // Check Microphone Permissions
         if([[AVAudioSession sharedInstance] respondsToSelector:@selector(requestRecordPermission:)])
         {
             [[AVAudioSession sharedInstance] requestRecordPermission:^(BOOL granted) {
                 if (granted) {
-                    // Microphone enabled code
                     permissionGranted = YES;
                 }
                 else {
@@ -890,8 +861,6 @@
             return;
         }
     }
-
-    // start recording
     [self.recorder record];
     self.timer = [NSTimer scheduledTimerWithTimeInterval: kTIMER_INTERVAL
                                                   target: self
@@ -943,7 +912,6 @@
 {
     if(self.isPaused)
     {
-        //if recorder is already stopped dont start it again
         if(self.recorder && ![self.recorder isRecording])
         {
             self.timer = [NSTimer scheduledTimerWithTimeInterval: kTIMER_INTERVAL
@@ -963,12 +931,9 @@
 {
     if(self.recorderFilePath)
     {
-        //update the wav header:
         NSURL *RecordingPath = [NSURL fileURLWithPath:self.recorderFilePath];
-
         NSDictionary *attributes = [[NSFileManager defaultManager] attributesOfItemAtPath:[RecordingPath path] error:NULL];
         unsigned long long fileSize = [attributes fileSize]; // in bytes
-
         unsigned long long totalAudioLen = 0;
         unsigned long long totalDataLen = 0;
         long longSampleRate = 16000.0;
@@ -1026,26 +991,16 @@
 
         self.headerData = [NSData dataWithBytes:header length:44];
         free(header);
-
-        self.outputStream = [NSOutputStream outputStreamToFileAtPath:[RecordingPath path]
-                                                              append:NO];
+        self.outputStream = [NSOutputStream outputStreamToFileAtPath:[RecordingPath path] append:NO];
     }
 }
 
 #pragma mark -
--(void)audioRecorderBeginInterruption:(AVAudioRecorder *)recorder {
-}
-
 - (void)audioRecorderDidFinishRecording:(AVAudioRecorder *) aRecorder successfully:(BOOL)flag
 {
 }
 
 #pragma mark - Orientation Methods
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
-    return YES;
-}
-
 - (BOOL)shouldAutorotate
 {
     return YES;
