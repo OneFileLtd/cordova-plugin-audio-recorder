@@ -58,6 +58,8 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.StatFs;
 
+import uk.co.onefile.onefileeportfolio.R;
+
 public class AudioRecorder extends AppCompatActivity {
 
 	private static final Integer STATE_NOT_SET = 0;
@@ -176,7 +178,7 @@ public class AudioRecorder extends AppCompatActivity {
 		packageName = this.getPackageName();
 		int activityMainId = activityRes.getIdentifier("activity_main", "layout", packageName);
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-		setTheme(R.Style.AppTheme);
+		setTheme(R.style.AppTheme);
 		setContentView(activityMainId);
 		setTitle("Audio Recorder");
 
