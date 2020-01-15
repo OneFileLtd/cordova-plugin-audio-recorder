@@ -67,8 +67,11 @@
         result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageToErrorObject:AUDIO_APPLICATION_BUSY];
     } else {
         CDVRecorderViewController *recorderViewController = [[CDVRecorderViewController alloc] initWithCommand:self maxUpload:maxupload callbackId:callbackId];
+        [recorderViewController setModalPresentationStyle: UIModalPresentationFullScreen];
         CDVRecorderNavigationController* navController = [[CDVRecorderNavigationController alloc] initWithRootViewController:recorderViewController];
+        [navController setModalPresentationStyle:UIModalPresentationFullScreen];
         self.inUse = YES;
+        [self.viewController setModalPresentationStyle:UIModalPresentationFullScreen];
         [self.viewController presentViewController:navController animated:YES completion:nil];
     }
 
