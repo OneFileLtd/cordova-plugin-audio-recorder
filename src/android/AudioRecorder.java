@@ -177,13 +177,12 @@ public class AudioRecorder extends AppCompatActivity {
 		activityRes = this.getResources();
 		packageName = this.getPackageName();
 		int activityMainId = activityRes.getIdentifier("activity_main", "layout", packageName);
+		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		setTheme(R.style.AppTheme);
-		setContentView(activityMainId);
+		setContentView(R.layout.activity_main);
 		setTitle("Audio Recorder");
 
-		WindowManager windowManager = (WindowManager)getSystemService(WINDOW_SERVICE);
-		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		if (savedInstanceState != null)
 		{
 			restoreSession(savedInstanceState);
@@ -210,7 +209,6 @@ public class AudioRecorder extends AppCompatActivity {
 	protected void onPause()
 	{
 		super.onPause();
-		WindowManager windowManager = (WindowManager)getSystemService(WINDOW_SERVICE);
 		getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		if (audioRecordingTask != null)
 		{
@@ -232,9 +230,11 @@ public class AudioRecorder extends AppCompatActivity {
 	protected void onResume()
 	{
 		super.onResume();
+		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		activityRes = this.getResources();
+		packageName = this.getPackageName();
 		int activityMainId = activityRes.getIdentifier("activity_main", "layout", packageName);
-		setContentView(activityMainId);
+		setContentView(R.layout.activity_main);
 		recordingTime = (TextView) findViewById(activityRes.getIdentifier("recordingTime", "id", packageName));
 		recordingSize = (TextView) findViewById(activityRes.getIdentifier("recordingSize", "id", packageName));
 		maxRecordingSize = (TextView) findViewById(activityRes.getIdentifier("maxSize", "id", packageName));
@@ -587,7 +587,7 @@ public class AudioRecorder extends AppCompatActivity {
 				startButton.setBackgroundResource(activityRes.getIdentifier("pause_button", "id", packageName));
 				startButton.setEnabled(false);
 
-				Toast.makeText(getApplicationContext(),"An error occured trying to record audio",
+				Toast.makeText(getApplicationContext(),"An error occurred trying to record audio",
 						Toast.LENGTH_LONG).show();
 			}
 		});
