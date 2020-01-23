@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">OneFileEportfolio</string>
-    <string name="launcher_name">OneFileEportfolio</string>
-    <string name="activity_name">AudioRecorder</string>
+    <string name="app_name">OneFile Eportfolio</string>
+    <string name="launcher_name">OneFile Eportfolio</string>
+    <string name="activity_name">OneFile Eportfolio</string>
 </resources>
