@@ -46,6 +46,7 @@
 // ----------------------------------
 - (void)audioRecorder:(CDVInvokedUrlCommand*)command
 {
+    [UIApplication sharedApplication].idleTimerDisabled = YES;
     NSLog(@"CDVAudioRecorder - (void)audioRecorder:(CDVInvokedUrlCommand*)command");
 
     NSString* callbackId = command.callbackId;
@@ -144,6 +145,7 @@
     float _averagePower;
     float _peakPower;
     BOOL _micPermission;
+    BOOL _idleTimerDisabled;
 }
 
 @property (nonatomic, retain) NSString *recorderFilePath;
@@ -164,6 +166,7 @@
 @property double MaxRecSize;
 @property double CurrentRecSize;
 @property BOOL micPermission;
+@property BOOL idleTimerDisabled;
 
 - (void)startRecording;
 - (void)stopRecording;
@@ -227,6 +230,7 @@
 @synthesize isTimed = _isTimed;
 @synthesize previousStatusBarStyle = _previousStatusBarStyle;
 @synthesize micPermission = _micPermission;
+@synthesize idleTimerDisabled = _idleTimerDisabled;
 
 #ifndef DEV_PLUGING
 @synthesize audioRecorderCommand = _audioRecorderCommand;
@@ -318,6 +322,8 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    self.idleTimerDisabled = [UIApplication sharedApplication].idleTimerDisabled;
+    [UIApplication sharedApplication].idleTimerDisabled = YES;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(backgroundNotification:)
                                                  name:UIApplicationDidEnterBackgroundNotification object:nil];
     self.isRecording = NO;
@@ -341,7 +347,6 @@
     [self drawPie];
     [self changeButtonState];
     [self checkPermission];
-
 }
 
 -(void)viewDidLayoutSubviews
@@ -365,6 +370,7 @@
 {
     [super viewWillDisappear:animated];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidEnterBackgroundNotification object:nil];
+    [UIApplication sharedApplication].idleTimerDisabled = self.idleTimerDisabled;
 }
 
 #pragma mark - ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -757,7 +763,6 @@
 
 #pragma mark -
 - (void)startRecording {
-	[UIApplication sharedApplication].idleTimerDisabled = YES;
     // Permission only required for iOS7 and up.
     if([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0)
     {
@@ -875,7 +880,6 @@
 
 - (void)endRecording
 {
-    [UIApplication sharedApplication].idleTimerDisabled = NO;
     self.isRecording = NO;
     [self.timer invalidate];
     [self.recorder stop];
@@ -908,7 +912,6 @@
     self.timer = nil;
     [self.recorder pause];
     self.isPaused = YES;
-    [UIApplication sharedApplication].idleTimerDisabled = NO;
 }
 
 - (void)resumeRecording
