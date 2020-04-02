@@ -82,7 +82,7 @@ public class AudioRecorder extends AppCompatActivity {
 	private Integer currentState = STATE_NOT_SET;
 	private Integer currentState_AudioTask = STATE_AUDIO_TASK_NOT_SET;
 
-	public static final Integer RECORDING_FREQUENCY = 11025;
+	public static final Integer RECORDING_FREQUENCY = 22100;
 	public static final String PREFS_NAME = "MyPrefsFile";
 	public String storageDirectory = Environment.getExternalStorageDirectory().getPath() + "/.audiorecorder/";
 
